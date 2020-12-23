@@ -1,0 +1,22 @@
+{
+  "name": "vi-parser",
+  "main": "index.js",
+  "version": "0.0.1",
+  "description": "Parser for the network city of education.",
+  "keywords": [],
+  "homepage": "https://github.com/lentryd/Vi-Parser#vi-parser",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/lentryd/Vi-Parser.git"
+  },
+  "author": "ViPerDollar",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^14.14.12",
+    "@types/node-fetch": "^2.5.7",
+    "@types/ws": "^7.4.0",
+    "node-fetch": "^2.6.1",
+    "node-html-parser": "^2.0.0",
+    "ws": "^7.4.1"
+  }
+}
