@@ -11,6 +11,7 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var node_html_parser_1 = require("node-html-parser");
 var node_fetch_1 = require("node-fetch");
 var html_parsers_1 = require("./html-parsers");
 var helpers_1 = require("./helpers");
@@ -46,6 +47,104 @@ var Parser = /** @class */ (function () {
         this.subjects = [];
         this.studyYear = { start: null, end: null };
     }
+    /** Checks whether this site can be used */
+    Parser.checkHost = function (host) {
+        return node_fetch_1.default("http://" + host + "/webapi/prepareloginform")
+            .then(function (res) {
+            if (res.ok)
+                return true;
+            else if (res.status === 404)
+                return false;
+            else
+                throw new helpers_1.FetchError(res);
+        });
+    };
+    /** Creating an authorization form */
+    Parser.authForm = function (host) {
+        var selectors = [];
+        return this.checkHost(host)
+            .then(function (fit) {
+            if (!fit)
+                throw new Error("This server(" + host + ") is not suitable for the parser.");
+            else
+                return node_fetch_1.default("http://" + host + "/webapi/logindata");
+        })
+            .then(function (res) {
+            if (!res.ok ||
+                !res.headers.get('content-type').startsWith('application/json'))
+                throw new helpers_1.FetchError(res);
+            return res.json();
+        })
+            .then(function (_a) {
+            var version = _a.version;
+            return node_fetch_1.default("http://" + host + "/vendor/pages/about/templates/loginform.html?ver=" + version);
+        })
+            .then(function (res) {
+            if (!res.ok ||
+                !res.headers.get('content-type').startsWith('text/html'))
+                throw new helpers_1.FetchError(res);
+            return res.text();
+        })
+            .then(node_html_parser_1.parse)
+            .then(function (html) {
+            for (var _i = 0, _a = html.querySelectorAll('#message select'); _i < _a.length; _i++) {
+                var s = _a[_i];
+                selectors.push({
+                    id: s.id,
+                    name: s.getAttribute('name'),
+                    value: null,
+                    options: [],
+                });
+            }
+            return node_fetch_1.default("http://" + host + "/webapi/prepareloginform");
+        })
+            .then(function (res) {
+            if (!res.ok ||
+                !res.headers.get('content-type').startsWith('application/json'))
+                throw new helpers_1.FetchError(res);
+            return res.json();
+        })
+            .then(function (data) {
+            var _loop_1 = function (name_1) {
+                if (!name_1)
+                    return "continue";
+                var value = data[name_1];
+                var index = selectors.findIndex(function (s) {
+                    return s.id.toLowerCase() == name_1.toLowerCase() ||
+                        s.name.toLowerCase() == name_1.toLowerCase();
+                });
+                if (index < 0)
+                    return "continue";
+                selectors[index][typeof value == 'number' ?
+                    'value' :
+                    'options'] = value;
+            };
+            for (var name_1 in data) {
+                _loop_1(name_1);
+            }
+            return selectors;
+        });
+    };
+    /** Loading value for the current selection */
+    Parser.uploadAuthForm = function (host, allSelected) {
+        return this.checkHost(host)
+            .then(function (fit) {
+            if (!fit)
+                throw new Error("This server(" + host + ") is not suitable for the parser.");
+            else
+                return node_fetch_1.default("http://" + host + "/webapi/loginform?" + allSelected + "&LASTNAME=" + allSelected.match(/(\w+?)=-*\d+?$/)[1]);
+        })
+            .then(function (res) {
+            if (!res.ok ||
+                !res.headers.get('content-type').startsWith('application/json'))
+                throw new helpers_1.FetchError(res);
+            return res.json();
+        })
+            .then(function (_a) {
+            var items = _a.items;
+            return items;
+        });
+    };
     Object.defineProperty(Parser.prototype, "host", {
         /** Host for this parser */
         get: function () {
@@ -116,10 +215,10 @@ var Parser = /** @class */ (function () {
         var cookies = (_d = (_c = (_b = (_a = res.headers.get('set-cookie')) === null || _a === void 0 ? void 0 : _a.replace) === null || _b === void 0 ? void 0 : _b.call(_a, /expires=.+?;/g, '')) === null || _c === void 0 ? void 0 : _c.split) === null || _d === void 0 ? void 0 : _d.call(_c, ', ');
         for (var _i = 0, _e = cookies !== null && cookies !== void 0 ? cookies : []; _i < _e.length; _i++) {
             var c = _e[_i];
-            var _f = c.match(/^(.+?)=(.+?)(?=;|$)/) || [], name_1 = _f[1], value = _f[2];
-            if (!name_1 || !value)
+            var _f = c.match(/^(.+?)=(.+?)(?=;|$)/) || [], name_2 = _f[1], value = _f[2];
+            if (!name_2 || !value)
                 continue;
-            this._cookie[name_1] = value;
+            this._cookie[name_2] = value;
         }
         return res;
     };

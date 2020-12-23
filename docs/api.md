@@ -1,7 +1,11 @@
-# Vi Parser API v0.0.1
+# Vi Parser API v0.1.0
 
 Содержимое документа
 
+- [Форма авторизации](#форма-авторизации)
+  - [checkHost(host)](#checkhosthost)
+  - [authForm(host)](#authformhost)
+  - [uploadAuthForm(host, allSelected)](#uploadauthformhost-allselected)
 - [Авторизация](#авторизация)
   - [needAuth](#needauth)
   - [logIn()](#login)
@@ -18,6 +22,24 @@
 - [Отчеты](#отчеты)
   - [subject(id, start, end)](#subjectid-start-end)
   - [journal(start, end)](#journalstart-end)
+
+### Форма авторизации
+
+#### checkHost(host)
+
+- host: <[String]> Ссылка на сервер
+- returns: <[Promise]> Promise, который в случае успеха вернет `true`
+
+#### authForm(host)
+
+- host: <[String]> Ссылка на сервер
+- returns: <[Promise]> Promise, который в случае успеха вернет скелет формы авторизации
+
+#### uploadAuthForm(host, allSelected)
+
+- host: <[String]> Ссылка на сервер
+- allSelected: <[String]> Уже выбранные значения в формате `<key>=<value>`
+- returns: <[Promise]> Promise, который в случае успеха вернет опции для следующегоселектора
 
 ### Авторизация
 
@@ -73,6 +95,7 @@
 ### Расписание
 
 #### birthdays(date[, withoutParens])
+
 - date: <[Date]> Число для которого нужен список именинников
 - withoutParens: <[Boolean]> Нужно ли отображать родителей
 - returns: <[Promise]> Список именинников в формате JSON

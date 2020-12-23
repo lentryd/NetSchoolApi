@@ -1,6 +1,7 @@
+import { parse } from 'node-html-parser';
 import { default as fetch, Response, RequestInit } from 'node-fetch';
 import { parserAppContext, UserInfo, parseUserInfo, Subject, parseSubject, Journal, parseJournal, Birthday, parseBirthday } from './html-parsers';
-import { Studentgrades, DiaryWeek, Assignment, reportFile, Announcement, AssignmentTypes, md5, FetchError } from './helpers';
+import { AuthForm, AuthFormItems, Studentgrades, DiaryWeek, Assignment, reportFile, Announcement, AssignmentTypes, md5, FetchError } from './helpers';
 
 /** Parser for SGO */
 export default class Parser {
@@ -64,6 +65,101 @@ export default class Parser {
     this.studyYear = { start: null, end: null };
   }
 
+  /** Checks whether this site can be used */
+  static checkHost(host: string): Promise<boolean> {
+    return fetch(`http://${host}/webapi/prepareloginform`)
+      .then(res => {
+        if (res.ok) return true;
+        else if (res.status === 404) return false;
+        else throw new FetchError(res);
+      });
+  }
+
+  /** Creating an authorization form */
+  static authForm(host: string): Promise<AuthForm> {
+    const selectors = [];
+    return this.checkHost(host)
+      .then(fit => {
+        if (!fit) throw new Error(`This server(${host}) is not suitable for the parser.`);
+        else return fetch(`http://${host}/webapi/logindata`);
+      })
+      .then(res => {
+        if (
+          !res.ok ||
+          !res.headers.get('content-type').startsWith('application/json')
+        ) throw new FetchError(res);
+
+        return res.json();
+      })
+      .then(({version}) => fetch(
+        `http://${host}/vendor/pages/about/templates/loginform.html?ver=${version}`
+      ))
+      .then(res => {
+        if (
+          !res.ok ||
+          !res.headers.get('content-type').startsWith('text/html')
+        ) throw new FetchError(res);
+
+        return res.text();
+      })
+      .then(parse)
+      .then(html => {
+        for (const s of html.querySelectorAll('#message select')) {
+          selectors.push({
+            id: s.id,
+            name: s.getAttribute('name'),
+            value: null,
+            options: [],
+          });
+        }
+        return fetch(`http://${host}/webapi/prepareloginform`);
+      })
+      .then(res => {
+        if (
+          !res.ok ||
+          !res.headers.get('content-type').startsWith('application/json')
+        ) throw new FetchError(res);
+
+        return res.json();
+      })
+      .then((data) => {
+        for (const name in data) {
+          if (!name) continue;
+          const value = data[name];
+          const index = selectors.findIndex((s) =>
+            s.id.toLowerCase() == name.toLowerCase() ||
+            s.name.toLowerCase() == name.toLowerCase(),
+          );
+          if (index < 0) continue;
+
+          selectors[index][
+            typeof value == 'number' ?
+              'value' :
+              'options'
+          ] = value;
+        }
+        return selectors;
+      });
+  }
+
+  /** Loading value for the current selection */
+  static uploadAuthForm(host: string, allSelected: string): Promise<AuthFormItems>{
+    return this.checkHost(host)
+      .then(fit => {
+        if (!fit) throw new Error(`This server(${host}) is not suitable for the parser.`);
+        else return fetch(`http://${host}/webapi/loginform?${allSelected}&LASTNAME=${allSelected.match(/(\w+?)=-*\d+?$/)[1]}`);
+      })
+      .then((res) => {
+        if (
+          !res.ok ||
+          !res.headers.get('content-type').startsWith('application/json')
+        ) throw new FetchError(res);
+
+        return res.json();
+      })
+      .then(({items}) => items);
+  }
+
 
   /** Host for this parser */
   protected get host():string {
@@ -97,12 +193,13 @@ export default class Parser {
     return !this._at || !this._ver || this._sessionTime - Date.now() < 1000;
   }
 
+
   /**
    * Request to the server for this parser
    * @param url Relative pathname
    * @param params Request params
    */
-  protected fetch(url: string, params?: RequestInit):Promise<Response> {
+  protected fetch(url: string, params?: RequestInit): Promise<Response> {
     return fetch(
       this.host + url,
       {
@@ -150,8 +247,9 @@ export default class Parser {
     return true;
   }
 
+
   /** Log in SGO */
-  public logIn():Promise<void> {
+  public logIn(): Promise<void> {
     return this.fetch('')
       .then(res => this._secure = res.url.startsWith('https'))
       .then(() => this.fetch('/webapi/auth/getdata', { method: 'post' }))
@@ -181,7 +279,7 @@ export default class Parser {
   }
 
   /** Log out SGO*/
-  public logOut():Promise<void> {
+  public logOut(): Promise<void> {
     return this.fetch(
         '/asp/logout.asp',
         {
@@ -200,7 +298,7 @@ export default class Parser {
   }
 
   /** Save application context */
-  private appContext():Promise<void> {
+  private appContext(): Promise<void> {
     return this.fetch(
         `/asp/MySettings/MySettings.asp?at=${this._at}`,
         {
@@ -249,7 +347,7 @@ export default class Parser {
   }
 
   /** Returns thr user's information */
-  public userInfo():Promise<UserInfo> {
+  public userInfo(): Promise<UserInfo> {
     return this.fetch(
         `/asp/MySettings/MySettings.asp?at=${this._at}`,
         {
@@ -265,7 +363,7 @@ export default class Parser {
   }
 
   /** Returns the user's photo */
-  public userPhoto():Promise<Buffer> {
+  public userPhoto(): Promise<Buffer> {
     return this.fetch(
       `/webapi/users/photo` +
           `?AT=${this._at}` +
@@ -276,7 +374,7 @@ export default class Parser {
   }
 
   /** Returns diary */
-  public diary(start: Date, end: Date):Promise<DiaryWeek> {
+  public diary(start: Date, end: Date): Promise<DiaryWeek> {
     if (!this.checkDates(start, end)) {
       throw new Error(`The start and end values is not valid.`);
     }
@@ -390,7 +488,7 @@ export default class Parser {
   }
 
   /** Returns information about the assignment */
-  public assignment(id: number):Promise<Assignment> {
+  public assignment(id: number): Promise<Assignment> {
     return this.fetch(
       `/webapi/student/diary/assigns/${id}?studentId=${this._userId}`,
       { headers: { at: this._at } }
@@ -399,7 +497,7 @@ export default class Parser {
   }
 
   /** Returns announcements */
-  public announcements():Promise<Announcement[]> {
+  public announcements(): Promise<Announcement[]> {
     return this.fetch(
         '/webapi/announcements?take=-1',
         {
@@ -410,13 +508,13 @@ export default class Parser {
   }
 
   /** Returns assignment types */
-  public assignmentTypes():Promise<AssignmentTypes[]> {
+  public assignmentTypes(): Promise<AssignmentTypes[]> {
     return this.fetch('/webapi/grade/assignment/types')
         .then(res => res.json());
   }
 
   /** Returns count of unread messages */
-  public unreadedMessages():Promise<Number> {
+  public unreadedMessages(): Promise<Number> {
     return this.fetch(
         '/webapi/mail/messages/unreaded',
         {

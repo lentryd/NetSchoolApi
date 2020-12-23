@@ -1,9 +1,12 @@
 {
   "name": "vi-parser",
   "main": "index.js",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Parser for the network city of education.",
   "keywords": [],
+  "scripts": {
+    "build": "tsc -t es5"
+  },
   "homepage": "https://github.com/lentryd/Vi-Parser#vi-parser",
   "repository": {
     "type" : "git",

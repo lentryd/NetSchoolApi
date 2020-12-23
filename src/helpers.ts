@@ -3,6 +3,19 @@ import * as crypto from 'crypto';
 import { Response } from 'node-fetch';
 import { default as Parser } from './parser';
 
+export type AuthForm = {
+  id: string;
+  name: string;
+  value: number;
+  options: {
+    id: number;
+    name: string;
+  }[];
+}[];
+export type AuthFormItems = {
+  id: number;
+  name: string;
+}[];
 export type Studentgrades = {
   report: {
     id: string;

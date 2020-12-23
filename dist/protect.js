@@ -29,6 +29,7 @@ var proxyFunctions = [
     'diary',
     'subject',
     'journal',
+    'birthdays',
     'assignment',
     'announcements',
     'assignmentTypes',
