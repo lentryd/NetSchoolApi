@@ -87,7 +87,7 @@ export type Subject = {
  * Parsing html in Subject
  * @param html Subject page of the SGO
   */
- export function parseSubject(html: string): Subject {
+export function parseSubject(html: string): Subject {
   const assignments = [];
   const root = htmlParser.parse(html);
   const trs = root.querySelectorAll('table.table-print tr') ?? [];
@@ -143,7 +143,7 @@ export type Journal = {
  * Parsing html in Journal
  * @param html Journal page of the SGO
   */
- export function parseJournal(html: string): Journal {
+export function parseJournal(html: string): Journal {
   // Начало учебного года
   const studyYear = html.match(/Учебный год:<\/b>(.+?)</s)?.[1]?.trim?.();
   // Индекс месяца
@@ -273,7 +273,7 @@ export type Birthday = {
  * Parsing html in Birthday
  * @param html Birthday page of the SGO
   */
- export function parseBirthday(html: string): Birthday {
+export function parseBirthday(html: string): Birthday {
   const root = htmlParser.parse(html);
   const table = root.querySelector('.table.print-block');
   table.querySelector('tr').remove();
@@ -308,4 +308,75 @@ export type Birthday = {
 
     return date;
   }
+}
+
+export type ScheduleDay = {
+  time: string;
+  name: string;
+}[];
+/**
+ * Parsing html in ScheduleDay
+ * @param html ScheduleDay page of the SGO
+  */
+export function parseScheduleDay(html: string): ScheduleDay {
+  html = html.replace(/&nbsp;/g, ' ');
+
+  const result = [];
+  const root = htmlParser.parse(html);
+  const table = root.querySelector('.table.print-block');
+  const trs = table?.querySelectorAll?.('tr') ?? [];
+
+  trs.shift();
+  for (const tr of trs) {
+    const tds = tr?.querySelectorAll?.('td');
+    const time = tds?.[0]?.structuredText;
+    const name = tds?.[1]?.structuredText;
+    if (!time || !name) continue;
+
+    result.push({time, name});
+  }
+
+  return result;
+}
+
+export type ScheduleWeek = {
+  day: string;
+  lessons: {
+    number: number;
+    name: string;
+  }[];
+}[];
+/** 
+ * Parsing html in ScheduleWeek
+ * @param html ScheduleWeek page of the SGO
+ */
+export function parseScheduleWeek(html: string): ScheduleWeek {
+  html = html.replace(/&nbsp;/g, ' ');
+
+  const result = [];
+  const root = htmlParser.parse(html);
+  const table = root.querySelector('.table.print-block');
+  const trs = table?.querySelectorAll?.('tr') ?? [];
+
+  trs.shift();
+  for(const tr of trs) {
+    const tds = tr?.querySelectorAll?.('td');
+    const day = {
+      day: tr?.querySelector?.('th')?.text,
+      lessons: []
+    };
+    const lessonsName = tds?.[1]?.childNodes?.filter(n => n.nodeType == 3);
+    const lessonsNumber = tds?.[0]?.childNodes?.filter(n => n.nodeType == 3);
+
+    for (let i = 0; i < lessonsNumber.length; i++) {
+      day.lessons.push({
+        number: lessonsNumber?.[i]?.text,
+        name: lessonsName?.[i]?.text
+      });
+    }
+
+    result.push(day);
+  }
+  
+  return result;
 }

@@ -71,6 +71,7 @@ function makeWSRequest(token, link, data) {
         ("&connectionToken=" + token));
     var ws = new WebSocket(this.host.replace('http', 'ws') + "/WebApi/signalr/connect" + query, { headers: this.headers });
     return new Promise(function (res, rej) {
+        var timeout = null;
         ws.on('open', function () {
             _this.fetch("/WebApi/signalr/start" + query)
                 .then(function () { return _this.fetch(link, {
@@ -92,12 +93,13 @@ function makeWSRequest(token, link, data) {
                 .then(function (res) { return res.json(); })
                 .then(function (_a) {
                 var taskId = _a.taskId;
-                return (ws.send(JSON.stringify({
+                timeout = setTimeout(function () { return ws.close(4010, 'The waiting time has been exceeded'); }, 6e4);
+                ws.send(JSON.stringify({
                     I: 0,
                     H: 'queuehub',
                     M: 'StartTask',
                     A: [taskId],
-                })));
+                }));
             })
                 .catch(function () { return ws.close(4001, 'Не удалось открыть соединение'); });
         });
@@ -124,6 +126,7 @@ function makeWSRequest(token, link, data) {
         ws.on('close', close.bind(_this));
         function close(code, msg, close) {
             if (close === void 0) { close = false; }
+            clearTimeout(timeout);
             if (close)
                 ws.close(4009);
             switch (code) {
@@ -139,6 +142,9 @@ function makeWSRequest(token, link, data) {
                     break;
                 case 4009:
                     return;
+                case 4010:
+                    rej(new WorkError('Error in task.\nError: ' + msg, -11));
+                    break;
                 default:
                     rej(new WorkError('Unknown error.\nError: ' + msg, -10));
             }

@@ -8,11 +8,12 @@
 const Parser = require("vi-parser").Parser;
 const user = new Parser("<host>", "<login>", "<password>", "<ttslogin>");
 
-(async function () {
-  await user.logIn();
-  console.log(await user.userInfo());
-  await user.logOut();
-})();
+user
+  .logIn()
+  .then(() => user.userInfo())
+  .then(console.log);
+
+// Вам не нужно выходить из системы, если это необходимо, модуль сделает это за вас.
 ```
 
 ## Типы парсера

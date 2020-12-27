@@ -207,6 +207,8 @@ function makeWSRequest(this: Parser, token: string, link: string, data: object):
   );
 
   return new Promise((res, rej) => {
+    let timeout = null;
+
     ws.on('open', () => {
       this.fetch(`/WebApi/signalr/start` + query)
         .then(() => this.fetch(
@@ -229,7 +231,8 @@ function makeWSRequest(this: Parser, token: string, link: string, data: object):
           }
         ))
         .then(res => res.json())
-        .then(({taskId}) => (
+        .then(({taskId}) => {
+          timeout = setTimeout(() => ws.close(4010, 'The waiting time has been exceeded'), 6e4);
           ws.send(
               JSON.stringify({
                 I: 0,
@@ -237,8 +240,8 @@ function makeWSRequest(this: Parser, token: string, link: string, data: object):
                 M: 'StartTask',
                 A: [taskId],
               })
-          )
-        ))
+          );
+        })
         .catch(() => ws.close(4001, 'Не удалось открыть соединение'));
     });
 
@@ -267,6 +270,7 @@ function makeWSRequest(this: Parser, token: string, link: string, data: object):
 
 
     function close(code: number, msg: string, close = false) {
+      clearTimeout(timeout);
       if (close) ws.close(4009);
       switch (code) {
         case 4000: break;
@@ -281,6 +285,9 @@ function makeWSRequest(this: Parser, token: string, link: string, data: object):
           break;
         case 4009:
           return;
+        case 4010:
+          rej(new WorkError('Error in task.\nError: ' + msg, -11));
+          break;
         default:
           rej(new WorkError('Unknown error.\nError: ' + msg, -10));
       }

@@ -15,6 +15,7 @@ var node_html_parser_1 = require("node-html-parser");
 var node_fetch_1 = require("node-fetch");
 var html_parsers_1 = require("./html-parsers");
 var helpers_1 = require("./helpers");
+process.on('uncaughtException', function (err) { return console.log('\x1b[30m\x1b[101m Error \x1b[0m', err); });
 /** Parser for SGO */
 var Parser = /** @class */ (function () {
     /**
@@ -46,6 +47,9 @@ var Parser = /** @class */ (function () {
         this._serverTimeZone = null;
         this.subjects = [];
         this.studyYear = { start: null, end: null };
+        process.addListener('SIGINT', this.closeSession.bind(this));
+        process.addListener('beforeExit', this.closeSession.bind(this));
+        process.addListener('uncaughtException', this.closeSession.bind(this));
     }
     /** Checks whether this site can be used */
     Parser.checkHost = function (host) {
@@ -200,8 +204,21 @@ var Parser = /** @class */ (function () {
         var _this = this;
         return node_fetch_1.default(this.host + url, __assign(__assign({}, params), { headers: __assign(__assign({}, this.headers), params === null || params === void 0 ? void 0 : params.headers) }))
             .then(function (res) {
+            var _a, _b;
             if (!res.ok)
                 throw new helpers_1.FetchError(res);
+            else if (((_b = (_a = res.headers.get('content-type')) === null || _a === void 0 ? void 0 : _a.includes) === null || _b === void 0 ? void 0 : _b.call(_a, 'text/html')) &&
+                +res.headers.get('content-length') < 1000 &&
+                !res.headers.has('filename')) {
+                return res.clone().text()
+                    .then(function (text) {
+                    if (!text.includes('/asp/SecurityWarning.asp'))
+                        return res;
+                    else
+                        return _this.fetch('/asp/SecurityWarning.asp', { method: 'post', body: "AT=" + _this._at + "&WarnType=2" })
+                            .then(function () { return _this.fetch(url, params); });
+                });
+            }
             else
                 return _this.saveCookie(res);
         });
@@ -224,19 +241,30 @@ var Parser = /** @class */ (function () {
     };
     /** Сheck the dates */
     Parser.prototype.checkDates = function () {
+        var _a;
         var dates = [];
         for (var _i = 0; _i < arguments.length; _i++) {
             dates[_i] = arguments[_i];
         }
-        for (var _a = 0, dates_1 = dates; _a < dates_1.length; _a++) {
-            var date = dates_1[_a];
+        for (var _b = 0, dates_1 = dates; _b < dates_1.length; _b++) {
+            var date = dates_1[_b];
             if (date < this.studyYear.start ||
                 date > this.studyYear.end ||
-                date.toJSON() == null) {
+                ((_a = date === null || date === void 0 ? void 0 : date.toJSON) === null || _a === void 0 ? void 0 : _a.call(date)) == null) {
                 return false;
             }
         }
         return true;
+    };
+    /** Сheck the dates */
+    Parser.prototype.closeSession = function () {
+        var _this = this;
+        if (this.needAuth)
+            return;
+        return this.logOut()
+            .then(function () { return console.info('\x1b[42m\x1b[30m DONE \x1b[0m', "The session for user '" + _this._login + "' was successfully closed."); })
+            .catch(function (err) { return console.error('\x1b[42m\x1b[30m Error \x1b[0m', "Failed to close session for user '" + _this._login + "'.", err); })
+            .finally(function () { return process.exit(); });
     };
     /** Log in SGO */
     Parser.prototype.logIn = function () {
@@ -430,6 +458,39 @@ var Parser = /** @class */ (function () {
         })
             .then(function (res) { return res.text(); })
             .then(html_parsers_1.parseBirthday);
+    };
+    /** Returns schedule for the day */
+    Parser.prototype.scheduleDay = function (date) {
+        if (!this.checkDates(date)) {
+            throw new Error("The date values is not valid.");
+        }
+        return this.fetch('/asp/Calendar/DayViewS.asp', {
+            method: 'post',
+            body: ("AT=" + this._at + "&" +
+                ("VER=" + this._ver + "&") +
+                ("DATE=" + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() % 100 + "&") +
+                ("PCLID_IUP=" + this._classId + "_0&") +
+                "LoginType=0")
+        })
+            .then(function (res) { return res.text(); })
+            .then(html_parsers_1.parseScheduleDay);
+    };
+    /** Returns schedule for the week */
+    Parser.prototype.scheduleWeek = function (date) {
+        if (!this.checkDates(date)) {
+            throw new Error("The date values is not valid.");
+        }
+        return this.fetch('/asp/Calendar/WeekViewTimeS.asp', {
+            method: 'post',
+            body: ("AT=" + this._at + "&" +
+                ("VER=" + this._ver + "&") +
+                ("DATE=" + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() % 100 + "&") +
+                "ViewType=0&" +
+                ("PCLID_IUP=" + this._classId + "_0&") +
+                "LoginType=0")
+        })
+            .then(function (res) { return res.text(); })
+            .then(html_parsers_1.parseScheduleWeek);
     };
     /** Returns information about the assignment */
     Parser.prototype.assignment = function (id) {

@@ -1,7 +1,9 @@
 import { parse } from 'node-html-parser';
 import { default as fetch, Response, RequestInit } from 'node-fetch';
-import { parserAppContext, UserInfo, parseUserInfo, Subject, parseSubject, Journal, parseJournal, Birthday, parseBirthday } from './html-parsers';
+import { parserAppContext, UserInfo, parseUserInfo, Subject, parseSubject, Journal, parseJournal, Birthday, parseBirthday, ScheduleDay, parseScheduleDay, ScheduleWeek, parseScheduleWeek } from './html-parsers';
 import { AuthForm, AuthFormItems, Studentgrades, DiaryWeek, Assignment, reportFile, Announcement, AssignmentTypes, md5, FetchError } from './helpers';
+
+process.on('uncaughtException', err => console.log('\x1b[30m\x1b[101m Error \x1b[0m', err));
 
 /** Parser for SGO */
 export default class Parser {
@@ -63,6 +65,10 @@ export default class Parser {
 
     this.subjects = [];
     this.studyYear = { start: null, end: null };
+
+    process.addListener('SIGINT', this.closeSession.bind(this));
+    process.addListener('beforeExit', this.closeSession.bind(this));
+    process.addListener('uncaughtException', this.closeSession.bind(this));
   }
 
   /** Checks whether this site can be used */
@@ -212,6 +218,21 @@ export default class Parser {
     )
         .then(res => {
           if (!res.ok) throw new FetchError(res);
+          else if (
+            res.headers.get('content-type')?.includes?.('text/html') &&
+            +res.headers.get('content-length') < 1000 &&
+            !res.headers.has('filename')
+          ) {
+            return res.clone().text()
+              .then(text => {
+                if (!text.includes('/asp/SecurityWarning.asp')) return res;
+                else return this.fetch(
+                  '/asp/SecurityWarning.asp',
+                  { method: 'post', body: `AT=${this._at}&WarnType=2` }
+                )
+                  .then(() => this.fetch(url, params));
+              });
+          }
           else return this.saveCookie(res);
         })
   }
@@ -239,12 +260,21 @@ export default class Parser {
       if (
         date < this.studyYear.start ||
         date > this.studyYear.end ||
-        date.toJSON() == null
+        date?.toJSON?.() == null
       ) {
         return false;
       }
     }
     return true;
+  }
+
+  /** Сheck the dates */
+  private closeSession() {
+    if (this.needAuth) return;
+    return this.logOut()
+      .then(() => console.info('\x1b[42m\x1b[30m DONE \x1b[0m', `The session for user '${this._login}' was successfully closed.`))
+      .catch(err => console.error('\x1b[42m\x1b[30m Error \x1b[0m', `Failed to close session for user '${this._login}'.`, err))
+      .finally(() => process.exit());
   }
 
 
@@ -485,6 +515,53 @@ export default class Parser {
   )
     .then(res => res.text())
     .then(parseBirthday);
+  }
+
+  /** Returns schedule for the day */
+  public scheduleDay(date: Date): Promise<ScheduleDay> {
+    if (!this.checkDates(date)) {
+      throw new Error(`The date values is not valid.`);
+    }
+
+    return this.fetch(
+      '/asp/Calendar/DayViewS.asp',
+      {
+        method: 'post',
+        body: (
+          `AT=${this._at}&` +
+          `VER=${this._ver}&` +
+          `DATE=${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear() % 100}&` +
+          `PCLID_IUP=${this._classId}_0&` +
+          `LoginType=0`
+        )
+      }
+    )
+      .then(res => res.text())
+      .then(parseScheduleDay);
+  }
+
+  /** Returns schedule for the week */
+  public scheduleWeek(date: Date): Promise<ScheduleWeek> {
+    if (!this.checkDates(date)) {
+      throw new Error(`The date values is not valid.`);
+    }
+
+    return this.fetch(
+      '/asp/Calendar/WeekViewTimeS.asp',
+      {
+        method: 'post',
+        body: (
+          `AT=${this._at}&` +
+          `VER=${this._ver}&` +
+          `DATE=${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear() % 100}&` +
+          `ViewType=0&` +
+          `PCLID_IUP=${this._classId}_0&` +
+          `LoginType=0`
+        )
+      }
+    )
+      .then(res => res.text())
+      .then(parseScheduleWeek);
   }
 
   /** Returns information about the assignment */

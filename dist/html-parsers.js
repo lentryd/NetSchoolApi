@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseBirthday = exports.parseJournal = exports.parseSubject = exports.parseUserInfo = exports.parserAppContext = void 0;
+exports.parseScheduleWeek = exports.parseScheduleDay = exports.parseBirthday = exports.parseJournal = exports.parseSubject = exports.parseUserInfo = exports.parserAppContext = void 0;
 var htmlParser = require("node-html-parser");
 /**
  * Parsing html in AppContext.
@@ -248,3 +248,59 @@ function parseBirthday(html) {
     }
 }
 exports.parseBirthday = parseBirthday;
+/**
+ * Parsing html in ScheduleDay
+ * @param html ScheduleDay page of the SGO
+  */
+function parseScheduleDay(html) {
+    var _a, _b, _c, _d, _e;
+    html = html.replace(/&nbsp;/g, ' ');
+    var result = [];
+    var root = htmlParser.parse(html);
+    var table = root.querySelector('.table.print-block');
+    var trs = (_b = (_a = table === null || table === void 0 ? void 0 : table.querySelectorAll) === null || _a === void 0 ? void 0 : _a.call(table, 'tr')) !== null && _b !== void 0 ? _b : [];
+    trs.shift();
+    for (var _i = 0, trs_2 = trs; _i < trs_2.length; _i++) {
+        var tr = trs_2[_i];
+        var tds = (_c = tr === null || tr === void 0 ? void 0 : tr.querySelectorAll) === null || _c === void 0 ? void 0 : _c.call(tr, 'td');
+        var time = (_d = tds === null || tds === void 0 ? void 0 : tds[0]) === null || _d === void 0 ? void 0 : _d.structuredText;
+        var name_3 = (_e = tds === null || tds === void 0 ? void 0 : tds[1]) === null || _e === void 0 ? void 0 : _e.structuredText;
+        if (!time || !name_3)
+            continue;
+        result.push({ time: time, name: name_3 });
+    }
+    return result;
+}
+exports.parseScheduleDay = parseScheduleDay;
+/**
+ * Parsing html in ScheduleWeek
+ * @param html ScheduleWeek page of the SGO
+ */
+function parseScheduleWeek(html) {
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+    html = html.replace(/&nbsp;/g, ' ');
+    var result = [];
+    var root = htmlParser.parse(html);
+    var table = root.querySelector('.table.print-block');
+    var trs = (_b = (_a = table === null || table === void 0 ? void 0 : table.querySelectorAll) === null || _a === void 0 ? void 0 : _a.call(table, 'tr')) !== null && _b !== void 0 ? _b : [];
+    trs.shift();
+    for (var _i = 0, trs_3 = trs; _i < trs_3.length; _i++) {
+        var tr = trs_3[_i];
+        var tds = (_c = tr === null || tr === void 0 ? void 0 : tr.querySelectorAll) === null || _c === void 0 ? void 0 : _c.call(tr, 'td');
+        var day = {
+            day: (_e = (_d = tr === null || tr === void 0 ? void 0 : tr.querySelector) === null || _d === void 0 ? void 0 : _d.call(tr, 'th')) === null || _e === void 0 ? void 0 : _e.text,
+            lessons: []
+        };
+        var lessonsName = (_g = (_f = tds === null || tds === void 0 ? void 0 : tds[1]) === null || _f === void 0 ? void 0 : _f.childNodes) === null || _g === void 0 ? void 0 : _g.filter(function (n) { return n.nodeType == 3; });
+        var lessonsNumber = (_j = (_h = tds === null || tds === void 0 ? void 0 : tds[0]) === null || _h === void 0 ? void 0 : _h.childNodes) === null || _j === void 0 ? void 0 : _j.filter(function (n) { return n.nodeType == 3; });
+        for (var i = 0; i < lessonsNumber.length; i++) {
+            day.lessons.push({
+                number: (_k = lessonsNumber === null || lessonsNumber === void 0 ? void 0 : lessonsNumber[i]) === null || _k === void 0 ? void 0 : _k.text,
+                name: (_l = lessonsName === null || lessonsName === void 0 ? void 0 : lessonsName[i]) === null || _l === void 0 ? void 0 : _l.text
+            });
+        }
+        result.push(day);
+    }
+    return result;
+}
+exports.parseScheduleWeek = parseScheduleWeek;

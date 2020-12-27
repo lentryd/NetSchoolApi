@@ -1,4 +1,4 @@
-# Vi Parser API v0.1.0
+# Vi Parser API v0.2.0
 
 Содержимое документа
 
@@ -19,6 +19,8 @@
   - [assignmentTypes()](#assignmentTypes)
 - [Расписание](#расписание)
   - [birthdays(date[, withoutParens])](#birthdaysdate-withoutParens)
+  - [scheduleDay(date)](#scheduledaydate)
+  - [scheduleWeek(date)](#scheduleweekdate)
 - [Отчеты](#отчеты)
   - [subject(id, start, end)](#subjectid-start-end)
   - [journal(start, end)](#journalstart-end)
@@ -38,8 +40,8 @@
 #### uploadAuthForm(host, allSelected)
 
 - host: <[String]> Ссылка на сервер
-- allSelected: <[String]> Уже выбранные значения в формате `<key>=<value>`
-- returns: <[Promise]> Promise, который в случае успеха вернет опции для следующегоселектора
+- allSelected: <[String]> Уже выбранные значения в формате `<key>=<value>&...<key>=<value>`
+- returns: <[Promise]> Promise, который в случае успеха вернет опции для следующего селектора
 
 ### Авторизация
 
@@ -79,7 +81,7 @@
 
 - start: <[Date]> Начало периода
 - end: <[Date]> Конец периода
-- returns: <[Promise]> Данные дней выьраного периода
+- returns: <[Promise]> Данные дней выбранного периода
   > Период должен быть больше 1 дня
 
 #### assignment(id)
@@ -96,13 +98,23 @@
 
 #### birthdays(date[, withoutParens])
 
-- date: <[Date]> Число для которого нужен список именинников
+- date: <[Date]> День месяца, для которого нужен список именинников
 - withoutParens: <[Boolean]> Нужно ли отображать родителей
 - returns: <[Promise]> Список именинников в формате JSON
 
+#### scheduleDay(date)
+
+- date: <[Date]> День, для которого нужно расписание уроков
+- returns: <[Promise]> Расписание в формате JSON
+
+#### scheduleWeek(date)
+
+- date: <[Date]> День недели, для которой вам нужно расписание занятий
+- returns: <[Promise]> Расписание на неделю в формате JSON
+
 ### Отчеты
 
-> Это самый нестабильный раздел сетевого. При большой нагрузки на сервер ждать отчета нет смысла, так как сетевой отправит его на почту игнорируя запрос. Поэтому для всех этим методов установлен тайм-аут в 1 минуту.
+> Это самый нестабильный раздел сетевого. При большой нагрузке на сервер ждать отчета нет смысла, так как сетевой отправит его на почту игнорируя запрос. Поэтому для всех этим методов установлен тайм-аут в 1 минуту.
 
 #### subject(id, start, end)
 
