@@ -1,4 +1,4 @@
-# Vi Parser API v0.2.0
+# Vi Sgo API v0.2.0
 
 Содержимое документа
 
@@ -86,7 +86,7 @@
 
 #### assignment(id)
 
-- id: <[Number]> Индификатор задания
+- id: <[Number]> ID задания
 - returns: <[Promise]> Информация об оценке
   > В случае отсутствия задания сервер ответит ошибкой 409
 
@@ -96,10 +96,10 @@
 
 ### Расписание
 
-#### birthdays(date[, withoutParens])
+#### birthdays(date[, withoutParents])
 
 - date: <[Date]> День месяца, для которого нужен список именинников
-- withoutParens: <[Boolean]> Нужно ли отображать родителей
+- withoutParents: <[Boolean]> Нужно ли отображать родителей
 - returns: <[Promise]> Список именинников в формате JSON
 
 #### scheduleDay(date)
@@ -118,7 +118,7 @@
 
 #### subject(id, start, end)
 
-- id: <[String] | [Number]> Индификатор предмета, все доступные предметы можно посмотреть в `subjects`
+- id: <[String] | [Number]> ID предмета, все доступные предметы можно посмотреть в `subjects`
 - start: <[Date]> Начало периода
 - end: <[Date]> Конец периода
 - returns: <[Promise]> Отчет об успеваемости в формате JSON

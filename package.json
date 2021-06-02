@@ -1,5 +1,5 @@
 {
-  "name": "vi-parser",
+  "name": "vi-sgo",
   "main": "index.js",
   "version": "0.2.0",
   "description": "Полностью асинхронный API клиент для \"Сетевой Город. Образование\" написанный на Node.js",
@@ -7,10 +7,10 @@
   "scripts": {
     "build": "tsc -t es5"
   },
-  "homepage": "https://github.com/lentryd/Vi-Parser#vi-parser",
+  "homepage": "https://github.com/lentryd/vi-sgo#vi-parser",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/lentryd/Vi-Parser.git"
+    "type": "git",
+    "url": "https://github.com/lentryd/vi-sgo.git"
   },
   "author": "ViPerDollar",
   "license": "MIT",
