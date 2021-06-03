@@ -1,7 +1,7 @@
 {
   "name": "vi-sgo",
   "main": "index.js",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "Полностью асинхронный API клиент для \"Сетевой Город. Образование\" написанный на Node.js",
   "scripts": {
     "build": "tsc -t es5"

@@ -1,20 +1,20 @@
-import Parser from './parser';
-import { hash } from './helpers';
+import Parser from "./parser";
+import { hash } from "./helpers";
 
 const proxyFunctions = [
-  'logIn',
-  'logOut',
-  'appContext',
-  'userInfo',
-  'userPhoto',
-  'diary',
-  'subject',
-  'journal',
-  'birthdays',
-  'assignment',
-  'announcements',
-  'assignmentTypes',
-  'unreadedMessages'
+  "logIn",
+  "logOut",
+  "appContext",
+  "userInfo",
+  "userPhoto",
+  "diary",
+  "subject",
+  "journal",
+  "birthdays",
+  "assignment",
+  "announcements",
+  "assignmentTypes",
+  "unreadedMessages",
 ];
 const runningProcesses = {};
 
@@ -27,14 +27,11 @@ for (const prop of Object.getOwnPropertyNames(Parser.prototype)) {
       if (processName in runningProcesses) return runningProcesses[processName];
       else {
         runningProcesses[processName] = fun
-            .call(ctx, ...args)
-            .then(data => (
-              delete runningProcesses[processName],
-              data
-            ));
+          .call(ctx, ...args)
+          .then((data) => (delete runningProcesses[processName], data));
         return runningProcesses[processName];
       }
-    }
+    },
   });
 }
 

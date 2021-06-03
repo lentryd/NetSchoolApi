@@ -1,7 +1,7 @@
-import * as WebSocket from 'ws';
-import * as crypto from 'crypto';
-import { Response } from 'node-fetch';
-import { default as Parser } from './parser';
+import * as WebSocket from "ws";
+import * as crypto from "crypto";
+import { Response } from "node-fetch";
+import { default as Parser } from "./parser";
 
 export type AuthForm = {
   id: string;
@@ -38,27 +38,27 @@ export type Studentgrades = {
           relatedObject: {
             type: string;
             ref: string;
-          },
+          };
           relatedValue: any;
           condition: string;
-        }[]
-      }[]
+        }[];
+      }[];
     };
-    presentTypes: any[]
-  },
+    presentTypes: any[];
+  };
   filterSources: {
     items?: {
       title: string;
       value: string;
-    }[],
+    }[];
     range?: {
       start: string;
       end: string;
-    },
-    defaultRange? : {
+    };
+    defaultRange?: {
       start: string;
       end: string;
-    },
+    };
     defaultValue: string;
     filterId: string;
     nullText: null | string;
@@ -83,14 +83,14 @@ export type DiaryWeek = {
       assignments: {
         id: number;
         mark: string | null;
-        weight: number; /** В моем дневнике это 0, всегда */
+        weight: number /** В моем дневнике это 0, всегда */;
         typeId: number;
         dueDate: string;
         classMeetingId: number;
         assignmentName: string;
-      }[],
+      }[];
       classmeetingId: number;
-    }[]
+    }[];
   }[];
   weekStart: string;
   weekEnd: string;
@@ -118,7 +118,7 @@ export type Assignment = {
   codeContentElements: null | string;
 };
 export type Announcement = {
-  author: {id: number, fio: string, nickName: string};
+  author: { id: number; fio: string; nickName: string };
   deleteDate: null | string;
   description: string;
   em: null | string;
@@ -135,37 +135,26 @@ export type AssignmentTypes = {
   name: string;
 };
 
-
 /**
  * MD5 hash
  * @param str original string
  */
-export function md5(str: string):string {
-  return crypto.createHash('md5').update(str).digest('hex');
+export function md5(str: string): string {
+  return crypto.createHash("md5").update(str).digest("hex");
 }
 
 /**
- * MD5 hash of length 8
+ * Hash of length 8
  * @param str original string
  * @param obj original string
  */
-export function hash(str: string, obj?: object):string {
-  return md5(str + data2str(obj)).substring(0, 8);
-}
-
-/**
- * Translating data to a string
- * @param data Any data
- */
-export function data2str(data: object):string {
-  let str = '';
-  for (const name in data) {
-    let value = data[name];
-    if (value.toString() == '[object Object]') value = data2str(value); 
-    if (str) str += ', ';   
-    str += name + ': ' + value.toString();
-  }
-  return '{' + str + '}';
+export function hash(str: string, obj?: object): string {
+  return crypto
+    .createHash("sha256")
+    .update(str)
+    .update(JSON.stringify(obj))
+    .digest("hex")
+    .substring(0, 8);
 }
 
 /**
@@ -173,7 +162,11 @@ export function data2str(data: object):string {
  * @param link The link to the resource
  * @param data Of the selected data
  */
-export function reportFile(this: Parser, link: string, data: object):Promise<string> {
+export function reportFile(
+  this: Parser,
+  link: string,
+  data: object
+): Promise<string> {
   return this.fetch(
     `/WebApi/signalr/negotiate` +
       `?_=${this._ver}` +
@@ -182,70 +175,77 @@ export function reportFile(this: Parser, link: string, data: object):Promise<str
       `&transport=webSockets` +
       `&connectionData=%5B%7B%22name%22%3A%22queuehub%22%7D%5D`
   )
-    .then(res => res.json())
-    .then(({ConnectionToken}) => makeWSRequest.call(this, ConnectionToken, link, data))
-    .then(id => this.fetch(
-      `/webapi/files/${id}`,
-      { headers: { at: this._at } }
-    ))
-    .then(res => res.text());
+    .then((res) => res.json())
+    .then(({ ConnectionToken }) =>
+      makeWSRequest.call(this, ConnectionToken, link, data)
+    )
+    .then((id) =>
+      this.fetch(`/webapi/files/${id}`, { headers: { at: this._at } })
+    )
+    .then((res) => res.text());
 }
 /** The receipt of the report */
-function makeWSRequest(this: Parser, token: string, link: string, data: object):Promise<string> {
+function makeWSRequest(
+  this: Parser,
+  token: string,
+  link: string,
+  data: object
+): Promise<string> {
   token = encodeURIComponent(token);
-  const query = (
+  const query =
     `?at=${this._at}` +
     `&_=${this._ver}` +
     `&clientProtocol=1.5` +
     `&transport=webSockets` +
     `&connectionData=%5B%7B%22name%22%3A%22queuehub%22%7D%5D` +
-    `&connectionToken=${token}`
-  );
+    `&connectionToken=${token}`;
   const ws = new WebSocket(
-    `${this.host.replace('http', 'ws')}/WebApi/signalr/connect` + query,
+    `${this.host.replace("http", "ws")}/WebApi/signalr/connect` + query,
     { headers: this.headers }
   );
 
   return new Promise((res, rej) => {
     let timeout = null;
 
-    ws.on('open', () => {
+    ws.on("open", () => {
       this.fetch(`/WebApi/signalr/start` + query)
-        .then(() => this.fetch(
-          link,
-          {
-            method: 'post',
-            headers: { 
-              'at': this._at,
-              'content-type': 'application/json; charset=utf-8'
+        .then(() =>
+          this.fetch(link, {
+            method: "post",
+            headers: {
+              at: this._at,
+              "content-type": "application/json; charset=utf-8",
             },
             body: JSON.stringify({
               selectedData: data,
               params: [
-                { name: 'SCHOOLYEARID', value: this._yearId },
-                { name: 'SERVERTIMEZONE', value: this._serverTimeZone },
-                { name: 'DATEFORMAT', value: this._dateFormat },
-                { name: 'FULLSCHOOLNAME', value: this._skoolName }
-              ]
-            })
-          }
-        ))
-        .then(res => res.json())
-        .then(({taskId}) => {
-          timeout = setTimeout(() => ws.close(4010, 'The waiting time has been exceeded'), 6e4);
+                { name: "SCHOOLYEARID", value: this._yearId },
+                { name: "SERVERTIMEZONE", value: this._serverTimeZone },
+                { name: "DATEFORMAT", value: this._dateFormat },
+                { name: "FULLSCHOOLNAME", value: this._skoolName },
+              ],
+            }),
+          })
+        )
+        .then((res) => res.json())
+        .then(({ taskId }) => {
+          timeout = setTimeout(
+            () => ws.close(4010, "The waiting time has been exceeded"),
+            6e4
+          );
           ws.send(
-              JSON.stringify({
-                I: 0,
-                H: 'queuehub',
-                M: 'StartTask',
-                A: [taskId],
-              })
+            JSON.stringify({
+              I: 0,
+              H: "queuehub",
+              M: "StartTask",
+              A: [taskId],
+            })
           );
         })
-        .catch(() => ws.close(4001, 'Не удалось открыть соединение'));
+        .catch(() => ws.close(4001, "Не удалось открыть соединение"));
     });
 
-    ws.on('message', (msg: string) => {
+    ws.on("message", (msg: string) => {
       let data: any;
       try {
         data = JSON.parse(msg);
@@ -254,49 +254,48 @@ function makeWSRequest(this: Parser, token: string, link: string, data: object):
       }
 
       switch (data?.M?.[0]?.M) {
-        case 'complete':
+        case "complete":
           res(data.M[0].A[0].Data);
           ws.close(4000);
           break;
-        case 'error':
+        case "error":
           close.call(this, 4003, data.M[0].A[0].Details, true);
           break;
       }
     });
 
-    ws.on('error', err => close.call(this, 4002, err.message, true));
+    ws.on("error", (err) => close.call(this, 4002, err.message, true));
 
-    ws.on('close', close.bind(this));
-
+    ws.on("close", close.bind(this));
 
     function close(code: number, msg: string, close = false) {
       clearTimeout(timeout);
       if (close) ws.close(4009);
       switch (code) {
-        case 4000: break;
+        case 4000:
+          break;
         case 4001:
-          rej(new WorkError('Error during initialization.', 12));
+          rej(new WorkError("Error during initialization.", 12));
           break;
         case 4002:
-          rej(new WorkError('Error in socket.\nError: ' + msg, 13));
+          rej(new WorkError("Error in socket.\nError: " + msg, 13));
           break;
         case 4003:
-          rej(new WorkError('Error in task.\nError: ' + msg, 14));
+          rej(new WorkError("Error in task.\nError: " + msg, 14));
           break;
         case 4009:
           return;
         case 4010:
-          rej(new WorkError('Error in task.\nError: ' + msg, -11));
+          rej(new WorkError("Error in task.\nError: " + msg, -11));
           break;
         default:
-          rej(new WorkError('Unknown error.\nError: ' + msg, -10));
+          rej(new WorkError("Unknown error.\nError: " + msg, -10));
       }
 
       this.fetch(`/WebApi/signalr/abort` + query);
     }
   });
 }
-
 
 /** Parsing errors */
 export class WorkError {
@@ -314,7 +313,7 @@ export class WorkError {
   }
 
   /** Error to string */
-  toString():string {
+  toString(): string {
     return `Code: ${this.code}\nMessage: ${this.message}`;
   }
 }

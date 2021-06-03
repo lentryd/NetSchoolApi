@@ -8,22 +8,21 @@ var htmlParser = require("node-html-parser");
  */
 function parserAppContext(html) {
     var _a, _b;
-    return new Function(((_b = (_a = html === null || html === void 0 ? void 0 : html.replace('pageVer', 'appContext.ver')) === null || _a === void 0 ? void 0 : _a.match(/\w+ appContext = {.+?};|appContext\.(?!ya)\w+ = (?!function).+?;/sg)) === null || _b === void 0 ? void 0 : _b.reduce(function (a, c) { return a += c; })) +
-        'return appContext;')();
+    return new Function(((_b = (_a = html === null || html === void 0 ? void 0 : html.replace("pageVer", "appContext.ver")) === null || _a === void 0 ? void 0 : _a.match(/\w+ appContext = {.+?};|appContext\.(?!ya)\w+ = (?!function).+?;/gs)) === null || _b === void 0 ? void 0 : _b.reduce(function (a, c) { return (a += c); })) + "return appContext;")();
 }
 exports.parserAppContext = parserAppContext;
 /**
  * Parsing html in UserInfo
  * @param html Settings page of the SGO
-  */
+ */
 function parseUserInfo(html) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
-    var email = (_b = (_a = html.match(/E-Mail.+?value="(.*?)"/)) === null || _a === void 0 ? void 0 : _a[1]) !== null && _b !== void 0 ? _b : '';
+    var email = (_b = (_a = html.match(/E-Mail.+?value="(.*?)"/)) === null || _a === void 0 ? void 0 : _a[1]) !== null && _b !== void 0 ? _b : "";
     var phone = +((_d = (_c = html.match(/Мобильный телефон.+?value="(.*?)"/)) === null || _c === void 0 ? void 0 : _c[1]) !== null && _d !== void 0 ? _d : 0);
-    var lastName = (_f = (_e = html.match(/Фамилия.+?value="(.*?)"/)) === null || _e === void 0 ? void 0 : _e[1]) !== null && _f !== void 0 ? _f : '';
-    var firstName = (_h = (_g = html.match(/Имя.+?value="(.*?)"/)) === null || _g === void 0 ? void 0 : _g[1]) !== null && _h !== void 0 ? _h : '';
-    var patronymic = (_k = (_j = html.match(/Отчество.+?value="(.*?)"/)) === null || _j === void 0 ? void 0 : _j[1]) !== null && _k !== void 0 ? _k : '';
-    var birthDateRaw = (_m = (_l = html.match(/Дата рождения.+?value="(.*?)"/)) === null || _l === void 0 ? void 0 : _l[1]) !== null && _m !== void 0 ? _m : '';
+    var lastName = (_f = (_e = html.match(/Фамилия.+?value="(.*?)"/)) === null || _e === void 0 ? void 0 : _e[1]) !== null && _f !== void 0 ? _f : "";
+    var firstName = (_h = (_g = html.match(/Имя.+?value="(.*?)"/)) === null || _g === void 0 ? void 0 : _g[1]) !== null && _h !== void 0 ? _h : "";
+    var patronymic = (_k = (_j = html.match(/Отчество.+?value="(.*?)"/)) === null || _j === void 0 ? void 0 : _j[1]) !== null && _k !== void 0 ? _k : "";
+    var birthDateRaw = (_m = (_l = html.match(/Дата рождения.+?value="(.*?)"/)) === null || _l === void 0 ? void 0 : _l[1]) !== null && _m !== void 0 ? _m : "";
     var match = birthDateRaw.match(/(\d{2})\.(\d{2})\.*(\d{0,4})/);
     var birthDate = new Date(match[2] + " " + match[1] + " " + match[3]);
     return {
@@ -39,15 +38,15 @@ exports.parseUserInfo = parseUserInfo;
 /**
  * Parsing html in Subject
  * @param html Subject page of the SGO
-  */
+ */
 function parseSubject(html) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s;
     var assignments = [];
     var root = htmlParser.parse(html);
-    var trs = (_a = root.querySelectorAll('table.table-print tr')) !== null && _a !== void 0 ? _a : [];
+    var trs = (_a = root.querySelectorAll("table.table-print tr")) !== null && _a !== void 0 ? _a : [];
     for (var _i = 0, trs_1 = trs; _i < trs_1.length; _i++) {
         var tr = trs_1[_i];
-        var tds = (_b = tr === null || tr === void 0 ? void 0 : tr.querySelectorAll('td')) !== null && _b !== void 0 ? _b : [];
+        var tds = (_b = tr === null || tr === void 0 ? void 0 : tr.querySelectorAll("td")) !== null && _b !== void 0 ? _b : [];
         var type = (_c = tds[0]) === null || _c === void 0 ? void 0 : _c.structuredText;
         var name_1 = (_d = tds[1]) === null || _d === void 0 ? void 0 : _d.structuredText;
         var date = str2date((_e = tds[2]) === null || _e === void 0 ? void 0 : _e.structuredText);
@@ -60,12 +59,13 @@ function parseSubject(html) {
             name: name_1,
             mark: mark,
             date: date,
-            issueDate: issueDate
+            issueDate: issueDate,
         });
     }
     return {
         assignments: assignments,
-        middleMark: (_s = +((_r = (_q = (_p = (_o = (_m = (_l = (_k = (_j = (_h = trs.pop()) === null || _h === void 0 ? void 0 : _h.removeWhitespace) === null || _j === void 0 ? void 0 : _j.call(_h)) === null || _k === void 0 ? void 0 : _k.childNodes) === null || _l === void 0 ? void 0 : _l[2]) === null || _m === void 0 ? void 0 : _m.text) === null || _o === void 0 ? void 0 : _o.replace) === null || _p === void 0 ? void 0 : _p.call(_o, ',', '.')) === null || _q === void 0 ? void 0 : _q.replace) === null || _r === void 0 ? void 0 : _r.call(_q, /^\D+(?=\d)/, ''))) !== null && _s !== void 0 ? _s : null,
+        middleMark: (_s = +((_r = (_q = (_p = (_o = (_m = (_l = (_k = (_j = (_h = trs
+            .pop()) === null || _h === void 0 ? void 0 : _h.removeWhitespace) === null || _j === void 0 ? void 0 : _j.call(_h)) === null || _k === void 0 ? void 0 : _k.childNodes) === null || _l === void 0 ? void 0 : _l[2]) === null || _m === void 0 ? void 0 : _m.text) === null || _o === void 0 ? void 0 : _o.replace) === null || _p === void 0 ? void 0 : _p.call(_o, ",", ".")) === null || _q === void 0 ? void 0 : _q.replace) === null || _r === void 0 ? void 0 : _r.call(_q, /^\D+(?=\d)/, ""))) !== null && _s !== void 0 ? _s : null,
     };
     /**
      * Перевод строки в время
@@ -74,9 +74,8 @@ function parseSubject(html) {
      */
     function str2date(str) {
         var _a;
-        if (str === void 0) { str = ''; }
-        var _b = (_a = str
-            .match(/(\d{1,2})\.(\d{1,2})\.(\d{1,2})/)) !== null && _a !== void 0 ? _a : [], _c = _b[1], date = _c === void 0 ? 8 : _c, _d = _b[2], month = _d === void 0 ? 6 : _d, _e = _b[3], year = _e === void 0 ? 2004 : _e;
+        if (str === void 0) { str = ""; }
+        var _b = (_a = str.match(/(\d{1,2})\.(\d{1,2})\.(\d{1,2})/)) !== null && _a !== void 0 ? _a : [], _c = _b[1], date = _c === void 0 ? 8 : _c, _d = _b[2], month = _d === void 0 ? 6 : _d, _e = _b[3], year = _e === void 0 ? 2004 : _e;
         return new Date(month + "-" + date + "-" + year);
     }
 }
@@ -84,7 +83,7 @@ exports.parseSubject = parseSubject;
 /**
  * Parsing html in Journal
  * @param html Journal page of the SGO
-  */
+ */
 function parseJournal(html) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j;
     // Начало учебного года
@@ -105,25 +104,26 @@ function parseJournal(html) {
         Август: 19,
     };
     // Получаем таблицу
-    var table = htmlParser.parse("<body>" + html + "</body>")
-        .querySelector('.table-print');
+    var table = htmlParser
+        .parse("<body>" + html + "</body>")
+        .querySelector(".table-print");
     if (!table)
         return [];
     // Получаем средний балл
-    var middleMarks = table.querySelectorAll('td.cell-num');
+    var middleMarks = table.querySelectorAll("td.cell-num");
     // Получаем предметы
-    var subjects = table.querySelectorAll('td.cell-text');
+    var subjects = table.querySelectorAll("td.cell-text");
     // Получаем месяца
-    var months = table.querySelectorAll('tr')[0].querySelectorAll('th');
+    var months = table.querySelectorAll("tr")[0].querySelectorAll("th");
     // Получаем даты
-    var dates = table.querySelectorAll('tr')[1].querySelectorAll('th');
+    var dates = table.querySelectorAll("tr")[1].querySelectorAll("th");
     // Получаем период месяцев и удаляем строку с месяцами
     var journalMonths = [];
     for (var i in months) {
         if (!i)
             continue;
         var m = months[i];
-        var to = +((_d = m === null || m === void 0 ? void 0 : m.getAttribute) === null || _d === void 0 ? void 0 : _d.call(m, 'colspan'));
+        var to = +((_d = m === null || m === void 0 ? void 0 : m.getAttribute) === null || _d === void 0 ? void 0 : _d.call(m, "colspan"));
         var from = (_f = (_e = journalMonths[journalMonths.length - 1]) === null || _e === void 0 ? void 0 : _e.to) !== null && _f !== void 0 ? _f : 0;
         if (!to)
             continue;
@@ -133,7 +133,7 @@ function parseJournal(html) {
             to: from + to,
         });
     }
-    table.querySelectorAll('tr')[0].remove();
+    table.querySelectorAll("tr")[0].remove();
     // Получаем даты в формате Date и удаляем строку c датами
     var journalDates = [];
     var _loop_1 = function (i) {
@@ -141,10 +141,10 @@ function parseJournal(html) {
             return "continue";
         var d = dates[i];
         var date = new Date(studyYear +
-            '-01-' +
-            (+d.innerText < 10 ? 0 : '') +
+            "-01-" +
+            (+d.innerText < 10 ? 0 : "") +
             d.innerText +
-            'T00:00:00.000Z');
+            "T00:00:00.000Z");
         var month = (_g = journalMonths.find(function (m) { return i >= m.from && i < m.to; })) === null || _g === void 0 ? void 0 : _g.id;
         if (!month)
             return "continue";
@@ -154,7 +154,7 @@ function parseJournal(html) {
     for (var i in dates) {
         _loop_1(i);
     }
-    table.querySelectorAll('tr')[0].remove();
+    table.querySelectorAll("tr")[0].remove();
     // Получаем название предметов и удаляем HTML элемент
     var journalSubjects = [];
     for (var i in subjects) {
@@ -173,7 +173,7 @@ function parseJournal(html) {
         if (!i)
             continue;
         var m = middleMarks[i];
-        var num = +((_j = (_h = m === null || m === void 0 ? void 0 : m.innerText) === null || _h === void 0 ? void 0 : _h.replace) === null || _j === void 0 ? void 0 : _j.call(_h, ',', '.'));
+        var num = +((_j = (_h = m === null || m === void 0 ? void 0 : m.innerText) === null || _h === void 0 ? void 0 : _h.replace) === null || _j === void 0 ? void 0 : _j.call(_h, ",", "."));
         if (!num)
             continue;
         journalMiddleMarks.push(num);
@@ -181,7 +181,7 @@ function parseJournal(html) {
     }
     // Получаем оценки и готовим результат
     var result = [];
-    var assignmentsRow = table.querySelectorAll('tr');
+    var assignmentsRow = table.querySelectorAll("tr");
     for (var i in assignmentsRow) {
         if (!i)
             continue;
@@ -193,7 +193,7 @@ function parseJournal(html) {
             middleMark: journalMiddleMarks[i],
             assignments: [],
         });
-        var assignments = row.querySelectorAll('td');
+        var assignments = row.querySelectorAll("td");
         for (var i1 in assignments) {
             if (!i)
                 continue;
@@ -201,7 +201,7 @@ function parseJournal(html) {
             if (!(a === null || a === void 0 ? void 0 : a.structuredText))
                 continue;
             result[i].assignments.push({
-                value: a.structuredText.replace(/&nbsp;/g, ' '),
+                value: a.structuredText.replace(/&nbsp;/g, " "),
                 date: journalDates[i1],
             });
         }
@@ -212,15 +212,15 @@ exports.parseJournal = parseJournal;
 /**
  * Parsing html in Birthday
  * @param html Birthday page of the SGO
-  */
+ */
 function parseBirthday(html) {
     var root = htmlParser.parse(html);
-    var table = root.querySelector('.table.print-block');
-    table.querySelector('tr').remove();
-    var people = table.querySelectorAll('tr');
+    var table = root.querySelector(".table.print-block");
+    table.querySelector("tr").remove();
+    var people = table.querySelectorAll("tr");
     var result = [];
     people.forEach(function (p) {
-        var data = p.querySelectorAll('td');
+        var data = p.querySelectorAll("td");
         result.push({
             date: str2date(data[2].structuredText),
             name: data[3].structuredText,
@@ -251,18 +251,18 @@ exports.parseBirthday = parseBirthday;
 /**
  * Parsing html in ScheduleDay
  * @param html ScheduleDay page of the SGO
-  */
+ */
 function parseScheduleDay(html) {
     var _a, _b, _c, _d, _e;
-    html = html.replace(/&nbsp;/g, ' ');
+    html = html.replace(/&nbsp;/g, " ");
     var result = [];
     var root = htmlParser.parse(html);
-    var table = root.querySelector('.table.print-block');
-    var trs = (_b = (_a = table === null || table === void 0 ? void 0 : table.querySelectorAll) === null || _a === void 0 ? void 0 : _a.call(table, 'tr')) !== null && _b !== void 0 ? _b : [];
+    var table = root.querySelector(".table.print-block");
+    var trs = (_b = (_a = table === null || table === void 0 ? void 0 : table.querySelectorAll) === null || _a === void 0 ? void 0 : _a.call(table, "tr")) !== null && _b !== void 0 ? _b : [];
     trs.shift();
     for (var _i = 0, trs_2 = trs; _i < trs_2.length; _i++) {
         var tr = trs_2[_i];
-        var tds = (_c = tr === null || tr === void 0 ? void 0 : tr.querySelectorAll) === null || _c === void 0 ? void 0 : _c.call(tr, 'td');
+        var tds = (_c = tr === null || tr === void 0 ? void 0 : tr.querySelectorAll) === null || _c === void 0 ? void 0 : _c.call(tr, "td");
         var time = (_d = tds === null || tds === void 0 ? void 0 : tds[0]) === null || _d === void 0 ? void 0 : _d.structuredText;
         var name_3 = (_e = tds === null || tds === void 0 ? void 0 : tds[1]) === null || _e === void 0 ? void 0 : _e.structuredText;
         if (!time || !name_3)
@@ -278,25 +278,25 @@ exports.parseScheduleDay = parseScheduleDay;
  */
 function parseScheduleWeek(html) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
-    html = html.replace(/&nbsp;/g, ' ');
+    html = html.replace(/&nbsp;/g, " ");
     var result = [];
     var root = htmlParser.parse(html);
-    var table = root.querySelector('.table.print-block');
-    var trs = (_b = (_a = table === null || table === void 0 ? void 0 : table.querySelectorAll) === null || _a === void 0 ? void 0 : _a.call(table, 'tr')) !== null && _b !== void 0 ? _b : [];
+    var table = root.querySelector(".table.print-block");
+    var trs = (_b = (_a = table === null || table === void 0 ? void 0 : table.querySelectorAll) === null || _a === void 0 ? void 0 : _a.call(table, "tr")) !== null && _b !== void 0 ? _b : [];
     trs.shift();
     for (var _i = 0, trs_3 = trs; _i < trs_3.length; _i++) {
         var tr = trs_3[_i];
-        var tds = (_c = tr === null || tr === void 0 ? void 0 : tr.querySelectorAll) === null || _c === void 0 ? void 0 : _c.call(tr, 'td');
+        var tds = (_c = tr === null || tr === void 0 ? void 0 : tr.querySelectorAll) === null || _c === void 0 ? void 0 : _c.call(tr, "td");
         var day = {
-            day: (_e = (_d = tr === null || tr === void 0 ? void 0 : tr.querySelector) === null || _d === void 0 ? void 0 : _d.call(tr, 'th')) === null || _e === void 0 ? void 0 : _e.text,
-            lessons: []
+            day: (_e = (_d = tr === null || tr === void 0 ? void 0 : tr.querySelector) === null || _d === void 0 ? void 0 : _d.call(tr, "th")) === null || _e === void 0 ? void 0 : _e.text,
+            lessons: [],
         };
         var lessonsName = (_g = (_f = tds === null || tds === void 0 ? void 0 : tds[1]) === null || _f === void 0 ? void 0 : _f.childNodes) === null || _g === void 0 ? void 0 : _g.filter(function (n) { return n.nodeType == 3; });
         var lessonsNumber = (_j = (_h = tds === null || tds === void 0 ? void 0 : tds[0]) === null || _h === void 0 ? void 0 : _h.childNodes) === null || _j === void 0 ? void 0 : _j.filter(function (n) { return n.nodeType == 3; });
         for (var i = 0; i < lessonsNumber.length; i++) {
             day.lessons.push({
                 number: (_k = lessonsNumber === null || lessonsNumber === void 0 ? void 0 : lessonsNumber[i]) === null || _k === void 0 ? void 0 : _k.text,
-                name: (_l = lessonsName === null || lessonsName === void 0 ? void 0 : lessonsName[i]) === null || _l === void 0 ? void 0 : _l.text
+                name: (_l = lessonsName === null || lessonsName === void 0 ? void 0 : lessonsName[i]) === null || _l === void 0 ? void 0 : _l.text,
             });
         }
         result.push(day);
