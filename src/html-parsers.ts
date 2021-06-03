@@ -1,4 +1,4 @@
-import * as htmlParser from 'node-html-parser';
+import * as htmlParser from "node-html-parser";
 
 export type AppContext = {
   at: string;
@@ -30,36 +30,36 @@ export type AppContext = {
  * Parsing html in AppContext.
  * @param html Any page of the SGO
  */
-export function parserAppContext(html: string):AppContext {
+export function parserAppContext(html: string): AppContext {
   return new Function(
     html
-      ?.replace('pageVer', 'appContext.ver')
-      ?.match(/\w+ appContext = {.+?};|appContext\.(?!ya)\w+ = (?!function).+?;/sg)
-      ?.reduce((a, c) => a += c) +
-      'return appContext;'
+      ?.replace("pageVer", "appContext.ver")
+      ?.match(
+        /\w+ appContext = {.+?};|appContext\.(?!ya)\w+ = (?!function).+?;/gs
+      )
+      ?.reduce((a, c) => (a += c)) + "return appContext;"
   )();
 }
 
-
 export type UserInfo = {
-  email: string,
-  phone: number,
-  lastName: string,
-  firstName: string,
-  birthDate: Date,
-  patronymic: string,
+  email: string;
+  phone: number;
+  lastName: string;
+  firstName: string;
+  birthDate: Date;
+  patronymic: string;
 };
 /**
  * Parsing html in UserInfo
  * @param html Settings page of the SGO
-  */
+ */
 export function parseUserInfo(html: string): UserInfo {
-  const email = html.match(/E-Mail.+?value="(.*?)"/)?.[1] ?? '';
+  const email = html.match(/E-Mail.+?value="(.*?)"/)?.[1] ?? "";
   const phone = +(html.match(/Мобильный телефон.+?value="(.*?)"/)?.[1] ?? 0);
-  const lastName = html.match(/Фамилия.+?value="(.*?)"/)?.[1] ?? '';
-  const firstName = html.match(/Имя.+?value="(.*?)"/)?.[1] ?? '';
-  const patronymic = html.match(/Отчество.+?value="(.*?)"/)?.[1] ?? '';
-  const birthDateRaw = html.match(/Дата рождения.+?value="(.*?)"/)?.[1] ?? '';
+  const lastName = html.match(/Фамилия.+?value="(.*?)"/)?.[1] ?? "";
+  const firstName = html.match(/Имя.+?value="(.*?)"/)?.[1] ?? "";
+  const patronymic = html.match(/Отчество.+?value="(.*?)"/)?.[1] ?? "";
+  const birthDateRaw = html.match(/Дата рождения.+?value="(.*?)"/)?.[1] ?? "";
   const match = birthDateRaw.match(/(\d{2})\.(\d{2})\.*(\d{0,4})/);
   const birthDate = new Date(`${match[2]} ${match[1]} ${match[3]}`);
 
@@ -81,19 +81,19 @@ export type Subject = {
     name: string;
     date: Date;
     issueDate: Date;
-  }[]
+  }[];
 };
 /**
  * Parsing html in Subject
  * @param html Subject page of the SGO
-  */
+ */
 export function parseSubject(html: string): Subject {
   const assignments = [];
   const root = htmlParser.parse(html);
-  const trs = root.querySelectorAll('table.table-print tr') ?? [];
-  
+  const trs = root.querySelectorAll("table.table-print tr") ?? [];
+
   for (let tr of trs) {
-    const tds = tr?.querySelectorAll('td') ?? [];
+    const tds = tr?.querySelectorAll("td") ?? [];
     const type = tds[0]?.structuredText;
     const name = tds[1]?.structuredText;
     const date = str2date(tds[2]?.structuredText);
@@ -106,17 +106,18 @@ export function parseSubject(html: string): Subject {
       name,
       mark,
       date,
-      issueDate
+      issueDate,
     });
   }
-  
+
   return {
     assignments,
-    middleMark: +trs.pop()
-      ?.removeWhitespace?.()
-      ?.childNodes?.[2]?.text
-      ?.replace?.(',', '.')
-      ?.replace?.(/^\D+(?=\d)/, '') ?? null,
+    middleMark:
+      +trs
+        .pop()
+        ?.removeWhitespace?.()
+        ?.childNodes?.[2]?.text?.replace?.(",", ".")
+        ?.replace?.(/^\D+(?=\d)/, "") ?? null,
   };
 
   /**
@@ -124,9 +125,9 @@ export function parseSubject(html: string): Subject {
    * @param {String} str Строка в формате dd.mm.yy
    * @return {Date} Время
    */
-  function str2date(str = '') {
-    const [, date = 8, month = 6, year = 2004] = str
-        .match(/(\d{1,2})\.(\d{1,2})\.(\d{1,2})/) ?? [];
+  function str2date(str = "") {
+    const [, date = 8, month = 6, year = 2004] =
+      str.match(/(\d{1,2})\.(\d{1,2})\.(\d{1,2})/) ?? [];
     return new Date(`${month}-${date}-${year}`);
   }
 }
@@ -136,13 +137,13 @@ export type Journal = {
   middleMark: number;
   assignments: {
     value: string;
-    date: Date
-  }[]
+    date: Date;
+  }[];
 }[];
 /**
  * Parsing html in Journal
  * @param html Journal page of the SGO
-  */
+ */
 export function parseJournal(html: string): Journal {
   // Начало учебного года
   const studyYear = html.match(/Учебный год:<\/b>(.+?)</s)?.[1]?.trim?.();
@@ -162,24 +163,25 @@ export function parseJournal(html: string): Journal {
     Август: 19,
   };
   // Получаем таблицу
-  const table = htmlParser.parse(`<body>${html}</body>`)
-      .querySelector('.table-print');
+  const table = htmlParser
+    .parse(`<body>${html}</body>`)
+    .querySelector(".table-print");
   if (!table) return [];
   // Получаем средний балл
-  const middleMarks = table.querySelectorAll('td.cell-num');
+  const middleMarks = table.querySelectorAll("td.cell-num");
   // Получаем предметы
-  const subjects = table.querySelectorAll('td.cell-text');
+  const subjects = table.querySelectorAll("td.cell-text");
   // Получаем месяца
-  const months = table.querySelectorAll('tr')[0].querySelectorAll('th');
+  const months = table.querySelectorAll("tr")[0].querySelectorAll("th");
   // Получаем даты
-  const dates = table.querySelectorAll('tr')[1].querySelectorAll('th');
+  const dates = table.querySelectorAll("tr")[1].querySelectorAll("th");
 
   // Получаем период месяцев и удаляем строку с месяцами
   const journalMonths = [];
   for (const i in months) {
     if (!i) continue;
     const m = months[i];
-    const to = +m?.getAttribute?.('colspan');
+    const to = +m?.getAttribute?.("colspan");
     const from = journalMonths[journalMonths.length - 1]?.to ?? 0;
     if (!to) continue;
 
@@ -189,7 +191,7 @@ export function parseJournal(html: string): Journal {
       to: from + to,
     });
   }
-  table.querySelectorAll('tr')[0].remove();
+  table.querySelectorAll("tr")[0].remove();
 
   // Получаем даты в формате Date и удаляем строку c датами
   const journalDates = [];
@@ -197,11 +199,11 @@ export function parseJournal(html: string): Journal {
     if (!i) continue;
     const d = dates[i];
     const date = new Date(
-        studyYear +
-        '-01-' +
-        (+d.innerText < 10 ? 0 : '') +
+      studyYear +
+        "-01-" +
+        (+d.innerText < 10 ? 0 : "") +
         d.innerText +
-        'T00:00:00.000Z',
+        "T00:00:00.000Z"
     );
     const month = journalMonths.find((m) => i >= m.from && i < m.to)?.id;
     if (!month) continue;
@@ -209,7 +211,7 @@ export function parseJournal(html: string): Journal {
     date.setMonth(monthIndex[month]);
     journalDates.push(date);
   }
-  table.querySelectorAll('tr')[0].remove();
+  table.querySelectorAll("tr")[0].remove();
 
   // Получаем название предметов и удаляем HTML элемент
   const journalSubjects = [];
@@ -228,7 +230,7 @@ export function parseJournal(html: string): Journal {
   for (const i in middleMarks) {
     if (!i) continue;
     const m = middleMarks[i];
-    const num = +m?.innerText?.replace?.(',', '.');
+    const num = +m?.innerText?.replace?.(",", ".");
     if (!num) continue;
 
     journalMiddleMarks.push(num);
@@ -237,7 +239,7 @@ export function parseJournal(html: string): Journal {
 
   // Получаем оценки и готовим результат
   const result = [];
-  const assignmentsRow = table.querySelectorAll('tr');
+  const assignmentsRow = table.querySelectorAll("tr");
   for (const i in assignmentsRow) {
     if (!i) continue;
     const row = assignmentsRow[i];
@@ -248,13 +250,13 @@ export function parseJournal(html: string): Journal {
       assignments: [],
     });
 
-    const assignments = row.querySelectorAll('td');
+    const assignments = row.querySelectorAll("td");
     for (const i1 in assignments) {
       if (!i) continue;
       const a = assignments[i1];
       if (!a?.structuredText) continue;
       result[i].assignments.push({
-        value: a.structuredText.replace(/&nbsp;/g, ' '),
+        value: a.structuredText.replace(/&nbsp;/g, " "),
         date: journalDates[i1],
       });
     }
@@ -264,23 +266,23 @@ export function parseJournal(html: string): Journal {
 }
 
 export type Birthday = {
-  date: Date,
-  name: string,
-  role: string,
-  class: string
+  date: Date;
+  name: string;
+  role: string;
+  class: string;
 }[];
 /**
  * Parsing html in Birthday
  * @param html Birthday page of the SGO
-  */
+ */
 export function parseBirthday(html: string): Birthday {
   const root = htmlParser.parse(html);
-  const table = root.querySelector('.table.print-block');
-  table.querySelector('tr').remove();
-  const people = table.querySelectorAll('tr');
+  const table = root.querySelector(".table.print-block");
+  table.querySelector("tr").remove();
+  const people = table.querySelectorAll("tr");
   const result = [];
   people.forEach((p) => {
-    const data = p.querySelectorAll('td');
+    const data = p.querySelectorAll("td");
     result.push({
       date: str2date(data[2].structuredText),
       name: data[3].structuredText,
@@ -317,23 +319,23 @@ export type ScheduleDay = {
 /**
  * Parsing html in ScheduleDay
  * @param html ScheduleDay page of the SGO
-  */
+ */
 export function parseScheduleDay(html: string): ScheduleDay {
-  html = html.replace(/&nbsp;/g, ' ');
+  html = html.replace(/&nbsp;/g, " ");
 
   const result = [];
   const root = htmlParser.parse(html);
-  const table = root.querySelector('.table.print-block');
-  const trs = table?.querySelectorAll?.('tr') ?? [];
+  const table = root.querySelector(".table.print-block");
+  const trs = table?.querySelectorAll?.("tr") ?? [];
 
   trs.shift();
   for (const tr of trs) {
-    const tds = tr?.querySelectorAll?.('td');
+    const tds = tr?.querySelectorAll?.("td");
     const time = tds?.[0]?.structuredText;
     const name = tds?.[1]?.structuredText;
     if (!time || !name) continue;
 
-    result.push({time, name});
+    result.push({ time, name });
   }
 
   return result;
@@ -346,37 +348,37 @@ export type ScheduleWeek = {
     name: string;
   }[];
 }[];
-/** 
+/**
  * Parsing html in ScheduleWeek
  * @param html ScheduleWeek page of the SGO
  */
 export function parseScheduleWeek(html: string): ScheduleWeek {
-  html = html.replace(/&nbsp;/g, ' ');
+  html = html.replace(/&nbsp;/g, " ");
 
   const result = [];
   const root = htmlParser.parse(html);
-  const table = root.querySelector('.table.print-block');
-  const trs = table?.querySelectorAll?.('tr') ?? [];
+  const table = root.querySelector(".table.print-block");
+  const trs = table?.querySelectorAll?.("tr") ?? [];
 
   trs.shift();
-  for(const tr of trs) {
-    const tds = tr?.querySelectorAll?.('td');
+  for (const tr of trs) {
+    const tds = tr?.querySelectorAll?.("td");
     const day = {
-      day: tr?.querySelector?.('th')?.text,
-      lessons: []
+      day: tr?.querySelector?.("th")?.text,
+      lessons: [],
     };
-    const lessonsName = tds?.[1]?.childNodes?.filter(n => n.nodeType == 3);
-    const lessonsNumber = tds?.[0]?.childNodes?.filter(n => n.nodeType == 3);
+    const lessonsName = tds?.[1]?.childNodes?.filter((n) => n.nodeType == 3);
+    const lessonsNumber = tds?.[0]?.childNodes?.filter((n) => n.nodeType == 3);
 
     for (let i = 0; i < lessonsNumber.length; i++) {
       day.lessons.push({
         number: lessonsNumber?.[i]?.text,
-        name: lessonsName?.[i]?.text
+        name: lessonsName?.[i]?.text,
       });
     }
 
     result.push(day);
   }
-  
+
   return result;
 }

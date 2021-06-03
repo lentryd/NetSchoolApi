@@ -15,7 +15,9 @@ var node_html_parser_1 = require("node-html-parser");
 var node_fetch_1 = require("node-fetch");
 var html_parsers_1 = require("./html-parsers");
 var helpers_1 = require("./helpers");
-process.on('uncaughtException', function (err) { return console.log('\x1b[30m\x1b[101m Error \x1b[0m', err); });
+process.on("uncaughtException", function (err) {
+    return console.log("\x1b[30m\x1b[101m Error \x1b[0m", err);
+});
 /** Parser for SGO */
 var Parser = /** @class */ (function () {
     /**
@@ -47,14 +49,13 @@ var Parser = /** @class */ (function () {
         this._serverTimeZone = null;
         this.subjects = [];
         this.studyYear = { start: null, end: null };
-        process.addListener('SIGINT', this.closeSession.bind(this));
-        process.addListener('beforeExit', this.closeSession.bind(this));
-        process.addListener('uncaughtException', this.closeSession.bind(this));
+        process.addListener("SIGINT", this.closeSession.bind(this));
+        process.addListener("beforeExit", this.closeSession.bind(this));
+        process.addListener("uncaughtException", this.closeSession.bind(this));
     }
     /** Checks whether this site can be used */
     Parser.checkHost = function (host) {
-        return node_fetch_1.default("http://" + host + "/webapi/prepareloginform")
-            .then(function (res) {
+        return node_fetch_1.default("http://" + host + "/webapi/prepareloginform").then(function (res) {
             if (res.ok)
                 return true;
             else if (res.status === 404)
@@ -75,7 +76,7 @@ var Parser = /** @class */ (function () {
         })
             .then(function (res) {
             if (!res.ok ||
-                !res.headers.get('content-type').startsWith('application/json'))
+                !res.headers.get("content-type").startsWith("application/json"))
                 throw new helpers_1.FetchError(res);
             return res.json();
         })
@@ -84,18 +85,17 @@ var Parser = /** @class */ (function () {
             return node_fetch_1.default("http://" + host + "/vendor/pages/about/templates/loginform.html?ver=" + version);
         })
             .then(function (res) {
-            if (!res.ok ||
-                !res.headers.get('content-type').startsWith('text/html'))
+            if (!res.ok || !res.headers.get("content-type").startsWith("text/html"))
                 throw new helpers_1.FetchError(res);
             return res.text();
         })
             .then(node_html_parser_1.parse)
             .then(function (html) {
-            for (var _i = 0, _a = html.querySelectorAll('#message select'); _i < _a.length; _i++) {
+            for (var _i = 0, _a = html.querySelectorAll("#message select"); _i < _a.length; _i++) {
                 var s = _a[_i];
                 selectors.push({
                     id: s.id,
-                    name: s.getAttribute('name'),
+                    name: s.getAttribute("name"),
                     value: null,
                     options: [],
                 });
@@ -104,7 +104,7 @@ var Parser = /** @class */ (function () {
         })
             .then(function (res) {
             if (!res.ok ||
-                !res.headers.get('content-type').startsWith('application/json'))
+                !res.headers.get("content-type").startsWith("application/json"))
                 throw new helpers_1.FetchError(res);
             return res.json();
         })
@@ -119,9 +119,8 @@ var Parser = /** @class */ (function () {
                 });
                 if (index < 0)
                     return "continue";
-                selectors[index][typeof value == 'number' ?
-                    'value' :
-                    'options'] = value;
+                selectors[index][typeof value == "number" ? "value" : "options"] =
+                    value;
             };
             for (var name_1 in data) {
                 _loop_1(name_1);
@@ -140,7 +139,7 @@ var Parser = /** @class */ (function () {
         })
             .then(function (res) {
             if (!res.ok ||
-                !res.headers.get('content-type').startsWith('application/json'))
+                !res.headers.get("content-type").startsWith("application/json"))
                 throw new helpers_1.FetchError(res);
             return res.json();
         })
@@ -152,7 +151,7 @@ var Parser = /** @class */ (function () {
     Object.defineProperty(Parser.prototype, "host", {
         /** Host for this parser */
         get: function () {
-            return "http" + (this._secure ? 's' : '') + "://" + this._host;
+            return "http" + (this._secure ? "s" : "") + "://" + this._host;
         },
         enumerable: false,
         configurable: true
@@ -160,13 +159,13 @@ var Parser = /** @class */ (function () {
     Object.defineProperty(Parser.prototype, "cookie", {
         /** Cookie for this parser */
         get: function () {
-            var str = '';
+            var str = "";
             for (var key in this._cookie) {
                 if (!this._cookie[key])
                     continue;
-                if (str != '')
-                    str += '; ';
-                str += key + '=' + this._cookie[key];
+                if (str != "")
+                    str += "; ";
+                str += key + "=" + this._cookie[key];
             }
             return str;
         },
@@ -177,11 +176,11 @@ var Parser = /** @class */ (function () {
         /** Headers for this parser */
         get: function () {
             return {
-                'host': this._host,
-                'cookie': this.cookie,
-                'referer': this.host,
-                'content-type': 'application/x-www-form-urlencoded',
-                'x-requested-with': 'xmlhttprequest',
+                host: this._host,
+                cookie: this.cookie,
+                referer: this.host,
+                "content-type": "application/x-www-form-urlencoded",
+                "x-requested-with": "xmlhttprequest",
             };
         },
         enumerable: false,
@@ -202,21 +201,24 @@ var Parser = /** @class */ (function () {
      */
     Parser.prototype.fetch = function (url, params) {
         var _this = this;
-        return node_fetch_1.default(this.host + url, __assign(__assign({}, params), { headers: __assign(__assign({}, this.headers), params === null || params === void 0 ? void 0 : params.headers) }))
-            .then(function (res) {
+        return node_fetch_1.default(this.host + url, __assign(__assign({}, params), { headers: __assign(__assign({}, this.headers), params === null || params === void 0 ? void 0 : params.headers) })).then(function (res) {
             var _a, _b;
             if (!res.ok)
                 throw new helpers_1.FetchError(res);
-            else if (((_b = (_a = res.headers.get('content-type')) === null || _a === void 0 ? void 0 : _a.includes) === null || _b === void 0 ? void 0 : _b.call(_a, 'text/html')) &&
-                +res.headers.get('content-length') < 1000 &&
-                !res.headers.has('filename')) {
-                return res.clone().text()
+            else if (((_b = (_a = res.headers.get("content-type")) === null || _a === void 0 ? void 0 : _a.includes) === null || _b === void 0 ? void 0 : _b.call(_a, "text/html")) &&
+                +res.headers.get("content-length") < 1000 &&
+                !res.headers.has("filename")) {
+                return res
+                    .clone()
+                    .text()
                     .then(function (text) {
-                    if (!text.includes('/asp/SecurityWarning.asp'))
+                    if (!text.includes("/asp/SecurityWarning.asp"))
                         return res;
                     else
-                        return _this.fetch('/asp/SecurityWarning.asp', { method: 'post', body: "AT=" + _this._at + "&WarnType=2" })
-                            .then(function () { return _this.fetch(url, params); });
+                        return _this.fetch("/asp/SecurityWarning.asp", {
+                            method: "post",
+                            body: "AT=" + _this._at + "&WarnType=2",
+                        }).then(function () { return _this.fetch(url, params); });
                 });
             }
             else
@@ -229,7 +231,8 @@ var Parser = /** @class */ (function () {
      */
     Parser.prototype.saveCookie = function (res) {
         var _a, _b, _c, _d;
-        var cookies = (_d = (_c = (_b = (_a = res.headers.get('set-cookie')) === null || _a === void 0 ? void 0 : _a.replace) === null || _b === void 0 ? void 0 : _b.call(_a, /expires=.+?;/g, '')) === null || _c === void 0 ? void 0 : _c.split) === null || _d === void 0 ? void 0 : _d.call(_c, ', ');
+        var cookies = (_d = (_c = (_b = (_a = res.headers
+            .get("set-cookie")) === null || _a === void 0 ? void 0 : _a.replace) === null || _b === void 0 ? void 0 : _b.call(_a, /expires=.+?;/g, "")) === null || _c === void 0 ? void 0 : _c.split) === null || _d === void 0 ? void 0 : _d.call(_c, ", ");
         for (var _i = 0, _e = cookies !== null && cookies !== void 0 ? cookies : []; _i < _e.length; _i++) {
             var c = _e[_i];
             var _f = c.match(/^(.+?)=(.+?)(?=;|$)/) || [], name_2 = _f[1], value = _f[2];
@@ -262,29 +265,33 @@ var Parser = /** @class */ (function () {
         if (this.needAuth)
             return;
         return this.logOut()
-            .then(function () { return console.info('\x1b[42m\x1b[30m DONE \x1b[0m', "The session for user '" + _this._login + "' was successfully closed."); })
-            .catch(function (err) { return console.error('\x1b[42m\x1b[30m Error \x1b[0m', "Failed to close session for user '" + _this._login + "'.", err); })
+            .then(function () {
+            return console.info("\x1b[42m\x1b[30m DONE \x1b[0m", "The session for user '" + _this._login + "' was successfully closed.");
+        })
+            .catch(function (err) {
+            return console.error("\x1b[42m\x1b[30m Error \x1b[0m", "Failed to close session for user '" + _this._login + "'.", err);
+        })
             .finally(function () { return process.exit(); });
     };
     /** Log in SGO */
     Parser.prototype.logIn = function () {
         var _this = this;
-        return this.fetch('')
-            .then(function (res) { return _this._secure = res.url.startsWith('https'); })
-            .then(function () { return _this.fetch('/webapi/auth/getdata', { method: 'post' }); })
+        return this.fetch("")
+            .then(function (res) { return (_this._secure = res.url.startsWith("https")); })
+            .then(function () { return _this.fetch("/webapi/auth/getdata", { method: "post" }); })
             .then(function (res) { return res.json(); })
             .then(function (_a) {
             var lt = _a.lt, ver = _a.ver, salt = _a.salt;
             _this._ver = ver;
             var password = helpers_1.md5(salt + helpers_1.md5(_this._password));
-            var body = ("lt=" + lt + "&" +
+            var body = "lt=" + lt + "&" +
                 ("ver=" + ver + "&") +
                 ("pw2=" + password + "&") +
                 ("UN=" + encodeURI(_this._login) + "&") +
                 ("PW=" + password.substring(0, _this._password.length) + "&") +
                 "LoginType=1&" +
-                _this._ttslogin);
-            return _this.fetch('/webapi/login', { method: 'post', body: body });
+                _this._ttslogin;
+            return _this.fetch("/webapi/login", { method: "post", body: body });
         })
             .then(function (res) { return res.json(); })
             .then(function (_a) {
@@ -299,12 +306,10 @@ var Parser = /** @class */ (function () {
     /** Log out SGO*/
     Parser.prototype.logOut = function () {
         var _this = this;
-        return this.fetch('/asp/logout.asp', {
-            method: 'post',
-            body: ("at=" + this._at + "&" +
-                ("ver=" + this._ver)),
-        })
-            .then(function () {
+        return this.fetch("/asp/logout.asp", {
+            method: "post",
+            body: "at=" + this._at + "&" + ("ver=" + this._ver),
+        }).then(function () {
             _this._at = null;
             _this._ver = null;
             _this._sessionTime = null;
@@ -314,9 +319,8 @@ var Parser = /** @class */ (function () {
     Parser.prototype.appContext = function () {
         var _this = this;
         return this.fetch("/asp/MySettings/MySettings.asp?at=" + this._at, {
-            method: 'post',
-            body: ("at=" + this._at + "&" +
-                ("ver=" + this._ver + "&"))
+            method: "post",
+            body: "at=" + this._at + "&" + ("ver=" + this._ver + "&"),
         })
             .then(function (res) { return res.text(); })
             .then(html_parsers_1.parserAppContext)
@@ -330,22 +334,25 @@ var Parser = /** @class */ (function () {
             _this._dateFormat = ctx.dateFormat;
             _this._timeFormat = ctx.timeFormat;
             _this._serverTimeZone = ctx.serverTimeZone;
-            return _this.fetch('/webapi/reports/studentgrades', {
+            return _this.fetch("/webapi/reports/studentgrades", {
                 headers: {
-                    at: _this._at
-                }
+                    at: _this._at,
+                },
             });
         })
             .then(function (res) { return res.json(); })
             .then(function (data) {
             var filterSources = data.filterSources;
-            var userId = filterSources.find(function (f) { return f.filterId == 'SID'; });
-            var classId = filterSources.find(function (f) { return f.filterId == 'PCLID_IUP'; });
-            var subjects = filterSources.find(function (f) { return f.filterId == 'SGID'; });
-            var range = filterSources.find(function (f) { return f.filterId == 'period'; });
+            var userId = filterSources.find(function (f) { return f.filterId == "SID"; });
+            var classId = filterSources.find(function (f) { return f.filterId == "PCLID_IUP"; });
+            var subjects = filterSources.find(function (f) { return f.filterId == "SGID"; });
+            var range = filterSources.find(function (f) { return f.filterId == "period"; });
             _this._userId = parseInt(userId.defaultValue);
             _this._classId = parseInt(classId.defaultValue);
-            _this.subjects = subjects.items.map(function (s) { return ({ id: s.value, name: s.title }); });
+            _this.subjects = subjects.items.map(function (s) { return ({
+                id: s.value,
+                name: s.title,
+            }); });
             _this.studyYear.start = new Date(range.defaultRange.start);
             _this.studyYear.end = new Date(range.defaultRange.end);
         });
@@ -353,9 +360,8 @@ var Parser = /** @class */ (function () {
     /** Returns thr user's information */
     Parser.prototype.userInfo = function () {
         return this.fetch("/asp/MySettings/MySettings.asp?at=" + this._at, {
-            method: 'post',
-            body: ("at: " + this._at +
-                ("ver: " + this._ver)),
+            method: "post",
+            body: "at: " + this._at + ("ver: " + this._ver),
         })
             .then(function (res) { return res.text(); })
             .then(html_parsers_1.parseUserInfo);
@@ -365,8 +371,7 @@ var Parser = /** @class */ (function () {
         return this.fetch("/webapi/users/photo" +
             ("?AT=" + this._at) +
             ("&VER=" + this._ver) +
-            ("&userId=" + this._userId))
-            .then(function (res) { return res.buffer(); });
+            ("&userId=" + this._userId)).then(function (res) { return res.buffer(); });
     };
     /** Returns diary */
     Parser.prototype.diary = function (start, end) {
@@ -376,15 +381,14 @@ var Parser = /** @class */ (function () {
         if (end.getTime() - start.getTime() < 8.64e7) {
             throw new Error("The interval should be more than a day.");
         }
-        return this.fetch('/webapi/student/diary' +
+        return this.fetch("/webapi/student/diary" +
             ("?vers=" + this._ver) +
             ("&yearId=" + this._yearId) +
             ("&weekEnd=" + end.toJSON()) +
             ("&studentId=" + this._userId) +
             ("&weekStart=" + start.toJSON()), {
-            headers: { at: this._at }
-        })
-            .then(function (res) { return res.json(); });
+            headers: { at: this._at },
+        }).then(function (res) { return res.json(); });
     };
     /** Returns subject */
     Parser.prototype.subject = function (id, start, end) {
@@ -394,22 +398,23 @@ var Parser = /** @class */ (function () {
         if (!this.checkDates(start, end)) {
             throw new Error("The start and end values is not valid.");
         }
-        return helpers_1.reportFile.call(this, '/webapi/reports/studentgrades/queue', [
+        return helpers_1.reportFile
+            .call(this, "/webapi/reports/studentgrades/queue", [
             {
-                filterId: 'SID',
+                filterId: "SID",
                 filterValue: this._userId,
             },
             {
-                filterId: 'PCLID_IUP',
-                filterValue: this._classId + '_0',
+                filterId: "PCLID_IUP",
+                filterValue: this._classId + "_0",
             },
             {
-                filterId: 'SGID',
+                filterId: "SGID",
                 filterValue: id,
             },
             {
-                filterId: 'period',
-                filterValue: start.toJSON() + ' - ' + end.toJSON(),
+                filterId: "period",
+                filterValue: start.toJSON() + " - " + end.toJSON(),
             },
         ])
             .then(html_parsers_1.parseSubject);
@@ -419,18 +424,19 @@ var Parser = /** @class */ (function () {
         if (!this.checkDates(start, end)) {
             throw new Error("The start and end values is not valid.");
         }
-        return helpers_1.reportFile.call(this, '/webapi/reports/studenttotal/queue', [
+        return helpers_1.reportFile
+            .call(this, "/webapi/reports/studenttotal/queue", [
             {
-                filterId: 'SID',
+                filterId: "SID",
                 filterValue: this._userId,
             },
             {
-                filterId: 'PCLID',
+                filterId: "PCLID",
                 filterValue: this._classId,
             },
             {
-                filterId: 'period',
-                filterValue: start.toJSON() + ' - ' + end.toJSON(),
+                filterId: "period",
+                filterValue: start.toJSON() + " - " + end.toJSON(),
             },
         ])
             .then(html_parsers_1.parseJournal);
@@ -441,9 +447,9 @@ var Parser = /** @class */ (function () {
         if (!this.checkDates(date)) {
             throw new Error("The date values is not valid.");
         }
-        return this.fetch('/asp/Calendar/MonthBirth.asp', {
-            method: 'post',
-            body: ("AT=" + this._at + "&" +
+        return this.fetch("/asp/Calendar/MonthBirth.asp", {
+            method: "post",
+            body: "AT=" + this._at + "&" +
                 ("VER=" + this._ver + "&") +
                 ("Year=" + date.getFullYear() + "&") +
                 ("Month=" + (date.getMonth() + 1) + "&") +
@@ -454,7 +460,7 @@ var Parser = /** @class */ (function () {
                 ("BIRTH_PARENT=" + (withoutParens ? 0 : 4) + "&") +
                 "BIRTH_STUDENT=2&" +
                 "From_MonthBirth=1&" +
-                ("MonthYear=" + (date.getMonth() + 1 + ',' + date.getFullYear())))
+                ("MonthYear=" + (date.getMonth() + 1 + "," + date.getFullYear())),
         })
             .then(function (res) { return res.text(); })
             .then(html_parsers_1.parseBirthday);
@@ -464,13 +470,13 @@ var Parser = /** @class */ (function () {
         if (!this.checkDates(date)) {
             throw new Error("The date values is not valid.");
         }
-        return this.fetch('/asp/Calendar/DayViewS.asp', {
-            method: 'post',
-            body: ("AT=" + this._at + "&" +
+        return this.fetch("/asp/Calendar/DayViewS.asp", {
+            method: "post",
+            body: "AT=" + this._at + "&" +
                 ("VER=" + this._ver + "&") +
                 ("DATE=" + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() % 100 + "&") +
                 ("PCLID_IUP=" + this._classId + "_0&") +
-                "LoginType=0")
+                "LoginType=0",
         })
             .then(function (res) { return res.text(); })
             .then(html_parsers_1.parseScheduleDay);
@@ -480,41 +486,39 @@ var Parser = /** @class */ (function () {
         if (!this.checkDates(date)) {
             throw new Error("The date values is not valid.");
         }
-        return this.fetch('/asp/Calendar/WeekViewTimeS.asp', {
-            method: 'post',
-            body: ("AT=" + this._at + "&" +
+        return this.fetch("/asp/Calendar/WeekViewTimeS.asp", {
+            method: "post",
+            body: "AT=" + this._at + "&" +
                 ("VER=" + this._ver + "&") +
                 ("DATE=" + date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() % 100 + "&") +
                 "ViewType=0&" +
                 ("PCLID_IUP=" + this._classId + "_0&") +
-                "LoginType=0")
+                "LoginType=0",
         })
             .then(function (res) { return res.text(); })
             .then(html_parsers_1.parseScheduleWeek);
     };
     /** Returns information about the assignment */
     Parser.prototype.assignment = function (id) {
-        return this.fetch("/webapi/student/diary/assigns/" + id + "?studentId=" + this._userId, { headers: { at: this._at } })
-            .then(function (res) { return res.json(); });
+        return this.fetch("/webapi/student/diary/assigns/" + id + "?studentId=" + this._userId, { headers: { at: this._at } }).then(function (res) { return res.json(); });
     };
     /** Returns announcements */
     Parser.prototype.announcements = function () {
-        return this.fetch('/webapi/announcements?take=-1', {
-            headers: { at: this._at }
-        })
-            .then(function (res) { return res.json(); });
+        return this.fetch("/webapi/announcements?take=-1", {
+            headers: { at: this._at },
+        }).then(function (res) { return res.json(); });
     };
     /** Returns assignment types */
     Parser.prototype.assignmentTypes = function () {
-        return this.fetch('/webapi/grade/assignment/types')
-            .then(function (res) { return res.json(); });
+        return this.fetch("/webapi/grade/assignment/types").then(function (res) {
+            return res.json();
+        });
     };
     /** Returns count of unread messages */
     Parser.prototype.unreadedMessages = function () {
-        return this.fetch('/webapi/mail/messages/unreaded', {
-            headers: { at: this._at }
-        })
-            .then(function (res) { return res.json(); });
+        return this.fetch("/webapi/mail/messages/unreaded", {
+            headers: { at: this._at },
+        }).then(function (res) { return res.json(); });
     };
     return Parser;
 }());
