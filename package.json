@@ -3,7 +3,6 @@
   "main": "index.js",
   "version": "0.2.0",
   "description": "Полностью асинхронный API клиент для \"Сетевой Город. Образование\" написанный на Node.js",
-  "keywords": [],
   "scripts": {
     "build": "tsc -t es5"
   },
