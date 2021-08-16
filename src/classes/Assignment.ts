@@ -10,6 +10,13 @@ export interface AssignmentObject {
   typeId: number;
   dueDate: string;
   mark?: Mark;
+  markComment?: {
+    id: number;
+    name: string;
+    teacher: string;
+    wasRead: boolean;
+    editTime: string;
+  };
   assignmentName: string;
   classMeetingId: number;
 }
@@ -20,6 +27,7 @@ export default class Assignment {
   text: string;
   mark: number | null;
   typeId: number;
+  comment: string | null;
   lessonId: number;
 
   private _date: string;
@@ -30,6 +38,7 @@ export default class Assignment {
     this.text = assignment.assignmentName;
     this.mark = assignment.mark?.mark ?? null;
     this.typeId = assignment.typeId;
+    this.comment = assignment.markComment?.name ?? null;
     this._date = assignment.dueDate;
     this.lessonId = assignment.classMeetingId;
   }
