@@ -1,60 +1,66 @@
-# Vi Sgo
+# NetSchoolApi
 
-Этот модуль в основном представляет собой класс, который предоставляет общие механизмы для взаимодействия с [Сетевым Городом](https://www.ir-tech.ru/?products=ais-setevoj-gorod-obrazovanie). Пример работы модуля скоро можно будет увидеть.
+![npm](https://img.shields.io/npm/v/netschoolapi)
+![npm bundle size](https://img.shields.io/bundlephobia/min/netschoolapi)
 
-## Пример использования
+![npm](https://img.shields.io/npm/dt/netschoolapi)
 
-```javascript
-const Parser = require("vi-sgo").Parser;
-const user = new Parser("<host>", "<login>", "<password>", "<ttslogin>");
+Это враппер для "Сетевой город. Образование". С помощью которого вы можете получить информацию о пользователе (дневник, расписание и т.д.)
+
+> Эта библиотека никоим образом не связана с компанией "ИРТех"
+
+## Установка
+
+```bash
+npm install netschoolapi
+```
+
+## Использование
+
+```typescript
+import NetSchoolApi from "netschoolapi";
+
+const user = new NetSchoolApi({
+  origin: "https://example.com",
+  login: "Иванов",
+  password: "123456",
+  schoolName: "МБОУ ...", // Название школы полностью
+});
+
+user
+  .diary({
+    startDate: new Date("2021-05-12"),
+    endDate: new Date("2021-05-19"),
+  })
+  .then(console.log);
+```
+
+> Метод `user.logIn()` и `user.logOut()` вызывать не требуется.
+
+Если вы хотите самостоятельно управлять сеансом пользователя, вам следует импортировать класс `Safe`.
+
+```typescript
+import { Safe as NetSchoolApi } from "netschoolapi";
+
+const user = new NetSchoolApi({
+  origin: "https://example.com",
+  login: "Иванов",
+  password: "123456",
+  schoolName: "МБОУ ...", // Название школы полностью
+});
 
 user
   .logIn()
-  .then(() => user.userInfo())
-  .then(console.log);
-
-// Вам не нужно выходить из системы, если это необходимо, модуль сделает это за вас.
-```
-
-## Типы парсера
-
-### Parser
-
-Это оригинальный парсер. В нем нет контроля запрос и это может вызывать дублирование одного и того же запроса, как это показано ниже.
-
-```javascript
-const Parser = require("vi-sgo").Parser;
-const user = new Parser("<host>", "<login>", "<password>", "<ttslogin>");
-
-user.logIn(); // Создаем процесс авторизации
-user.logIn(); // Создаем еще один процесс авторизации
-// В результате этих действий вход в систему будет выполнен дважды, но будет использоваться только последняя авотризация
-```
-
-### Protect (рекомендуется)
-
-Это парсер проксирует основные функции и следит за их выполнением. В результате этого, процессы с одинаковыми данными не повторяются.
-
-```javascript
-const Parser = require("vi-sgo").Protect;
-const user = new Parser("<host>", "<login>", "<password>", "<ttslogin>");
-
-user.logIn(); // Создаем процесс авторизации
-user.logIn(); // Ссылаемся на уже ранее созданный процесс
-// В результате этих действий вход в систему будет выполнен один раз
-```
-
-Отслеживание одинаковых процессор осуществляется путем сравнения переданных значений. То есть вы можете специально продублировать процесс передав дополнительный параметр.
-
-```javascript
-const Parser = require("vi-sgo").Protect;
-const user = new Parser("<host>", "<login>", "<password>", "<ttslogin>");
-
-user.logIn(); // Создаем процесс авторизации
-user.logIn(1); // Создаем еще один процесс авторизации
-// В результате этих действий вход в систему будет выполнен дважды
+  .then(() =>
+    user.diary({
+      startDate: new Date("2021-05-12"),
+      endDate: new Date("2021-05-19"),
+    })
+  )
+  .then(console.log)
+  .finally(() => user.logOut());
 ```
 
 ## Стоит прочитать
 
-- [API Документация](https://github.com/lentryd/vi-sgo/blob/main/docs/api.md)
+- [Доступные методы](https://github.com/lentryd/netschoolapi/blob/main/docs/guide.md)

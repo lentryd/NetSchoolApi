@@ -1,24 +1,24 @@
 {
-  "name": "vi-sgo",
-  "main": "index.js",
-  "version": "1.0.0",
-  "description": "Полностью асинхронный API клиент для \"Сетевой Город. Образование\" написанный на Node.js",
+  "name": "netschoolapi",
+  "main": "dist/index.js",
+  "version": "0.0.1",
+  "description": "Полностью асинхронный API враппер для \"Сетевой Город. Образование\" написанный на Node.js",
   "scripts": {
-    "build": "tsc -t es5"
+    "test": "node test",
+    "build": "tsc"
   },
-  "homepage": "https://github.com/lentryd/vi-sgo#vi-sgo",
+  "homepage": "https://github.com/lentryd/netschoolapi",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lentryd/vi-sgo.git"
+    "url": "https://github.com/lentryd/netschoolapi.git"
   },
-  "author": "ViPerDollar",
+  "author": "lentryd",
   "license": "MIT",
   "dependencies": {
-    "@types/node": "^14.14.12",
-    "@types/node-fetch": "^2.5.7",
-    "@types/ws": "^7.4.0",
-    "node-fetch": "^2.6.1",
-    "node-html-parser": "^2.0.0",
-    "ws": "^7.4.6"
+    "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "@types/node": "^15.12.5",
+    "@types/node-fetch": "^2.5.12"
   }
 }
