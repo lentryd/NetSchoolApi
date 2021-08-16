@@ -43,7 +43,7 @@ export default class Diary {
 
     return (
       lessons.find(
-        ({ startDate, endDate }) => date >= startDate && date < endDate
+        ({ start: startDate, end: endDate }) => date >= startDate && date < endDate
       ) ?? null
     );
   }
