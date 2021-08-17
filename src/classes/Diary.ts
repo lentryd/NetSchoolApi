@@ -14,23 +14,23 @@ export default class Diary {
   termName: string;
   className: string;
 
-  private _endDate: string;
-  private _startDate: string;
+  private _end: string;
+  private _start: string;
 
   constructor(diary: DiaryObject) {
     this.days = diary.weekDays?.map((d) => new Day(d)) ?? [];
     this.termName = diary.termName;
     this.className = diary.className;
-    this._endDate = diary.weekEnd;
-    this._startDate = diary.weekStart;
+    this._end = diary.weekEnd;
+    this._start = diary.weekStart;
   }
 
-  get startDate() {
-    return new Date(this._startDate);
+  get start() {
+    return new Date(this._start);
   }
 
-  get endDate() {
-    return new Date(this._endDate);
+  get end() {
+    return new Date(this._end);
   }
 
   slice({ start, end }: { start: Date; end: Date }) {
@@ -43,7 +43,7 @@ export default class Diary {
 
     return (
       lessons.find(
-        ({ startDate, endDate }) => date >= startDate && date < endDate
+        ({ start: startDate, end: endDate }) => date >= startDate && date < endDate
       ) ?? null
     );
   }
@@ -51,8 +51,8 @@ export default class Diary {
   toJSON() {
     return {
       days: this.days.map((d) => d.toJSON()),
-      endDate: this._endDate,
-      startDate: this._startDate,
+      endDate: this._end,
+      startDate: this._start,
     };
   }
 }

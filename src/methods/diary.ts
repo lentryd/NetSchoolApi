@@ -2,17 +2,17 @@ import Diary from "../classes/Diary";
 import Session from "../classes/Session";
 import NetSchoolApi from "../NetSchoolApi-safe";
 
-export interface Credentials {
+export interface DiaryCredentials {
   studentId?: number;
-  startDate: Date;
-  endDate: Date;
+  start: Date;
+  end: Date;
 }
 
-export default function (this: NetSchoolApi, credentials: Credentials) {
+export default function (this: NetSchoolApi, credentials: DiaryCredentials) {
   const {
     studentId = this.session?.studentsId?.[0] ?? 2004,
-    startDate,
-    endDate,
+    start: startDate,
+    end: endDate,
   } = credentials;
 
   if (!this.studentExists(studentId))

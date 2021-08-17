@@ -27,11 +27,11 @@ export default class Lesson {
     this.assignments = lesson.assignments.map((a) => new Assignment(a));
   }
 
-  get endDate() {
+  get end() {
     return new Date(this._endDate);
   }
 
-  get startDate() {
+  get start() {
     return new Date(this._startDate);
   }
 
