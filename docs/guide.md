@@ -52,4 +52,4 @@
 
 #### Не принимает аргументы
 
-#### Возвращает объект класса [AssignmentTypes](reference.md#AssignmentInfo)
+#### Возвращает объект класса [AssignmentTypes](reference.md#assignmenttypes)
