@@ -5,6 +5,7 @@
 - [Day](#day)
 - [Lesson](#lesson)
 - [Assignment](#assignment)
+- [AssignmentInfo](#assignmentinfo)
 
 ## `Session`
 
@@ -31,8 +32,8 @@
 - `.days: Day[]` - массив объектов [Day](#day)
 - `.termName: string` - название учебного периода (например: _2 полугодие_)
 - `.className: string` - название класса (например: _10б_)
-- `.startDate: Date` - дата, с которой начинается дневник
-- `.endDate: Date` - дата последнего дня в дневнике
+- `.start: Date` - дата, с которой начинается дневник
+- `.end: Date` - дата последнего дня в дневнике
 - `.slice(): Day[]` - возвращает массив объектов [Day](#day). **Принимает объект данных:**
   - `start: Date` - дата, с которой дневник должен быть обрезан
   - `end: Date` - дата, до которой дневник должен быть обрезан
@@ -56,8 +57,8 @@
 ### Объект класса содержит:
 
 - `.id: number` - ID занятия
-- `.startDate: Date` - дата начала урока
-- `.endDate: Date` - дата окончания урока
+- `.start: Date` - дата начала урока
+- `.end: Date` - дата окончания урока
 - `.subject: string` - название предмета
 - `.assignments: Assignment[]` - массив объектов [Assignment](#assignment)
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
@@ -70,9 +71,26 @@
 
 - `.id: number` - ID задания
 - `.dot: boolean` - возвращает `true`, если урок просрочен (точка в дневнике)
-- `.date: Date` - дата установки этой задачи
+- `.date: Date` - дата сдачи задания
 - `.text: string` - текст задания
 - `.mark: number | null` - оценка за задание, если таковая имеется
-- `.typeId: number` - ID задания
+- `.typeId: number` - ID типа задания
+- `.comment: string | null` - комментарий учителя, если таковой имеется
 - `.lessonId: number` - ID занятия
+- `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
+
+## AssignmentInfo
+
+Класс необходимо для удобной работы с доп. информацией о задании.
+
+### Объект класса содержит:
+
+- `.id: number` - ID задания
+- `.date: Date` - дата сдачи задания
+- `.text: string` - текст задания
+- `.weight: number` - вес оценки
+- `.subject: string` - название предмета
+- `.teacher: string` - имя учителя
+- `.isDeleted: boolean` - хз, за что это отвечает (у меня всегда `true`)
+- `.description: string` - описание задания
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)

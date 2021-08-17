@@ -1,8 +1,10 @@
-import Diary from "./classes/Diary";
 import { Httpx } from "./classes/Httpx";
 import Session from "./classes/Session";
+import Diary from "./classes/Diary";
+import AssignmentInfo from "./classes/AssignmentInfo";
 import authData from "./methods/authData";
-import diary, { Credentials as DiaryCredentials } from "./methods/diary";
+import diary, { DiaryCredentials } from "./methods/diary";
+import assignment, { AssignmentCredentials } from "./methods/assignment";
 import logIn from "./methods/logIn";
 import logOut from "./methods/logOut";
 import studentExists from "./methods/studentExists";
@@ -48,6 +50,11 @@ export default class NetSchoolApi_safe {
   /** Дневник пользователя*/
   diary(credentials: DiaryCredentials): Promise<Diary> {
     return diary.call(this, credentials);
+  }
+
+  /** Информация о задание */
+  assignment(credentials: AssignmentCredentials): Promise<AssignmentInfo> {
+    return assignment.call(this, credentials);
   }
 
   // ⭐️ Просто надо (возможно потом их уберу)

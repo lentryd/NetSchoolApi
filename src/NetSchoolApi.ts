@@ -1,5 +1,6 @@
 import NetSchoolApi_safe, { Credentials } from "./NetSchoolApi-safe";
-import { Credentials as DiaryCredentials } from "./methods/diary";
+import { DiaryCredentials } from "./methods/diary";
+import { AssignmentCredentials } from "./methods/assignment";
 
 export default class NetSchoolApi extends NetSchoolApi_safe {
   constructor(credentials: Credentials) {
@@ -86,5 +87,9 @@ export default class NetSchoolApi extends NetSchoolApi_safe {
 
   diary(credentials: DiaryCredentials) {
     return this.openSession().then(() => super.diary(credentials));
+  }
+
+  assignment(credentials: AssignmentCredentials) {
+    return this.openSession().then(() => super.assignment(credentials));
   }
 }
