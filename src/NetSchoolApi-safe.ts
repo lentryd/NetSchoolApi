@@ -2,13 +2,16 @@ import { Httpx } from "./classes/Httpx";
 import Session from "./classes/Session";
 import Diary from "./classes/Diary";
 import AssignmentInfo from "./classes/AssignmentInfo";
-import authData from "./methods/authData";
-import diary, { DiaryCredentials } from "./methods/diary";
-import assignment, { AssignmentCredentials } from "./methods/assignment";
+import AssignmentTypes from "./classes/AssignmentTypes";
+
 import logIn from "./methods/logIn";
 import logOut from "./methods/logOut";
-import studentExists from "./methods/studentExists";
+import authData from "./methods/authData";
 import ttsLogin from "./methods/ttsLogin";
+import studentExists from "./methods/studentExists";
+import diary, { DiaryCredentials } from "./methods/diary";
+import assignment, { AssignmentCredentials } from "./methods/assignment";
+import assignmentTypes from "./methods/assignmentTypes";
 
 export interface Credentials {
   origin: string;
@@ -55,6 +58,11 @@ export default class NetSchoolApi_safe {
   /** Информация о задание */
   assignment(credentials: AssignmentCredentials): Promise<AssignmentInfo> {
     return assignment.call(this, credentials);
+  }
+
+  /** Типы заданий */
+  assignmentTypes(): Promise<AssignmentTypes> {
+    return assignmentTypes.call(this);
   }
 
   // ⭐️ Просто надо (возможно потом их уберу)

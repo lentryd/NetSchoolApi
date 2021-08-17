@@ -6,6 +6,8 @@
 - [Lesson](#lesson)
 - [Assignment](#assignment)
 - [AssignmentInfo](#assignmentinfo)
+- [AssignmentType](#assignmenttype)
+- [AssignmentTypes](#assignmenttypes)
 
 ## `Session`
 
@@ -93,4 +95,27 @@
 - `.teacher: string` - имя учителя
 - `.isDeleted: boolean` - хз, за что это отвечает (у меня всегда `true`)
 - `.description: string` - описание задания
+- `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
+
+## AssignmentType
+
+Класс необходим для удобного хранения типов заданий.
+
+### Объект класса содержит:
+
+- `.id: number` - ID типа задания
+- `.name: string` - название типа задания
+- `.abbr: string` - короткое название типа задания
+- `.order: number` - какая-то странная вещь (если вы знаете, что это такое, то пишите)
+- `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
+
+## AssignmentTypes
+
+Класс необходим для удобной работы с типами задания ([AssignmentType](#assignmenttype)).
+
+### Объект класса содержит:
+
+- `.types: AssignmentType[]` - массив объектов [AssignmentType](#assignmenttype)
+- `.findById(): AssignmentType` - возвращает объект класса [AssignmentType](#assignmenttype). **Принимает id типа задания в качестве аргумента**
+- `.findByAbbr(): AssignmentType` - возвращает объект класса [AssignmentType](#assignmenttype). **Принимает abbr типа задания в качестве аргумента**
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)

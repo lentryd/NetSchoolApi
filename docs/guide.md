@@ -6,6 +6,7 @@
 - [Дневник](#дневник)
   - [.diary()](#diary)
   - [.assignment()](#assignment)
+  - [.assignmentTypes()](#assignmenttypes)
 
 ## Управление сессией
 
@@ -16,7 +17,7 @@
 
 #### Не принимает аргументы
 
-#### Возвращает объект класс [Session](https://github.com/lentryd/netschoolapi/blob/main/docs/reference.md#session)
+#### Возвращает объект класса [Session](reference.md#session)
 
 ### `.logOut()`
 
@@ -36,7 +37,7 @@
 - `start: Date` - Дата, с которой начинается дневник
 - `end: Date` - Последний день в дневнике
 
-#### Возвращает объект класс [Diary](https://github.com/lentryd/netschoolapi/blob/main/docs/reference.md#diary)
+#### Возвращает объект класса [Diary](reference.md#diary)
 
 ### `.assignment()`
 
@@ -45,4 +46,10 @@
 - `studentId?: number` - ID учащегося, можно не указать.(Добавлено для родителей, имеющих доступ к нескольким учащимся)
 - `id: number` - ID задания
 
-#### Возвращает объект класс [AssignmentInfo](https://github.com/lentryd/netschoolapi/blob/main/docs/reference.md#AssignmentInfo)
+#### Возвращает объект класса [AssignmentInfo](reference.md#AssignmentInfo)
+
+### `.assignmentTypes()`
+
+#### Не принимает аргументы
+
+#### Возвращает объект класса [AssignmentTypes](reference.md#AssignmentInfo)

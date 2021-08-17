@@ -92,4 +92,8 @@ export default class NetSchoolApi extends NetSchoolApi_safe {
   assignment(credentials: AssignmentCredentials) {
     return this.openSession().then(() => super.assignment(credentials));
   }
+
+  assignmentTypes() {
+    return this.openSession().then(() => super.assignmentTypes());
+  }
 }
