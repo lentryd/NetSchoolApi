@@ -1,7 +1,7 @@
 # NetSchoolApi
 
 ![npm](https://img.shields.io/npm/v/netschoolapi)
-![npm bundle size](https://img.shields.io/bundlephobia/min/netschoolapi)
+![GitHub](https://img.shields.io/github/license/lentryd/netschoolapi?color=blue)
 
 ![npm](https://img.shields.io/npm/dt/netschoolapi)
 
