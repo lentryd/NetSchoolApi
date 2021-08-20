@@ -63,5 +63,5 @@ user
 
 ## Стоит прочитать
 
-- [Доступные методы](./docs/guide.md)
-- [Доступные классы](./docs/reference.md)
+- [Доступные методы](docs/guide.md)
+- [Доступные классы](docs/reference.md)
