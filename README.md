@@ -63,5 +63,5 @@ user
 
 ## Стоит прочитать
 
-- [Доступные методы](https://github.com/lentryd/netschoolapi/blob/main/docs/guide.md)
-- [Доступные классы](https://github.com/lentryd/netschoolapi/blob/main/docs/reference.md)
+- [Доступные методы](./docs/guide.md)
+- [Доступные классы](./docs/reference.md)
