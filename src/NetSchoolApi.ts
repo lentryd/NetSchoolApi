@@ -1,8 +1,8 @@
-import NetSchoolApi_safe, { Credentials } from "./NetSchoolApi-safe";
+import NetSchoolApiSafe, { Credentials } from "./NetSchoolApi-safe";
 import { DiaryCredentials } from "./methods/diary";
 import { AssignmentCredentials } from "./methods/assignment";
 
-export default class NetSchoolApi extends NetSchoolApi_safe {
+export default class NetSchoolApi extends NetSchoolApiSafe {
   constructor(credentials: Credentials) {
     super(credentials);
 

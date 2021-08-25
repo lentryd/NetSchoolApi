@@ -9,7 +9,7 @@
 import * as path from "path";
 import fetch, { HeadersInit, RequestInit } from "node-fetch";
 
-export class Httpx {
+export class Client {
   static formData(
     body: { [key: string]: any },
     headers?: HeadersInit
@@ -32,7 +32,7 @@ export class Httpx {
 
   /**
    *
-   * @param href Ссылка на сайт, например http://example.com
+   * @param origin Ссылка на сайт, например http://example.com
    */
   constructor(origin: string) {
     this.origin = origin;
@@ -94,8 +94,8 @@ export class Httpx {
 
   /**
    * `get` запрос
-   * @param url ссылка на ресурсу
-   * @param options доп. данные запроса
+   * @param path ссылка на ресурсу
+   * @param init доп. данные запроса
    */
   get(path: string, init?: RequestInit) {
     return this.request(path, { method: "get", ...init });
@@ -103,8 +103,8 @@ export class Httpx {
 
   /**
    * `post` запрос
-   * @param url ссылка на ресурсу
-   * @param options доп. данные запроса
+   * @param path ссылка на ресурсу
+   * @param init доп. данные запроса
    */
   post(path: string, init?: RequestInit) {
     return this.request(path, { method: "post", ...init });

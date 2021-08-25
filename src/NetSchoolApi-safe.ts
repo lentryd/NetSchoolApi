@@ -1,4 +1,4 @@
-import { Httpx } from "./classes/Httpx";
+import { Client } from "./classes/Client";
 import Session from "./classes/Session";
 import Diary from "./classes/Diary";
 import AssignmentInfo from "./classes/AssignmentInfo";
@@ -20,12 +20,12 @@ export interface Credentials {
   schoolName: string;
 }
 
-export default class NetSchoolApi_safe {
-  Client: Httpx;
+export default class NetSchoolApiSafe {
+  Client: Client;
   session: null | Session = null;
 
   constructor(public credentials: Credentials) {
-    this.Client = new Httpx(credentials.origin);
+    this.Client = new Client(credentials.origin);
     this.Client.path = "/webapi";
   }
 

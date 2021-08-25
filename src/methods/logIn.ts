@@ -1,5 +1,5 @@
 import * as crypto from "crypto";
-import { Httpx } from "../classes/Httpx";
+import { Client } from "../classes/Client";
 import Session from "../classes/Session";
 import NetSchoolApi from "../NetSchoolApi-safe";
 
@@ -47,7 +47,7 @@ function formData(this: NetSchoolApi) {
 function logInContext(this: NetSchoolApi): Promise<LogInContext> {
   return formData
     .call(this)
-    .then((data) => this.Client.post("/login", Httpx.formData(data)))
+    .then((data) => this.Client.post("/login", Client.formData(data)))
     .then((res) => res.json());
 }
 

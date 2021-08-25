@@ -1,15 +1,15 @@
 {
   "name": "netschoolapi",
   "main": "dist/index.js",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "description": "Полностью асинхронный API враппер для \"Сетевой Город. Образование\" написанный на Node.js",
   "scripts": {
     "build": "tsc"
   },
-  "homepage": "https://github.com/lentryd/netschoolapi",
+  "homepage": "https://lentryd.su/NetSchoolApi/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/lentryd/netschoolapi.git"
+    "url": "https://github.com/lentryd/NetSchoolApi.git"
   },
   "author": "lentryd",
   "license": "MIT",
