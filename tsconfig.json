@@ -17,7 +17,7 @@
         "src/*"
       ],
       "@NS": [
-        "src/NetSchoolApi-safe.ts"
+        "src/NetSchoolApi-safe"
       ],
       "@checks/*": [
         "src/checks/*"
