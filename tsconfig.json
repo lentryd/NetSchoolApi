@@ -4,13 +4,31 @@
     "target": "es6",
     "strict": true,
     "pretty": true,
+    "baseUrl": "./",
+    "outDir": "dist",
+    "rootDir": "src",
     "sourceMap": true,
+    "declaration": true,
     "esModuleInterop": true,
     "strictNullChecks": true,
     "moduleResolution": "node",
-    "outDir": "dist",
-    "rootDir": "src",
-    "declaration": true
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "@NS": [
+        "src/NetSchoolApi-safe.ts"
+      ],
+      "@checks/*": [
+        "src/checks/*"
+      ],
+      "@classes/*": [
+        "src/classes/*"
+      ],
+      "@methods/*": [
+        "src/methods/*"
+      ]
+    }
   },
   "lib": [
     "es2015"
