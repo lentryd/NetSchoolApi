@@ -1,33 +1,36 @@
-import Diary from "../classes/Diary";
-import Session from "../classes/Session";
-import NetSchoolApi from "../NetSchoolApi-safe";
+import NS from "@NS";
+import Diary from "@classes/Diary";
+import Session from "@classes/Session";
 
-export interface DiaryCredentials {
+export interface Credentials {
   studentId?: number;
   start: Date;
   end: Date;
 }
 
-export default function (this: NetSchoolApi, credentials: DiaryCredentials) {
-  const {
-    studentId = this.session?.studentsId?.[0] ?? 2004,
-    start: startDate,
-    end: endDate,
-  } = credentials;
+export default async function (this: NS, credentials: Credentials) {
+  if ((await this.sessionValid()) == false)
+    throw new Error("Сначала надо открыть сессию. (.logIn)");
 
-  if (!this.studentExists(studentId))
-    throw new Error(`Student ${studentId} not found`);
+  const { Client: client, session, studentExists } = this;
+  const { accessToken: at, ver: vers, yearId, studentsId } = session as Session;
+  let { studentId, start, end } = credentials;
 
-  const { accessToken, yearId } = this.session as Session;
+  if (!studentId) studentId = studentsId[0];
+  if (!studentExists(studentId))
+    throw new Error(`Нет пользователя ${studentId}`);
 
-  return this.Client.get(
-    "student/diary?" +
-      `yearId=${yearId}&` +
-      `studentId=${studentId}&` +
-      `weekEnd=${endDate.toJSON()}&` +
-      `weekStart=${startDate.toJSON()}`,
-    { headers: { at: accessToken } }
-  )
+  return client
+    .get("student/diary", {
+      params: {
+        vers,
+        yearId,
+        studentId,
+        weekEnd: end.toJSON(),
+        weekStart: start.toJSON(),
+      },
+      headers: { at },
+    })
     .then((res) => res.json())
     .then((data) => new Diary(data));
 }
