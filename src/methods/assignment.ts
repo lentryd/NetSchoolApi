@@ -11,12 +11,12 @@ export default async function (this: NS, credentials: Credentials) {
   if ((await this.sessionValid()) == false)
     throw new Error("Сначала надо открыть сессию. (.logIn)");
 
-  const { Client: client, session, studentExists } = this;
+  const { Client: client, session } = this;
   const { accessToken: at, studentsId } = session as Session;
   let { studentId, id } = credentials;
 
   if (!studentId) studentId = studentsId[0];
-  if (!studentExists(studentId))
+  if (!this.studentExists(studentId))
     throw new Error(`Нет пользователя ${studentId}`);
 
   return client
