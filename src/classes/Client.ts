@@ -106,7 +106,7 @@ export class Client {
     if (init?.params) {
       for (let name in init.params) {
         query += !query ? "?" : "&";
-        query += encodeURI(`${name}=${JSON.stringify(init.params[name])}`);
+        query += encodeURI(`${name}=${init.params[name]}`);
       }
     }
 
