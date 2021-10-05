@@ -1,4 +1,5 @@
-import NetSchoolApi from "./NetSchoolApi";
-import NetSchoolApiSafe from "./NetSchoolApi-safe";
+import NetSchoolApi from "@/NetSchoolApi";
+import NetSchoolApiSafe from "@/NetSchoolApi-safe";
 
-export = { NetSchoolApi, NetSchoolApiSafe };
+export default NetSchoolApi;
+export const Safe = NetSchoolApiSafe;
