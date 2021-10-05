@@ -1,23 +1,25 @@
-import { Client } from "./classes/Client";
-import Session from "./classes/Session";
-import Diary from "./classes/Diary";
-import AssignmentInfo from "./classes/AssignmentInfo";
-import AssignmentTypes from "./classes/AssignmentTypes";
+import { Client } from "@classes/Client";
+import Session from "@classes/Session";
+import AssignmentTypes from "@classes/AssignmentTypes";
 
-import logIn from "./methods/logIn";
-import logOut from "./methods/logOut";
-import authData from "./methods/authData";
-import ttsLogin from "./methods/ttsLogin";
-import studentExists from "./methods/studentExists";
-import diary, { DiaryCredentials } from "./methods/diary";
-import assignment, { AssignmentCredentials } from "./methods/assignment";
-import assignmentTypes from "./methods/assignmentTypes";
+import checkSession from "@checks/checkSession";
+import studentExists from "@checks/studentExists";
+
+import logIn from "@methods/logIn";
+import logOut from "@methods/logOut";
+
+import diary from "@methods/diary";
+import assignment from "@methods/assignment";
+import assignmentTypes from "@methods/assignmentTypes";
+
+import { Credentials as DiaryCredentials } from "@methods/diary";
+import { Credentials as AssignmentCredentials } from "@methods/assignment";
 
 export interface Credentials {
   origin: string;
   login: string;
   password: string;
-  schoolName: string;
+  school: number | string;
 }
 
 export default class NetSchoolApiSafe {
@@ -26,37 +28,42 @@ export default class NetSchoolApiSafe {
 
   constructor(public credentials: Credentials) {
     this.Client = new Client(credentials.origin);
-    this.Client.path = "/webapi";
+    this.Client.path = "/webApi";
   }
 
-  // ⭐️ Управление аккаунтом
+  // ⭐️ Управление сессией
 
   /** Открытие сессии в "Сетевой город. Образование" */
-  logIn(): Promise<Session> {
+  logIn() {
     return logIn.call(this);
   }
 
   /** Закрытие сессии в "Сетевой город. Образование" */
-  logOut(): Promise<boolean> {
+  logOut() {
     return logOut.call(this);
   }
 
-  // ⭐️ Проверки данные
+  // ⭐️ Различные проверки
+
+  /** Проверка сессии через API "Сетевой город. Образование"*/
+  sessionValid() {
+    return checkSession.call(this);
+  }
 
   /** Существует ли `id` ученика */
-  studentExists(id: number): boolean {
+  studentExists(id: number) {
     return studentExists.call(this, id);
   }
 
   // ⭐️ Получение данных
 
   /** Дневник пользователя*/
-  diary(credentials: DiaryCredentials): Promise<Diary> {
+  diary(credentials: DiaryCredentials) {
     return diary.call(this, credentials);
   }
 
   /** Информация о задание */
-  assignment(credentials: AssignmentCredentials): Promise<AssignmentInfo> {
+  assignment(credentials: AssignmentCredentials) {
     return assignment.call(this, credentials);
   }
 
@@ -64,9 +71,4 @@ export default class NetSchoolApiSafe {
   assignmentTypes(): Promise<AssignmentTypes> {
     return assignmentTypes.call(this);
   }
-
-  // ⭐️ Просто надо (возможно потом их уберу)
-
-  _authData = authData.bind(this);
-  _ttsLogin = ttsLogin.bind(this);
 }
