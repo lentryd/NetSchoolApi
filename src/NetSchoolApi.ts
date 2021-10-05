@@ -1,8 +1,6 @@
-import NetSchoolApiSafe, { Credentials } from "./NetSchoolApi-safe";
-import { DiaryCredentials } from "./methods/diary";
-import { AssignmentCredentials } from "./methods/assignment";
+import NS, { Credentials } from "@NS";
 
-export default class NetSchoolApi extends NetSchoolApiSafe {
+export default class NetSchoolApi extends NS {
   constructor(credentials: Credentials) {
     super(credentials);
 
@@ -22,29 +20,7 @@ export default class NetSchoolApi extends NetSchoolApiSafe {
     process.addListener("unhandledRejection", this.closeSession.bind(this));
   }
 
-  openSession() {
-    return new Promise((resolve) => {
-      if (!this.session || this.session.isExpired()) {
-        console.info(
-          "\x1b[46m\x1b[30m INFO \x1b[0m",
-          `У пользователя ${this.credentials.login} нет открытого сеанс. Сейчас мы откроем его 😄`
-        );
-
-        resolve(
-          this.logIn().then((session) => {
-            console.info(
-              "\x1b[42m\x1b[30m DONE \x1b[0m",
-              `Сеанс ${this.credentials.login} успешно открыт.`
-            );
-            return session;
-          })
-        );
-      } else {
-        resolve(this.session);
-      }
-    });
-  }
-
+  /** Экстренное закрытие сессии */
   closeSession(err: any) {
     // Если поймали ошибку, то показываем ее
     if (err) {
@@ -55,45 +31,48 @@ export default class NetSchoolApi extends NetSchoolApiSafe {
       );
     }
 
-    // Сессия еще даже не создана, отдыхаем
-    if (!this.session) return true;
+    return super.sessionValid().then((d) => {
+      if (!d) {
+        return true;
+      } else {
+        super
+          .logOut()
+          .then(() =>
+            console.info(
+              "\x1b[42m\x1b[30m DONE \x1b[0m",
+              `Сеанс ${this.credentials.login} успешно закрыт, хорошего дня 😏`
+            )
+          )
+          .catch((err) =>
+            console.error(
+              "\x1b[41m\x1b[30m ERROR \x1b[0m",
+              `Не удалось закрыт сеанс ${this.credentials.login} 😔\n`,
+              err
+            )
+          )
+          .finally(() => process.exit());
+      }
+    });
+  }
 
-    // Сессия уже завершена
-    if (this.session.isExpired()) return true;
+  /** Повторное открытие сессии (всегда возвращает `true`) */
+  sessionValid() {
+    return super
+      .sessionValid()
+      .then((valid) => {
+        if (valid) return;
 
-    // Уведомляем об открытой сессии
-    console.info(
-      "\x1b[46m\x1b[30m INFO \x1b[0m",
-      `У пользователя ${this.credentials.login} обнаружен открытый сеанс. Мы закроем его сейчас 😄`
-    );
-
-    // Закрываем сессию и уведомляем об этот пользователя
-    return this.logOut()
-      .then(() =>
         console.info(
-          "\x1b[42m\x1b[30m DONE \x1b[0m",
-          `Сеанс ${this.credentials.login} успешно закрыт, хорошего дня 😏`
-        )
-      )
-      .catch((err) =>
-        console.error(
-          "\x1b[41m\x1b[30m ERROR \x1b[0m",
-          `Не удалось закрыт сеанс ${this.credentials.login} 😔\n`,
-          err
-        )
-      )
-      .finally(() => process.exit());
-  }
-
-  diary(credentials: DiaryCredentials) {
-    return this.openSession().then(() => super.diary(credentials));
-  }
-
-  assignment(credentials: AssignmentCredentials) {
-    return this.openSession().then(() => super.assignment(credentials));
-  }
-
-  assignmentTypes() {
-    return this.openSession().then(() => super.assignmentTypes());
+          "\x1b[46m\x1b[30m INFO \x1b[0m",
+          `У пользователя ${this.credentials.login} нет открытого сеанс. Сейчас мы откроем его 😄`
+        );
+        return super.logIn().then(() => {
+          console.info(
+            "\x1b[42m\x1b[30m DONE \x1b[0m",
+            `Сеанс для ${this.credentials.login} успешно открыт.`
+          );
+        });
+      })
+      .then(() => true);
   }
 }
