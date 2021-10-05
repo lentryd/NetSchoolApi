@@ -1,4 +1,5 @@
 interface Credentials {
+  ver: string;
   userId: number;
   yearId: number;
   schoolId: number;
@@ -9,6 +10,7 @@ interface Credentials {
 }
 
 export default class Session {
+  ver: string;
   userId: number;
   yearId: number;
   schoolId: number;
@@ -18,6 +20,7 @@ export default class Session {
   globalYearId: number;
 
   constructor(credentials: Credentials) {
+    this.ver = credentials.ver;
     this.userId = credentials.userId;
     this.yearId = credentials.yearId;
     this.schoolId = credentials.schoolId;
