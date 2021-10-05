@@ -7,7 +7,7 @@ export interface LessonObject {
   endTime: string;
   startTime: string;
   subjectName: string;
-  assignments: AssignmentObject[];
+  assignments: undefined | AssignmentObject[];
   classmeetingId: number;
 }
 
@@ -24,7 +24,7 @@ export default class Lesson {
     this.subject = lesson.subjectName;
     this._endDate = lesson.day.replace("00:00", lesson.endTime);
     this._startDate = lesson.day.replace("00:00", lesson.startTime);
-    this.assignments = lesson.assignments.map((a) => new Assignment(a));
+    this.assignments = lesson.assignments?.map((a) => new Assignment(a)) ?? [];
   }
 
   get end() {
