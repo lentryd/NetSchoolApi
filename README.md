@@ -17,7 +17,7 @@ const user = new NetSchoolApi({
   origin: "https://example.com",
   login: "Иванов",
   password: "123456",
-  schoolName: "МБОУ ...", // Название школы полностью
+  school: "МБОУ ...", // Название школы (полностью) или её id
 });
 
 user
