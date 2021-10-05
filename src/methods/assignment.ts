@@ -1,26 +1,29 @@
-import AssignmentInfo from "../classes/AssignmentInfo";
-import Session from "../classes/Session";
-import NetSchoolApi from "../NetSchoolApi-safe";
+import NS from "@NS";
+import Session from "@classes/Session";
+import AssignmentInfo from "@classes/AssignmentInfo";
 
-export interface AssignmentCredentials {
+export interface Credentials {
   studentId?: number;
   id: number;
 }
 
-export default function (
-  this: NetSchoolApi,
-  credentials: AssignmentCredentials
-) {
-  const { studentId = this.session?.studentsId?.[0] ?? 2004, id } = credentials;
+export default async function (this: NS, credentials: Credentials) {
+  if ((await this.sessionValid()) == false)
+    throw new Error("Сначала надо открыть сессию. (.logIn)");
 
-  if (!this.studentExists(studentId))
-    throw new Error(`Student ${studentId} not found`);
+  const { Client: client, session, studentExists } = this;
+  const { accessToken: at, studentsId } = session as Session;
+  let { studentId, id } = credentials;
 
-  const { accessToken: at } = this.session as Session;
+  if (!studentId) studentId = studentsId[0];
+  if (!studentExists(studentId))
+    throw new Error(`Нет пользователя ${studentId}`);
 
-  return this.Client.get(`student/diary/assigns/${id}?studentId=${studentId}`, {
-    headers: { at },
-  })
+  return client
+    .get(`student/diary/assigns/${id}`, {
+      params: { studentId },
+      headers: { at },
+    })
     .then((res) => res.json())
     .then((data) => new AssignmentInfo(data));
 }
