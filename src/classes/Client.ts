@@ -9,6 +9,10 @@
 import * as path from "path";
 import fetch, { HeadersInit, RequestInit } from "node-fetch";
 
+interface Init extends RequestInit {
+  params?: { [key: string]: any };
+}
+
 export class Client {
   static formData(
     body: { [key: string]: any },
@@ -97,8 +101,16 @@ export class Client {
    * @param path ссылка на ресурсу
    * @param init доп. данные запроса
    */
-  get(path: string, init?: RequestInit) {
-    return this.request(path, { method: "get", ...init });
+  get(path: string, init?: Init) {
+    let query = "";
+    if (init?.params) {
+      for (let name in init.params) {
+        query += !query ? "?" : "&";
+        query += encodeURI(`${name}=${JSON.stringify(init.params[name])}`);
+      }
+    }
+
+    return this.request(path + query, { method: "get", ...init });
   }
 
   /**
