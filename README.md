@@ -32,5 +32,5 @@ user
 
 ## Стоит прочитать
 
-- [Доступные методы](docs/guide.md)
-- [Доступные классы](docs/reference.md)
+- [Методы](docs/guide.md)
+- [Классы](docs/reference.md)
