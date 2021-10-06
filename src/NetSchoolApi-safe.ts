@@ -1,6 +1,5 @@
 import { Client } from "@classes/Client";
 import Session from "@classes/Session";
-import AssignmentTypes from "@classes/AssignmentTypes";
 
 import checkSession from "@checks/checkSession";
 import studentExists from "@checks/studentExists";
@@ -68,7 +67,7 @@ export default class NetSchoolApiSafe {
   }
 
   /** Типы заданий */
-  assignmentTypes(): Promise<AssignmentTypes> {
+  assignmentTypes() {
     return assignmentTypes.call(this);
   }
 }
