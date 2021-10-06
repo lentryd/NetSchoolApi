@@ -22,8 +22,8 @@ const user = new NetSchoolApi({
 
 user
   .diary({
-    startDate: new Date("2021-05-12"),
-    endDate: new Date("2021-05-19"),
+    start: new Date("2021-05-12"),
+    end: new Date("2021-05-19"),
   })
   .then(console.log);
 ```
