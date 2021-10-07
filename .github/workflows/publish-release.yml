@@ -8,8 +8,6 @@ jobs:
   publish:
     name: Публикация релиза
     runs-on: ubuntu-latest
-    env:
-      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     
     steps:
       - name: Качаем репозиторий
@@ -24,5 +22,8 @@ jobs:
           npm run build
       - name: Публикация релиза
         run: |
-          npm publish
+          npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+          npm publish --ignore-scripts
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     
