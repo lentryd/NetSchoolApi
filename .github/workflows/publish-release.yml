@@ -17,5 +17,5 @@ jobs:
           npm install
           npm run build
       - name: Проверка папки
-        run: ls
+        run: ls -l
     
