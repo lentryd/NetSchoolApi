@@ -7,9 +7,9 @@ jobs:
     
     steps:
       - name: Качаем репозиторий
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.3.4
       - name: Установка Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v2.4.1
         with:
           node-version: 14.17.0
       - name: Установка зависимостей и компиляция
@@ -17,5 +17,5 @@ jobs:
           npm install
           npm run build
       - name: Проверка папки
-        run: ls -l
+        run: ls -a
     
