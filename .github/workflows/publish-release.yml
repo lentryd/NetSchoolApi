@@ -1,0 +1,28 @@
+name: Автоматическая публикация релизов
+
+on: 
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    name: Публикация релиза
+    runs-on: ubuntu-latest
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    
+    steps:
+      - name: Качаем репозиторий
+        uses: actions/checkout@v2.3.4
+      - name: Установка Node.js
+        uses: actions/setup-node@v2.4.1
+        with:
+          node-version: 14.17.0
+      - name: Установка зависимостей и компиляция
+        run: |
+          npm install
+          npm run build
+      - name: Публикация релиза
+        run: |
+          npm publish
+    
