@@ -1,9 +1,15 @@
-on: [push]
+name: Автоматическая публикация релизов
+
+on: 
+  release:
+    types: [published]
 
 jobs:
   publish:
     name: Публикация релиза
     runs-on: ubuntu-latest
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
     
     steps:
       - name: Качаем репозиторий
@@ -16,6 +22,7 @@ jobs:
         run: |
           npm install
           npm run build
-      - name: Проверка папки
-        run: ls -a
+      - name: Публикация релиза
+        run: |
+          npm publish
     
