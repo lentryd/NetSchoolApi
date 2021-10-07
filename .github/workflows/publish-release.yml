@@ -1,6 +1,8 @@
 name: Автоматическая публикация релизов
 
-on: push
+on:
+  release:
+    types: [published]
 
 jobs:
   publish:
