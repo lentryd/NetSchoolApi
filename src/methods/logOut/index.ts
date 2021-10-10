@@ -7,8 +7,9 @@ import signOut from "./methods/signOut";
 export default function (this: NS) {
   const { client, session } = this;
 
-  return expiredSession(client, session).then((expired) => {
-    if (!expired)
-      signOut(client, session as Session).then(() => (this.session = null));
-  });
+  return expiredSession(client, session).then((expired) =>
+    expired
+      ? undefined
+      : signOut(client, session as Session).then(() => (this.session = null))
+  );
 }
