@@ -1,7 +1,7 @@
 import NS from "@NS";
 
 export default async function (this: NS) {
-  const { Client: client, session } = this;
+  const { client, session } = this;
   if (!session) return false;
 
   return client

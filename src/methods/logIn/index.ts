@@ -6,7 +6,7 @@ import openSession from "./methods/openSession";
 import expiredSession from "@methods/logOut/methods/expiredSession";
 
 export default async function (this: NS) {
-  const { Client: client, session, credentials } = this;
+  const { client, session, credentials } = this;
   const { login, password, school } = credentials;
 
   if ((await expiredSession(client, session)) == false)

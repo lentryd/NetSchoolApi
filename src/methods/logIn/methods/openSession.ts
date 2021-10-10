@@ -1,4 +1,4 @@
-import { Client } from "@classes/Client";
+import Client from "@classes/Client";
 
 import { SignIn } from "./signIn";
 import appContext from "./appContext";

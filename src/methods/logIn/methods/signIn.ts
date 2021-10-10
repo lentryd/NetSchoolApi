@@ -1,4 +1,4 @@
-import { Client } from "@classes/Client";
+import Client from "@classes/Client";
 
 import passwordHash from "./passwordHash";
 import authData, { AuthData } from "./authData";

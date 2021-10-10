@@ -6,7 +6,7 @@ export default async function (this: NS) {
   if ((await this.sessionValid()) == false)
     throw new Error("Сначала надо открыть сессию. (.logIn)");
 
-  const { Client: client, session } = this;
+  const { client, session } = this;
   const { accessToken: at } = session as Session;
 
   return client

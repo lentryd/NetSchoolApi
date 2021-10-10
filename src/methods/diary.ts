@@ -12,7 +12,7 @@ export default async function (this: NS, credentials: Credentials) {
   if ((await this.sessionValid()) == false)
     throw new Error("Сначала надо открыть сессию. (.logIn)");
 
-  const { Client: client, session } = this;
+  const { client, session } = this;
   const { accessToken: at, ver: vers, yearId, studentsId } = session as Session;
   let { studentId, start, end } = credentials;
 
