@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "description": "Полностью асинхронный API враппер для \"Сетевой Город. Образование\" написанный на Node.js",
   "scripts": {
-    "build": "tsc && tscpaths -p ./tsconfig.json -s ./src -o ./dist"
+    "build": "tsc && tscpaths -p ./tsconfig.json -s ./src -o ./dist",
+    "test": "npm run build && node test"
   },
   "homepage": "https://lentryd.su/NetSchoolApi/",
   "repository": {
