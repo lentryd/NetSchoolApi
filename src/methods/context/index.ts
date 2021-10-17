@@ -1,9 +1,9 @@
 import NS from "@NS";
 import Context from "@classes/Context";
 
+import sysInfo from "./methods/sysInfo";
 import context from "./methods/context";
 import studentGrades from "./methods/studentGrades";
-import sysInfo from "./methods/sysinfo";
 
 export default async function (this: NS) {
   const { client } = this;
