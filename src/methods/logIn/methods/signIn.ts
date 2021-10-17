@@ -1,24 +1,9 @@
+import { Credentials } from "@NS";
 import Client from "@classes/Client";
 
+import authData from "./authData";
+import schoolInfo from "./schoolInfo";
 import passwordHash from "./passwordHash";
-import authData, { AuthData } from "./authData";
-import schoolInfo, { SchoolInfo } from "./schoolInfo";
-
-function formData(
-  login: string,
-  password: string,
-  { lt, ver, salt }: AuthData,
-  school: SchoolInfo
-) {
-  return Client.formData({
-    un: login,
-    lt,
-    ver,
-    loginType: 1,
-    ...school,
-    ...passwordHash(salt, password),
-  });
-}
 
 interface SignInObject {
   at: string;
@@ -31,31 +16,30 @@ export interface SignIn {
   timeOut: number;
 }
 
-export default function (
-  login: string,
-  password: string,
-  school: string | number,
-  client: Client
+export default async function (
+  client: Client,
+  credentials: Credentials
 ): Promise<SignIn> {
-  let ver = "";
+  const { login: un, password, school: schoolCr } = credentials;
 
-  return Promise.all([authData(client), schoolInfo(client, school)])
-    .then(([authData, schoolInfo]) => {
-      ver = authData.ver;
+  const [{ lt, ver, salt }, school] = await Promise.all([
+    authData(client),
+    schoolInfo(client, schoolCr),
+  ]);
 
-      return formData(login, password, authData, schoolInfo);
-    })
-    .then((init) => client.post("/login", init))
-    .then((res) => res.json() as Promise<SignInObject>)
-    .then((data) => {
-      if (!data) {
-        throw new Error("Не удалось войти");
-      } else {
-        return {
-          at: data.at,
-          ver,
-          timeOut: data.timeOut,
-        };
-      }
-    });
+  const { at, timeOut }: SignInObject = await client
+    .post(
+      "/login",
+      Client.formData({
+        un,
+        lt,
+        ver,
+        loginType: 1,
+        ...school,
+        ...passwordHash(salt, password),
+      })
+    )
+    .then((res) => res.json());
+
+  return { at, ver, timeOut };
 }

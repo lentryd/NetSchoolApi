@@ -19,9 +19,6 @@
       "@NS": [
         "src/NetSchoolApi-safe"
       ],
-      "@checks/*": [
-        "src/checks/*"
-      ],
       "@classes/*": [
         "src/classes/*"
       ],

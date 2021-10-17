@@ -12,31 +12,6 @@ interface SchoolAddress {
   municipalityDistrictId: number;
 }
 
-function getSchools(client: Client) {
-  return client
-    .get("addresses/schools?funcType=2")
-    .then((res) => res.json() as Promise<SchoolAddress[]>)
-    .then((data) => {
-      if (!data || !data.length) {
-        throw new Error("Сетевой не вернул список школ");
-      } else {
-        return data;
-      }
-    });
-}
-
-function findSchool(school: string | number, schools: SchoolAddress[]) {
-  if (typeof school === "string") school = school.toLowerCase();
-
-  return schools.find(({ id, name }) => {
-    if (typeof school === "string") {
-      return name.toLowerCase() == school;
-    } else {
-      return id == school;
-    }
-  });
-}
-
 export interface SchoolInfo {
   cid: number;
   sid: number;
@@ -46,21 +21,27 @@ export interface SchoolInfo {
   scid: number;
 }
 
-export default function (client: Client, school: string | number) {
-  return getSchools(client)
-    .then(findSchool.bind(null, school))
-    .then((school) => {
-      if (!school) {
-        throw new Error("Не удалось найти школу");
-      } else {
-        return {
-          cid: school.countryId,
-          sid: school.stateId,
-          pid: school.municipalityDistrictId,
-          cn: school.cityId,
-          sft: 2,
-          scid: school.id,
-        };
-      }
-    });
+export default async function (client: Client, school: string | number) {
+  const schools: SchoolAddress[] = await client
+    .get("addresses/schools?funcType=2")
+    .then((res) => res.json());
+
+  if (!schools || !schools.length)
+    throw new Error("Сетевой не вернул список школ");
+
+  if (typeof school === "string") school = school.toLowerCase();
+  const result = schools.find(({ id, name }) =>
+    typeof school !== "string" ? id == school : name.toLowerCase() == school
+  );
+
+  if (!result) throw new Error("Не удалось найти школу");
+
+  return {
+    cid: result.countryId,
+    sid: result.stateId,
+    pid: result.municipalityDistrictId,
+    cn: result.cityId,
+    sft: 2,
+    scid: result.id,
+  };
 }

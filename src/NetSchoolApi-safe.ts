@@ -1,11 +1,11 @@
 import Client from "@classes/Client";
 import Session from "@classes/Session";
-
-import checkSession from "@checks/checkSession";
-import studentExists from "@checks/studentExists";
+import Context from "@classes/Context";
 
 import logIn from "@methods/logIn";
 import logOut from "@methods/logOut";
+import context from "@methods/context";
+import sessionValid from "@methods/sessionValid";
 
 import diary from "@methods/diary";
 import assignment from "@methods/assignment";
@@ -22,14 +22,18 @@ export interface Credentials {
 }
 
 export default class NetSchoolApiSafe {
-  client: Client;
-  session: null | Session = null;
+  public context: null | Context = null;
+  protected session: null | Session = null;
+
+  protected client: Client;
+  protected credentials: Credentials;
 
   /**
    * Создание пользователя
-   * @param credentials Авторизационные данные пользователя
+   * @param credentials Данные пользователя
    */
-  constructor(public credentials: Credentials) {
+  constructor(credentials: Credentials) {
+    this.credentials = credentials;
     this.client = new Client(credentials.origin);
 
     this.client.path.set("webApi");
@@ -38,34 +42,35 @@ export default class NetSchoolApiSafe {
     );
   }
 
-  // ⭐️ Управление сессией
+  // ⭐️ Сессия
 
   /** Открытие сессии в "Сетевой город. Образование" */
-  logIn() {
-    return logIn.call(this);
+  async logIn() {
+    await logIn.call(this);
+
+    if (!this.context) {
+      this.context = await context.call(this);
+    }
+
+    return this.session;
   }
 
   /** Закрытие сессии в "Сетевой город. Образование" */
-  logOut() {
-    return logOut.call(this);
-  }
+  async logOut() {
+    await logOut.call(this);
 
-  // ⭐️ Различные проверки
+    return (this.session = null);
+  }
 
   /** Проверка сессии через API "Сетевой город. Образование"*/
   sessionValid() {
-    return checkSession.call(this);
+    return sessionValid.call(this);
   }
 
-  /** Существует ли `id` ученика */
-  studentExists(id: number) {
-    return studentExists.call(this, id);
-  }
-
-  // ⭐️ Получение данных
+  // ⭐️ Дневник
 
   /** Дневник пользователя*/
-  diary(credentials: DiaryCredentials) {
+  diary(credentials?: DiaryCredentials) {
     return diary.call(this, credentials);
   }
 
