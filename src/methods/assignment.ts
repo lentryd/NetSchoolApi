@@ -7,11 +7,11 @@ export interface Credentials {
 }
 
 export default async function (this: NS, credentials: Credentials) {
-  const { client, context } = this;
-  if (!context || !(await this.sessionValid())) {
+  if (!(await this.sessionValid()) || !this.context) {
     throw new Error("Сначала надо открыть сессию. (.logIn)");
   }
 
+  const { client, context } = this;
   let { studentId, id } = credentials;
   if (!studentId) {
     studentId = context.defaultStudent();
