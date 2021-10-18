@@ -24,7 +24,8 @@ export default async function (this: NS, credentials: Credentials = {}) {
       .get("student/diary/init")
       .then((res) => res.json());
 
-    start = end = new Date(weekStart);
+    start = new Date(weekStart);
+    end = new Date(weekStart);
     end.setDate(end.getDate() + 7);
   }
 
