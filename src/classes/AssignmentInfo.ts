@@ -12,7 +12,8 @@ export interface AssignmentInfoObject {
   id: number;
   date: string;
   weight: number;
-  teachers: Teacher[];
+  teacher: Teacher;
+  teachers?: Teacher[];
   isDeleted: boolean;
   description: string;
   subjectGroup: SubjectGroup;
@@ -35,7 +36,9 @@ export default class {
     this.text = assignment.assignmentName;
     this.weight = assignment.weight;
     this.subject = assignment.subjectGroup.name;
-    this.teacher = assignment.teachers ? assignment.teachers[0].name : assignment.teacher.name;
+    this.teacher = assignment.teachers
+      ? assignment.teachers[0].name
+      : assignment.teacher.name;
     this.isDeleted = assignment.isDeleted;
     this.description = assignment.description;
     this._date = assignment.date;
