@@ -8,6 +8,8 @@
   - [.diary()](#diary)
   - [.assignment()](#assignment)
   - [.assignmentTypes()](#assignmenttypes)
+- [Расписание](#расписание)
+  - [.scheduleDay()](#scheduleday)
 
 ## Управление сессией
 
@@ -54,13 +56,13 @@
 
 #### Принимает объект данных:
 
-- `studentId?: number` - ID учащегося, можно не указать.
+- `studentId?: number` - ID учащегося, можно не указывать.
 - `start: Date` - Дата, с которой начинается дневник
 - `end: Date` - Последний день в дневнике
 
 #### Возвращает объект класса [Diary](reference.md#diary)
 
-#### Пример использования
+#### [Пример использования](examples/diary.md)
 
 ### .assignment()
 
@@ -68,12 +70,12 @@
 
 #### Принимает объект данных:
 
-- `studentId?: number` - ID учащегося, можно не указать.
+- `studentId?: number` - ID учащегося, можно не указывать.
 - `id: number` - ID задания
 
-#### Возвращает объект класса [AssignmentInfo](reference.md#AssignmentInfo)
+#### Возвращает объект класса [AssignmentInfo](reference.md#assignmentinfo)
 
-#### Пример использования
+#### [Пример использования](examples/assignment.md)
 
 ### .assignmentTypes()
 
@@ -83,4 +85,4 @@
 
 #### Возвращает объект класса [AssignmentTypes](reference.md#assignmenttypes)
 
-#### Пример использования
+#### [Пример использования](examples/assignmentTypes.md)
