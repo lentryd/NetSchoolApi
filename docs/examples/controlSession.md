@@ -12,8 +12,6 @@
 
 Мы хотим получить дневник (как в [базовом примере](../../README.md#использование)). Однако мы не доверяем автоматической авторизации и хотим все делать сами.
 
-Для этого нам нужно будет импортировать класс `Safe`.
-
 ```typescript
 import { Safe as NS } from "netschoolapi";
 
@@ -29,10 +27,7 @@ const user = new NS({
   await user.logIn();
 
   // Получаем дневник
-  const diary = await user.diary({
-    start: new Date("2021-05-12"),
-    end: new Date("2021-05-19"),
-  });
+  const diary = await user.diary();
   console.log(diary);
 
   // Закрываем сессию
