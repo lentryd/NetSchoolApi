@@ -20,15 +20,8 @@ const user = new NetSchoolApi({
   school: "МБОУ ...", // Название школы (полностью) или её id
 });
 
-user
-  .diary({
-    start: new Date("2021-05-12"),
-    end: new Date("2021-05-19"),
-  })
-  .then(console.log);
+user.diary().then(console.log);
 ```
-
-> Метод `user.logIn()` и `user.logOut()` вызывать не требуется.
 
 ## Стоит прочитать
 
