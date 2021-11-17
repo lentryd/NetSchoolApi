@@ -35,7 +35,7 @@ export default class {
     this.text = assignment.assignmentName;
     this.weight = assignment.weight;
     this.subject = assignment.subjectGroup.name;
-    this.teacher = assignment.teachers[0].name;
+    this.teacher = assignment.teachers ? assignment.teachers[0].name : assignment.teacher.name;
     this.isDeleted = assignment.isDeleted;
     this.description = assignment.description;
     this._date = assignment.date;
