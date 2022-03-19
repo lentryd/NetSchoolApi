@@ -1,4 +1,4 @@
-import fetch, { HeadersInit, RequestInit } from "node-fetch";
+import fetch, { RequestInit } from "node-fetch";
 
 // Работа с куки
 import decodeCookie from "./methods/cookie/decode";
