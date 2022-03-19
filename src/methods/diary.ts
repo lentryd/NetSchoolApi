@@ -22,7 +22,7 @@ export default async function (this: NS, credentials: Credentials = {}) {
   if (!start || !end) {
     const { weekStart } = await client
       .get("student/diary/init")
-      .then((res) => res.json());
+      .then((res) => res.json() as any);
 
     start = new Date(weekStart);
     end = new Date(weekStart);
@@ -38,6 +38,6 @@ export default async function (this: NS, credentials: Credentials = {}) {
         weekStart: start.toJSON(),
       },
     })
-    .then((res) => res.json())
+    .then((res) => res.json() as any)
     .then((data) => new Diary(data));
 }

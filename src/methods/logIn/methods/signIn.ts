@@ -39,7 +39,7 @@ export default async function (
         ...passwordHash(salt, password),
       })
     )
-    .then((res) => res.json());
+    .then((res) => res.json() as any);
 
   return { at, ver, timeOut };
 }

@@ -24,7 +24,7 @@ export interface SchoolInfo {
 export default async function (client: Client, school: string | number) {
   const schools: SchoolAddress[] = await client
     .get("addresses/schools")
-    .then((res) => res.json());
+    .then((res) => res.json() as any);
 
   if (!schools || !schools.length)
     throw new Error("Сетевой не вернул список школ");

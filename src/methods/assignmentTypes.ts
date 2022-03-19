@@ -7,6 +7,6 @@ export default async function (this: NS) {
 
   return this.client
     .get("grade/assignment/types", { params: { all: false } })
-    .then((res) => res.json())
+    .then((res) => res.json() as any)
     .then((data) => new AssignmentTypes(data));
 }

@@ -21,6 +21,6 @@ export default async function (this: NS, credentials: Credentials) {
 
   return client
     .get(`student/diary/assigns/${id}`, { params: { studentId } })
-    .then((res) => res.json())
+    .then((res) => res.json() as any)
     .then((data) => new AssignmentInfo(data));
 }

@@ -52,7 +52,7 @@ interface ContextObject {
 export default async function (client: Client) {
   const data: ContextObject = await client
     .get("context")
-    .then((res) => res.json());
+    .then((res) => res.json() as any);
 
   return {
     year: {

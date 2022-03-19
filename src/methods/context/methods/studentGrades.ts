@@ -73,7 +73,7 @@ interface StudentGradesObject {
 export default async function (client: Client) {
   const { filterSources: data }: StudentGradesObject = await client
     .get("reports/studentGrades")
-    .then((res) => res.json());
+    .then((res) => res.json() as any);
 
   const classes =
     data
