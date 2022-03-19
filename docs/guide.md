@@ -86,3 +86,14 @@
 #### Возвращает объект класса [AssignmentTypes](reference.md#assignmenttypes)
 
 #### [Пример использования](examples/assignmentTypes.md)
+
+## Расписание
+
+### .scheduleDay()
+
+---
+
+#### Принимает объект данных:
+
+- `studentId?: number` - ID учащегося, можно не указывать.
+- `data?: Date` - Дата дня, на который нужно получить расписание.
