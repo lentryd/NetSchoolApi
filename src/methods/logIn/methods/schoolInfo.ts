@@ -23,7 +23,7 @@ export interface SchoolInfo {
 
 export default async function (client: Client, school: string | number) {
   const schools: SchoolAddress[] = await client
-    .get("addresses/schools?funcType=2")
+    .get("addresses/schools")
     .then((res) => res.json());
 
   if (!schools || !schools.length)
