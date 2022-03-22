@@ -1,6 +1,7 @@
 {
   "name": "netschoolapi",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "version": "1.0.4",
   "description": "Полностью асинхронный API враппер для \"Сетевой Город. Образование\" написанный на Node.js",
   "scripts": {
@@ -15,7 +16,8 @@
   "author": "lentryd",
   "license": "MIT",
   "dependencies": {
-    "node-fetch": "^2.6.7"
+    "node-fetch": "^2.6.7",
+    "node-html-parser": "^5.3.3"
   },
   "devDependencies": {
     "@types/node": "^15.12.5",
