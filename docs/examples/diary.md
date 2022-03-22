@@ -26,7 +26,7 @@ const user = new NS({
 
 (async function () {
   // Получаем дневник
-  const diary = await user.diary({ date: new Date() });
+  const diary = await user.diary();
   console.log(diary.days[0].lessons[2]);
 })();
 ```
@@ -50,7 +50,7 @@ const user = new NS({
   await user.logIn();
 
   // Получаем дневник
-  const diary = await user.diary({ date: new Date() });
+  const diary = await user.diary();
   console.log(diary.days[0].lessons[2]);
 
   // Закрываем сессию
