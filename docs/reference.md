@@ -8,8 +8,10 @@
 - [AssignmentInfo](#assignmentinfo)
 - [AssignmentType](#assignmenttype)
 - [AssignmentTypes](#assignmenttypes)
+- [ScheduleDay](#scheduleday)
+- [ScheduleDayLine](#scheduledayline)
 
-## `Session`
+## Session
 
 Класс необходим для удобного хранения данных сеанса/пользователя.
 
@@ -118,4 +120,26 @@
 - `.types: AssignmentType[]` - массив объектов [AssignmentType](#assignmenttype)
 - `.findById(): AssignmentType` - возвращает объект класса [AssignmentType](#assignmenttype). **Принимает id типа задания в качестве аргумента**
 - `.findByAbbr(): AssignmentType` - возвращает объект класса [AssignmentType](#assignmenttype). **Принимает abbr типа задания в качестве аргумента**
+- `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
+
+## ScheduleDay
+
+Класс необходим для удобной работы с расписанием на день.
+
+### Объект класса содержит:
+
+- `.date: Date` - дата возвращаемого дня
+- `.lines: ScheduleDayLine[]` - массив объектов [ScheduleDayLine](#scheduledayline).
+- `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
+
+## ScheduleDayLine
+
+Класс необходим для удобной работы с "линиями" расписания.
+
+### Объект класса содержит:
+
+- `.name: string` - название предмета/мероприятия
+- `.className?: string` - название кабинета
+- `.start: Date` - время начала предмета/мероприятия.
+- `.end: Date` - время окончания предмета/мероприятия.
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
