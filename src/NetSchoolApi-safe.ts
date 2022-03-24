@@ -7,12 +7,15 @@ import logOut from "@methods/logOut";
 import context from "@methods/context";
 import sessionValid from "@methods/sessionValid";
 
+import photo from "@methods/photo";
+
 import diary from "@methods/diary";
 import assignment from "@methods/assignment";
 import assignmentTypes from "@methods/assignmentTypes";
 
 import scheduleDay from "@methods/scheduleDay";
 
+import { Credentials as PhotoCredentials } from "@methods/photo";
 import { Credentials as DiaryCredentials } from "@methods/diary";
 import { Credentials as AssignmentCredentials } from "@methods/assignment";
 import { Credentials as ScheduleDayCredentials } from "@methods/scheduleDay";
@@ -68,6 +71,13 @@ export default class NetSchoolApiSafe {
   /** Проверка сессии через API "Сетевой город. Образование"*/
   sessionValid() {
     return sessionValid.call(this);
+  }
+
+  // ⭐️ Пользователь
+
+  /** Фото пользователя */
+  photo(credentials?: PhotoCredentials) {
+    return photo.call(this, credentials);
   }
 
   // ⭐️ Дневник
