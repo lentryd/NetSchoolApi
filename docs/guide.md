@@ -4,6 +4,8 @@
   - [.logIn()](#login)
   - [.logOut()](#logout)
   - [.sessionValid()](#sessionvalid)
+- [Пользователь](#пользователь)
+  - [.photo()](#photo)
 - [Дневник](#дневник)
   - [.diary()](#diary)
   - [.assignment()](#assignment)
@@ -45,6 +47,20 @@
 #### Возвращает `true` если сессия активна
 
 #### [Пример использования](examples/sessionValid.md)
+
+## Пользователь
+
+### .photo()
+
+---
+
+#### Принимает объект данных:
+
+- `studentId?: number` - ID учащегося, можно не указывать.
+
+#### Возвращает `Buffer`
+
+#### [Пример использования](examples/photo.md)
 
 ## Дневник
 
