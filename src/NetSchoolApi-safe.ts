@@ -7,6 +7,7 @@ import logOut from "@methods/logOut";
 import context from "@methods/context";
 import sessionValid from "@methods/sessionValid";
 
+import info from "@methods/info";
 import photo from "@methods/photo";
 
 import diary from "@methods/diary";
@@ -15,6 +16,7 @@ import assignmentTypes from "@methods/assignmentTypes";
 
 import scheduleDay from "@methods/scheduleDay";
 
+import { Credentials as InfoCredentials } from "@methods/info";
 import { Credentials as PhotoCredentials } from "@methods/photo";
 import { Credentials as DiaryCredentials } from "@methods/diary";
 import { Credentials as AssignmentCredentials } from "@methods/assignment";
@@ -74,6 +76,11 @@ export default class NetSchoolApiSafe {
   }
 
   // ⭐️ Пользователь
+
+  /** Информация пользователя */
+  info(credentials?: InfoCredentials) {
+    return info.call(this, credentials);
+  }
 
   /** Фото пользователя */
   photo(credentials?: PhotoCredentials) {

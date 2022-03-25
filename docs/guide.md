@@ -5,6 +5,7 @@
   - [.logOut()](#logout)
   - [.sessionValid()](#sessionvalid)
 - [Пользователь](#пользователь)
+  - [.info()](#info)
   - [.photo()](#photo)
 - [Дневник](#дневник)
   - [.diary()](#diary)
@@ -49,6 +50,18 @@
 #### [Пример использования](examples/sessionValid.md)
 
 ## Пользователь
+
+### .info()
+
+---
+
+#### Принимает объект данных:
+
+- `studentId?: number` - ID учащегося, можно не указывать.
+
+#### Возвращает объект класса [Info](reference.md#info)
+
+#### [Пример использования](examples/info.md)
 
 ### .photo()
 

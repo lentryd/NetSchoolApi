@@ -1,6 +1,7 @@
 # Классы | NetSchoolApi
 
 - [Session](#session)
+- [Info](#info)
 - [Diary](#diary)
 - [Day](#day)
 - [Lesson](#lesson)
@@ -26,6 +27,21 @@
 - `.globalYearId: number` - ID года (чаще всего это последние 2 цифры года)
 - `.isValid(): boolean` - возвращает `true`, если сессия все еще активна
 - `.isExpired(): boolean` - возвращает "true", если сессия больше не активна
+
+## Info
+
+Класс необходим для удобной работы с данными пользователя.
+
+### Объект класса содержит:
+
+- `.email: string` - почта пользователя
+- `.phone: string` - телефон пользователя
+- `.lastName: string` - фамилия пользователя
+- `.firstName: string` - имя пользователя
+- `.middleName: string` - отчество пользователя
+- `.birthDate: Date` - день рождения пользователя
+- `.existsPhoto: boolean` - возвращает `true` если фото установлено
+- `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
 
 ## Diary
 
