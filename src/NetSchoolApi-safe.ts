@@ -15,11 +15,13 @@ import assignment from "@methods/assignment";
 import assignmentTypes from "@methods/assignmentTypes";
 
 import scheduleDay from "@methods/scheduleDay";
+import scheduleWeek from "@methods/scheduleWeek";
 
 import { Credentials as PhotoCredentials } from "@methods/photo";
 import { Credentials as DiaryCredentials } from "@methods/diary";
 import { Credentials as AssignmentCredentials } from "@methods/assignment";
 import { Credentials as ScheduleDayCredentials } from "@methods/scheduleDay";
+import { Credentials as ScheduleWeekCredentials } from "@methods/scheduleWeek";
 
 export interface Credentials {
   login: string;
@@ -108,5 +110,10 @@ export default class NetSchoolApiSafe {
   /** Расписание на день */
   scheduleDay(credentials?: ScheduleDayCredentials) {
     return scheduleDay.call(this, credentials);
+  }
+
+  /** Расписание на неделю */
+  scheduleWeek(credentials?: ScheduleWeekCredentials) {
+    return scheduleWeek.call(this, credentials);
   }
 }
