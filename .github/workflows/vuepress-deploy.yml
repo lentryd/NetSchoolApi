@@ -1,40 +1,13 @@
-name: Генерация github-page
+name: Build Github Pages
 on: [push]
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2.4.0
+    - name: Build-Vue
+      uses: lentryd/VDocs@1.0.1
       with:
-          ref: "main"
-          repository: "lentryd/VDocs"
-          
-    - name: Delete default .env
-      run: rm .env
-        
-    - name: Installing Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
-        
-    - name: Installing dependencies
-      run: npm ci
-      
-    - name: Build project
-      env: 
-        VUE_APP_GH_REPO: ${{ github.event.repository.name }}
-        VUE_APP_GH_OWNER: ${{ github.repository_owner }}
-        VUE_APP_GH_BRANCH: ${{ github.ref_name }}
-      run: npm run build
-      
-    - name: Push dist
-      run: |
-        cd dist
-        cp index.html 404.html
-        git config --global user.name "${{ github.actor }}"
-        git config --global user.email "${{ github.actor }}@users.noreply.github.com"
-        git init
-        git add -A
-        git commit -m 'update content'
-        git push -f https://${{ github.repository_owner }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git master:gh-pages
+        username: ${{ github.repository_owner }}
+        reponame: ${{ github.event.repository.name }}
+        branch: ${{ github.ref_name }}
+        token: ${{ secrets.GITHUB_TOKEN }} # Leave this line unchanged
