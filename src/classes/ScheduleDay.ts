@@ -1,15 +1,10 @@
-import { parse } from "node-html-parser";
+import { outerHTML, table } from "@/utils/parseHtml";
+import { num2str } from "@utils/number";
 import ScheduleDayLine from "./ScheduleDayLine";
 
 interface Credentials {
   date: string;
   htmlText: string;
-}
-
-function num2str(num: number | string) {
-  if (typeof num == "string") num = parseInt(num);
-  if (num < 10) return "0" + num;
-  else return num.toString();
 }
 
 function timeFormat(date: string, strDate: string) {
@@ -26,52 +21,39 @@ function timeFormat(date: string, strDate: string) {
   }
 }
 
-function parseHtml(html: string, date: string) {
-  html = html.replace(/&nbsp;/g, " ");
-
-  const result: ScheduleDayLine[] = [];
-  const root = parse(html);
-  const table = root.querySelector(".schedule-table");
-  const trs = table?.querySelectorAll?.("tr") ?? [];
-
-  trs.shift();
-  trs.forEach((tr) => {
-    const tds = tr?.querySelectorAll?.("td");
-    let [start, end] = tds?.[0]?.structuredText.split(" - ");
-    let name = tds?.[1]?.structuredText;
-    const className = name.match(/\[(.+)\]/)?.[1];
-    if (!start || !end || !name) return;
-    if (className) name = name.replace(/ \[(.+)\]/, "");
-
-    result.push(
-      new ScheduleDayLine({
-        name,
-        className,
-        startDate: timeFormat(date, start),
-        endDate: timeFormat(date, end),
-      })
-    );
-  });
-
-  return result;
-}
-
 export default class ScheduleDay {
-  lines: ScheduleDayLine[];
+  raw: string;
 
   private _date: string;
 
   constructor(credentials: Credentials) {
+    this.raw = outerHTML({ html: credentials.htmlText, query: ".table" });
     this._date = credentials.date;
-    this.lines = parseHtml(credentials.htmlText, credentials.date);
   }
 
   get date() {
     return new Date(this._date);
   }
 
+  get lines(): ScheduleDayLine[] {
+    return table({ html: this.raw }).map((tr) => {
+      const [timeTd, nameTd] = tr?.querySelectorAll?.("td") ?? [];
+
+      let [start, end] = timeTd?.structuredText.split(" - ");
+      const startDate = timeFormat(this._date, start);
+      const endDate = timeFormat(this._date, end);
+
+      let name = nameTd?.structuredText;
+      const className = name.match(/\[(.+)\]/)?.[1];
+      if (className) name = name.replace(/ \[(.+)\]/, "");
+
+      return new ScheduleDayLine({ name, endDate, startDate, className });
+    });
+  }
+
   toJSON() {
     return {
+      raw: this.raw,
       date: this._date,
       lines: this.lines.map((line) => line.toJSON()),
     };
