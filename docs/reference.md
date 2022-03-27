@@ -11,6 +11,8 @@
 - [AssignmentTypes](#assignmenttypes)
 - [ScheduleDay](#scheduleday)
 - [ScheduleDayLine](#scheduledayline)
+- [ScheduleWeek](#scheduleweek)
+- [ScheduleWeekLine](#scheduleweekline)
 
 ## Session
 
@@ -144,6 +146,7 @@
 
 ### Объект класса содержит:
 
+- `.raw: string` - HTML код таблицы с расписанием
 - `.date: Date` - дата возвращаемого дня
 - `.lines: ScheduleDayLine[]` - массив объектов [ScheduleDayLine](#scheduledayline).
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
@@ -158,4 +161,28 @@
 - `.className?: string` - название кабинета
 - `.start: Date` - время начала предмета/мероприятия.
 - `.end: Date` - время окончания предмета/мероприятия.
+- `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
+
+## ScheduleWeek
+
+Класс необходим для удобной работы с расписанием на неделю.
+
+### Объект класса содержит:
+
+- `.raw: string` - HTML код таблицы с расписанием
+- `.date: Date` - дата требуемого дня
+- `.parsed: ScheduleWeekLine[]` - массив объектов [ScheduleWeekLine](#scheduleweekline).
+- `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
+
+## ScheduleWeekLine
+
+Класс необходим для удобной работы с "линиями" расписания.
+
+### Объект класса содержит:
+
+- `.date: Date` - дата дня.
+- `.lessons: object[]` - массив предметов
+- `.lessons.names: string[]` - названия предметов
+- `.lessons.number: number` - порядковый номер предмета
+- `.lessons.classesName: string[]` - названия кабинетов
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)

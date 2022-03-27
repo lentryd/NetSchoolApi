@@ -122,10 +122,22 @@
 
 #### Принимает объект данных:
 
-- `studentId?: number` - ID учащегося, можно не указывать.
 - `classId?: number` - ID класса, можно не указывать
 - `date?: Date` - Дата дня, на который нужно получить расписание.
 
 #### Возвращает объект класса [ScheduleDay](reference.md#scheduleday)
 
 #### [Пример использования](examples/scheduleday.md)
+
+### .scheduleWeek()
+
+---
+
+#### Принимает объект данных:
+
+- `classId?: number` - ID класса, можно не указывать
+- `date?: Date` - Дата дня, на который нужно получить расписание.
+
+#### Возвращает объект класса [ScheduleWeek](reference.md#scheduleweek)
+
+#### [Пример использования](examples/scheduleweek.md)
