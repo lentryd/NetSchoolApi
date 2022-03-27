@@ -19,6 +19,9 @@
       "@NS": [
         "src/NetSchoolApi-safe.ts"
       ],
+      "@utils/*": [
+        "src/utils/*"
+      ],
       "@classes/*": [
         "src/classes/*"
       ],
