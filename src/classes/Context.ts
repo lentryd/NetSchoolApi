@@ -32,7 +32,7 @@ interface Credentials {
   subjects: Subject[];
 }
 
-export default class {
+export default class Context {
   readonly user: User;
   readonly year: Year;
   readonly server: Server;
