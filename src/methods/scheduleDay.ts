@@ -1,6 +1,7 @@
 import NS from "@NS";
 import Client from "@classes/Client";
 import ScheduleDay from "@classes/ScheduleDay";
+import { sessionValid, dateValid, classIdValid } from "@utils/checks";
 
 function date2str(date: Date) {
   const day = date.getDate();
@@ -11,35 +12,26 @@ function date2str(date: Date) {
 }
 
 export interface Credentials {
-  studentId?: number;
-  classId?: number;
   date?: Date;
+  classId?: number;
 }
 
 export default async function (this: NS, credentials: Credentials = {}) {
-  if (!(await this.sessionValid()) || !this.context)
-    throw new Error("Сначала надо открыть сессию.");
+  const { client, session } = await sessionValid.call(this);
+  const { accessToken: at, ver } = session;
 
-  const { client, context } = this;
-  let { studentId, classId, date } = credentials;
+  let { date, classId } = credentials;
   if (!date) date = new Date();
-  if (!studentId) studentId = context.defaultStudent();
-  else if (!context.studentExists(studentId)) {
-    throw new Error(`Нет пользователя ${studentId}`);
-  }
-  if (!classId) classId = context.defaultClass();
-  else if (!context.classExists(classId)) {
-    throw new Error(`Нет класса ${classId}`);
-  }
+  else dateValid.call(this, date);
 
   const htmlText = await client
     .post(
       "../asp/Calendar/DayViewS.asp",
       Client.formData({
-        AT: this.session?.accessToken,
-        VER: this.session?.ver,
-        DATE: date2str(date),
-        PCLID_IUP: classId + "_0",
+        at,
+        ver,
+        date: date2str(date),
+        PCLID_IUP: classIdValid.call(this, classId) + "_0",
         LoginType: 0,
       })
     )
