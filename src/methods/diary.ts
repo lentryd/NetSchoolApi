@@ -1,5 +1,6 @@
 import NS from "@NS";
 import Diary from "@classes/Diary";
+import { sessionValid, dateValid, studentIdValid } from "@utils/checks";
 
 export interface Credentials {
   studentId?: number;
@@ -8,18 +9,12 @@ export interface Credentials {
 }
 
 export default async function (this: NS, credentials: Credentials = {}) {
-  if (!(await this.sessionValid()) || !this.context)
-    throw new Error("Сначала надо открыть сессию.");
+  const { client, context } = await sessionValid.call(this);
 
-  const { client, context } = this;
   let { studentId, start, end } = credentials;
-  if (!studentId) {
-    studentId = context.defaultStudent();
-  } else if (!context.studentExists(studentId)) {
-    throw new Error(`Нет пользователя ${studentId}`);
-  }
-
-  if (!start || !end) {
+  studentId = studentIdValid.call(this, studentId);
+  if (start && end) dateValid.call(this, start, end);
+  else {
     const { weekStart } = await client
       .get("student/diary/init")
       .then((res) => res.json() as any);

@@ -1,9 +1,9 @@
 import NS from "@NS";
+import { sessionValid } from "@utils/checks";
 import AssignmentTypes from "@classes/AssignmentTypes";
 
 export default async function (this: NS) {
-  if (!(await this.sessionValid()))
-    throw new Error("Сначала надо открыть сессию. (.logIn)");
+  await sessionValid.call(this);
 
   return this.client
     .get("grade/assignment/types", { params: { all: false } })

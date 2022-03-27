@@ -1,4 +1,5 @@
 import NS from "@NS";
+import { sessionValid, studentIdValid } from "@utils/checks";
 import AssignmentInfo from "@classes/AssignmentInfo";
 
 export interface Credentials {
@@ -7,17 +8,10 @@ export interface Credentials {
 }
 
 export default async function (this: NS, credentials: Credentials) {
-  if (!(await this.sessionValid()) || !this.context) {
-    throw new Error("Сначала надо открыть сессию. (.logIn)");
-  }
+  const { client } = await sessionValid.call(this);
 
-  const { client, context } = this;
-  let { studentId, id } = credentials;
-  if (!studentId) {
-    studentId = context.defaultStudent();
-  } else if (!context.studentExists(studentId)) {
-    throw new Error(`Нет пользователя ${studentId}`);
-  }
+  let { id, studentId } = credentials;
+  studentId = studentIdValid.call(this, credentials.studentId);
 
   return client
     .get(`student/diary/assigns/${id}`, { params: { studentId } })
