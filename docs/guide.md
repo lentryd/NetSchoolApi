@@ -13,6 +13,7 @@
   - [.assignmentTypes()](#assignmenttypes)
 - [Расписание](#расписание)
   - [.scheduleDay()](#scheduleday)
+  - [.scheduleWeek()](#scheduleweek)
 
 ## Управление сессией
 
