@@ -14,8 +14,6 @@ import joinURL from "./methods/url/join";
 import isAbsolute from "./methods/url/isAbsolute";
 import encodeQuery from "./methods/url/encodeQuery";
 
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-
 export type DecodeCookie = { [key: string]: string };
 export type ExtraHeaders = { key: string; value: string | Function }[];
 export type ExtraHeadersRaw = { [key: string]: string };
@@ -25,6 +23,23 @@ export interface InitRequest extends RequestInit {
 }
 
 export default class {
+  static formData(
+    body: { [key: string]: any },
+    init?: InitRequest
+  ): InitRequest {
+    const data = [];
+    for (let key in body) data.push(key + "=" + body[key]);
+
+    return {
+      ...init,
+      body: encodeURI(data.join("&")),
+      headers: {
+        ...init?.headers,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    };
+  }
+
   private origin: string;
 
   constructor(origin: string) {
@@ -103,22 +118,5 @@ export default class {
 
   public post(url: string, init?: Omit<InitRequest, "method">) {
     return this.request(url, { ...init, method: "post" });
-  }
-
-  static formData(
-    body: { [key: string]: any },
-    init?: InitRequest
-  ): InitRequest {
-    const data = [];
-    for (let key in body) data.push(key + "=" + body[key]);
-
-    return {
-      ...init,
-      body: encodeURI(data.join("&")),
-      headers: {
-        ...init?.headers,
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    };
   }
 }

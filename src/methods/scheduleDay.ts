@@ -1,15 +1,8 @@
 import NS from "@NS";
 import Client from "@classes/Client";
 import ScheduleDay from "@classes/ScheduleDay";
+import { date2str } from "@utils/dateNum";
 import { sessionValid, dateValid, classIdValid } from "@utils/checks";
-
-function date2str(date: Date) {
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear() % 100;
-
-  return day + "." + month + "." + year;
-}
 
 export interface Credentials {
   date?: Date;

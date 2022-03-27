@@ -1,5 +1,5 @@
 import { outerHTML, table } from "@/utils/parseHtml";
-import { num2str } from "@utils/number";
+import { num2str } from "@/utils/dateNum";
 import ScheduleDayLine from "./ScheduleDayLine";
 
 interface Credentials {
