@@ -16,7 +16,6 @@ import assignmentTypes from "@methods/assignmentTypes";
 
 import scheduleDay from "@methods/scheduleDay";
 
-import { Credentials as InfoCredentials } from "@methods/info";
 import { Credentials as PhotoCredentials } from "@methods/photo";
 import { Credentials as DiaryCredentials } from "@methods/diary";
 import { Credentials as AssignmentCredentials } from "@methods/assignment";
@@ -78,8 +77,8 @@ export default class NetSchoolApiSafe {
   // ⭐️ Пользователь
 
   /** Информация пользователя */
-  info(credentials?: InfoCredentials) {
-    return info.call(this, credentials);
+  info() {
+    return info.call(this);
   }
 
   /** Фото пользователя */
