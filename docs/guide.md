@@ -14,6 +14,9 @@
 - [Расписание](#расписание)
   - [.scheduleDay()](#scheduleday)
   - [.scheduleWeek()](#scheduleweek)
+- [Дополнительно](#дополнительно)
+  - [.fetch()](#fetch)
+  - [.reportFile()](#reportfile)
 
 ## Управление сессией
 
@@ -142,3 +145,32 @@
 #### Возвращает объект класса [ScheduleWeek](reference.md#scheduleweek)
 
 #### [Пример использования](examples/scheduleweek.md)
+
+## Дополнительно
+
+### .fetch()
+
+---
+
+#### Принимает данные:
+
+- `url: string` - Ссылка на ресурс
+- `init?: InitRequest` - Объект [InitRequest](reference.md#initrequest)
+
+#### Возвращает объект класса [Response](https://www.npmjs.com/package/node-fetch#class-response)
+
+#### [Пример использования](examples/fetch.md)
+
+### .reportFile()
+
+---
+
+#### Принимает объект данных:
+
+- `url: string` - Ссылка на таскер (например для "Отчет об успеваемости и посещаемости ученика" это `reports/studenttotal/queue `)
+- `filters: { filterId: string, filterValue: string }[]` - Массив с фильтрами (форма, которая находится на странице запроса)
+- `timeout?: number` - Время в миллисекундах, через которое запрос будет закрыт (по умолчания `60000`, при значении `-1` запрос не будет закрываться)
+
+#### Возвращает html с результатом запроса
+
+#### [Пример использования](examples/reportfile.md)

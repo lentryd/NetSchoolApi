@@ -1,4 +1,4 @@
-import Client from "@classes/Client";
+import Client, { InitRequest } from "@classes/Client";
 import Session from "@classes/Session";
 import Context from "@classes/Context";
 
@@ -17,11 +17,14 @@ import assignmentTypes from "@methods/assignmentTypes";
 import scheduleDay from "@methods/scheduleDay";
 import scheduleWeek from "@methods/scheduleWeek";
 
+import reportFile from "@methods/reportFile";
+
 import { Credentials as PhotoCredentials } from "@methods/photo";
 import { Credentials as DiaryCredentials } from "@methods/diary";
 import { Credentials as AssignmentCredentials } from "@methods/assignment";
 import { Credentials as ScheduleDayCredentials } from "@methods/scheduleDay";
 import { Credentials as ScheduleWeekCredentials } from "@methods/scheduleWeek";
+import { Credentials as ReportFileCredentials } from "@methods/reportFile";
 
 export interface Credentials {
   login: string;
@@ -49,6 +52,13 @@ export default class NetSchoolApiSafe {
     this.client.headers.set("at", () =>
       this.session?.isValid() ? this.session.accessToken : undefined
     );
+  }
+
+  // ⭐️ Пусть будет
+
+  /** Произвольные запросы к сетевому */
+  fetch(url: string, init?: InitRequest) {
+    return this.client.request("../" + url, init);
   }
 
   // ⭐️ Сессия
@@ -115,5 +125,10 @@ export default class NetSchoolApiSafe {
   /** Расписание на неделю */
   scheduleWeek(credentials?: ScheduleWeekCredentials) {
     return scheduleWeek.call(this, credentials);
+  }
+
+  // ⭐️ Отчеты
+  reportFile(credentials: ReportFileCredentials) {
+    return reportFile.call(this, credentials);
   }
 }

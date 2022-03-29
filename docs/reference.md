@@ -13,6 +13,7 @@
 - [ScheduleDayLine](#scheduledayline)
 - [ScheduleWeek](#scheduleweek)
 - [ScheduleWeekLine](#scheduleweekline)
+- [InitRequest](#initrequest)
 
 ## Session
 
@@ -186,3 +187,12 @@
 - `.lessons.number: number` - порядковый номер предмета
 - `.lessons.classesName: string[]` - названия кабинетов
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
+
+## InitRequest
+
+Интерфейс опциональных значений запроса
+
+### Объект класса содержит:
+
+- `.params: object` - объект параметров запроса (?a=12&b=24)
+- Другие значения [см. тут](https://www.npmjs.com/package/node-fetch#options)
