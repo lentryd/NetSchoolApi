@@ -17,11 +17,13 @@
   "license": "MIT",
   "dependencies": {
     "node-fetch": "^2.6.7",
-    "node-html-parser": "^5.3.3"
+    "node-html-parser": "^5.3.3",
+    "ws": "^8.5.0"
   },
   "devDependencies": {
     "@types/node": "^15.12.5",
     "@types/node-fetch": "^2.6.1",
+    "@types/ws": "^8.5.3",
     "tsc-alias": "^1.6.4",
     "typescript": "^4.6.2"
   }
