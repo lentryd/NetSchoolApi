@@ -3,7 +3,7 @@ export default function (params: { [key: string]: any }) {
 
   for (let key in params) {
     query += !!query ? "&" : "?";
-    query += key + "=" + encodeURI(params[key]);
+    query += key + "=" + encodeURIComponent(params[key]);
   }
 
   return query;
