@@ -24,11 +24,17 @@ interface Subject {
   name: string;
 }
 
+interface School {
+  id: number;
+  name: string;
+  fullName: string;
+}
+
 interface Credentials {
   user: User;
   year: Year;
   server: Server;
-  schoolId: number;
+  school: School;
   subjects: Subject[];
 }
 
@@ -36,14 +42,14 @@ export default class Context {
   readonly user: User;
   readonly year: Year;
   readonly server: Server;
-  readonly schoolId: number;
+  readonly school: School;
   readonly subjects: Subject[];
 
   constructor(credentials: Credentials) {
     this.user = credentials.user;
     this.year = credentials.year;
     this.server = credentials.server;
-    this.schoolId = credentials.schoolId;
+    this.school = credentials.school;
     this.subjects = credentials.subjects;
   }
 
