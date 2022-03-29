@@ -1,4 +1,5 @@
-import fetch, { RequestInit } from "node-fetch";
+import WS, { ClientOptions } from "ws";
+import fetch, { Response, RequestInit } from "node-fetch";
 
 // Работа с куки
 import decodeCookie from "./methods/cookie/decode";
@@ -18,11 +19,14 @@ export type DecodeCookie = { [key: string]: string };
 export type ExtraHeaders = { key: string; value: string | Function }[];
 export type ExtraHeadersRaw = { [key: string]: string };
 
+export interface InitWS extends ClientOptions {
+  params?: { [key: string]: any };
+}
 export interface InitRequest extends RequestInit {
   params?: { [key: string]: any };
 }
 
-export default class {
+export default class Client {
   static formData(
     body: { [key: string]: any },
     init?: InitRequest
@@ -46,6 +50,7 @@ export default class {
     if (!isAbsolute(origin)) throw new Error("origin must be an absolute path");
 
     this.origin = new URL(origin).origin;
+    this.headers.set("Origin", this.origin);
     this.headers.set("Referer", this.origin);
     this.headers.set("Cookie", () => this.cookie.get());
   }
@@ -95,7 +100,30 @@ export default class {
     return joinURL(this.origin, this.path.get(), ...paths);
   }
 
-  public async request(url: string, init?: InitRequest) {
+  private async isSecurityWarning(res: Response) {
+    const { headers } = res;
+    return !!(
+      headers.get("content-type")?.includes?.("text/html") &&
+      +(res.headers.get("content-length") ?? "") < 1000 &&
+      !res.headers.has("filename") &&
+      (await res.text()).includes("/asp/SecurityWarning.asp")
+    );
+  }
+
+  public ws(url: string, init?: InitWS) {
+    if (!isAbsolute(url)) url = this.join(url);
+    if (init?.params) url += encodeQuery(init.params);
+
+    return new WS(url.replace("http", "ws"), {
+      ...init,
+      headers: {
+        ...init?.headers,
+        ...this.headers.get(),
+      },
+    });
+  }
+
+  public async request(url: string, init?: InitRequest): Promise<Response> {
     if (!isAbsolute(url)) url = this.join(url);
     if (init?.params) url += encodeQuery(init.params);
 
@@ -106,7 +134,18 @@ export default class {
         ...this.headers.get(),
       },
     });
-
+    if (!res.ok) throw new Error("Fetch failed");
+    if (await this.isSecurityWarning(res)) {
+      await this.post(
+        "../asp/SecurityWarning.asp",
+        Client.formData({
+          at: this.headers.get().at,
+          WarnType: 2,
+        })
+      );
+      return this.request(url, init);
+    }
+    
     this.cookie.set(res.headers.raw()?.["set-cookie"]);
 
     return res;
