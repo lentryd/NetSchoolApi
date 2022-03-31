@@ -10,6 +10,10 @@ export function outerHTML(args: { html: string; query: string }) {
   return parse(html).querySelector(query)?.outerHTML ?? html;
 }
 
+export function query(html: string, query: string) {
+  return parse(html).querySelector(query);
+}
+
 export function table(args: {
   html: string;
   query?: string;

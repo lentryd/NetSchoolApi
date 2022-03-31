@@ -22,7 +22,7 @@ export function date2str(date: Date) {
  * Переводит строку формата "dd.mm.yy" в объект `Date`
  */
 export function str2date(str: string) {
-  if (!/(\d{1,2}\.){2}\d{1,2}/.test(str))
+  if (!/(\d{1,2}\.){2}\d{2}/.test(str))
     throw new Error("Invalid date string: " + str);
 
   const [day, month, year] = (str.match(/\d+/g) as string[]).map((s) =>

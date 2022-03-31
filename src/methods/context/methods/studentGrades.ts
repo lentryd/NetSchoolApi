@@ -83,7 +83,7 @@ export default async function (client: Client) {
   const subjects =
     data
       .find((f) => f.filterId == "SGID")
-      ?.items.map((s) => ({ id: s.value, name: s.title })) ?? [];
+      ?.items.map((s) => ({ id: parseInt(s.value), name: s.title })) ?? [];
 
   const students =
     data
@@ -93,11 +93,14 @@ export default async function (client: Client) {
         name: s.title,
       })) ?? [];
 
+  const range = data.find((f) => f.filterId == "period")?.range;
+
   return {
     user: {
       classes,
       students,
     },
     subjects,
+    range,
   };
 }

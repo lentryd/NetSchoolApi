@@ -11,6 +11,10 @@ export default class AssignmentTypes {
     return this.types.find((t) => t.id === id) ?? null;
   }
 
+  findByName(name: string) {
+    return this.types.find((t) => t.name === name) ?? null;
+  }
+
   findByAbbr(abbr: string) {
     return this.types.find((t) => t.abbr === abbr) ?? null;
   }

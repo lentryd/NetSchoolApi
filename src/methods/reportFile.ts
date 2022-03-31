@@ -5,7 +5,7 @@ import { sessionValid } from "@utils/checks";
 
 type Filter = {
   filterId: string;
-  filterValue: string;
+  filterValue: string | number;
 };
 
 type Query = {
@@ -35,7 +35,10 @@ export interface Credentials {
   timeout?: number;
 }
 
-export default async function reportFile(this: NS, credentials: Credentials) {
+export default async function reportFile(
+  this: NS,
+  credentials: Credentials
+): Promise<string> {
   const { url, filters, timeout = 6e4 } = credentials;
   const { client, session, context } = await sessionValid.call(this);
   const query: Query = {
