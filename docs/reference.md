@@ -14,6 +14,7 @@
 - [ScheduleWeek](#scheduleweek)
 - [ScheduleWeekLine](#scheduleweekline)
 - [InitRequest](#initrequest)
+- [Grades](#grades)
 
 ## Session
 
@@ -196,3 +197,18 @@
 
 - `.params: object` - объект параметров запроса (?a=12&b=24)
 - Другие значения [см. тут](https://www.npmjs.com/package/node-fetch#options)
+
+## Grades
+
+Класс необходим для удобной работы с отчётом успеваемости (по предмету)
+
+### Объект класса содержит:
+
+- `.raw: string` - HTML код отчёта
+- `.range: { start: Date, end: Date }` - период отчёта
+- ​`.teacher​: ​string​` - имя учителя, ведущего урок
+-​ `.averageMark​: ​number​` - средняя оценка
+- `.assignments` - массив оценок
+- `.date: Date` - дата требуемого дня
+- `.parsed: ScheduleWeekLine[]` - массив объектов [ScheduleWeekLine](#scheduleweekline).
+- `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
