@@ -14,9 +14,11 @@
 - [Расписание](#расписание)
   - [.scheduleDay()](#scheduleday)
   - [.scheduleWeek()](#scheduleweek)
+- [Отчеты](#отчеты)
+  - [.reportFile()](#reportfile)
+  - [.grades()](#grades)
 - [Дополнительно](#дополнительно)
   - [.fetch()](#fetch)
-  - [.reportFile()](#reportfile)
 
 ## Управление сессией
 
@@ -146,20 +148,7 @@
 
 #### [Пример использования](examples/scheduleweek.md)
 
-## Дополнительно
-
-### .fetch()
-
----
-
-#### Принимает данные:
-
-- `url: string` - Ссылка на ресурс
-- `init?: InitRequest` - Объект [InitRequest](reference.md#initrequest)
-
-#### Возвращает объект класса [Response](https://www.npmjs.com/package/node-fetch#class-response)
-
-#### [Пример использования](examples/fetch.md)
+## Отчеты
 
 ### .reportFile()
 
@@ -174,3 +163,33 @@
 #### Возвращает html с результатом запроса
 
 #### [Пример использования](examples/reportfile.md)
+
+### .grades()
+
+---
+
+#### Принимает объект данных:
+- `​subjectId​: ​number​` - ID прпредмет
+- `start​?: ​Date​` - начала периода (опционный)
+- `end​?: ​Date​` - окончание периода (оопционный
+- `​classId​?: ​number​` - ID класса (опопционный)
+- `studentId​?: ​number​` - ID учащегося (опопционный)
+
+#### Возвращает объект класса [Grades](reference.md#grades)
+
+#### [Пример использования](examples/grades.md)
+
+## Дополнительно
+
+### .fetch()
+
+---
+
+#### Принимает данные:
+
+- `url: string` - Ссылка на ресурс
+- `init?: InitRequest` - Объект [InitRequest](reference.md#initrequest)
+
+#### Возвращает объект класса [Response](https://www.npmjs.com/package/node-fetch#class-response)
+
+#### [Пример использования](examples/fetch.md)
