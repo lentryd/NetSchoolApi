@@ -209,6 +209,4 @@
 - ​`.teacher​: ​string​` - имя учителя, ведущего урок
 -​ `.averageMark​: ​number​` - средняя оценка
 - `.assignments` - массив оценок
-- `.date: Date` - дата требуемого дня
-- `.parsed: ScheduleWeekLine[]` - массив объектов [ScheduleWeekLine](#scheduleweekline).
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
