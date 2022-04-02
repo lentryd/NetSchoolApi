@@ -69,6 +69,9 @@
 - `.subjects: array` - массив доступных предметов
   - `.id: number` - id предмета
   - `.name: string` - название предмета
+- `.reportRange: object` - период отчетов
+  - `.start: Date` - начало периода
+  - `.end: Date` - конец периода
 - `.checkDate(date: Date): boolean` - является ли дата частью года
 - `.classExists(id: number): boolean` - существует ли id класса
 - `.defaultClass(): number` - id первого класса
