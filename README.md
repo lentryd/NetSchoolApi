@@ -1,29 +1,69 @@
-Это враппер для "Сетевой город. Образование". С помощью которого вы можете получить информацию о пользователе (дневник, расписание и т.д.)
+# NetSchoolApi
 
-> Эта библиотека никоим образом не связана с компанией "ИРТех"
+Это враппер для продукта "Сетевой город. Образование". С помощью которого вы можете получить информацию о пользователе (дневник, расписание и т.д.)
 
-## Установка
+## Начало работы
+
+Эти инструкции позволят вам запустить копию проекта на вашем локальном компьютере для целей разработки и тестирования.
+
+### Предварительные условия
+
+Для установки библиотеке необходимо:
+
+- NodeJS >= v10.24.1 ([установить](https://nodejs.org/ru/download/))
+
+### Установка
+
+Для установки необходимо ввести команду
 
 ```bash
 npm i netschoolapi
 ```
 
-## Использование
+## Проверка установки
 
-```typescript
-import NetSchoolApi from "netschoolapi";
+1. В корне проекта создайте файл `test.js`
+2. В этот файл вставьте код ниже (введя выши данные)
 
-const user = new NetSchoolApi({
-  origin: "https://example.com",
-  login: "Иванов",
-  password: "123456",
-  school: "МБОУ ...", // Название школы (полностью) или её id
+```javascript
+const NS = require("./dist").default;
+const user = new NS({
+  origin: "https://example.com/", // Origin вашего сайта
+  login: "Иванов", // Ваш логин
+  password: "******", // Ваш пароль
+  school: "МБОУ ....", // Название вашей школы (как на сайте)
 });
 
-user.diary().then(console.log);
+(async function () {
+  const info = await user.info();
+  console.log(info);
+})();
 ```
 
-## Стоит прочитать
+3. Запустите это код введя в консоли команду
 
-- [Методы](docs/guide.md)
-- [Классы](docs/reference.md)
+```bash
+node test.ts
+```
+
+4. Если в консоли не выводится информация о пользователе, то проверьте версию NodeJS или создайте [issue](https://github.com/lentryd/NetSchoolApi/issues/new)
+
+## Сделано с помощью
+
+- [ws](https://www.npmjs.com/package/ws) - Клиентская реализация WebSocket
+- [node-fetch](https://www.npmjs.com/package/node-fetch) - Fetch API в Node.js
+- [node-html-parser](https://www.npmjs.com/package/node-html-parser) - Генерация упрощенного DOM-дерева с поддержкой запросов к элементам.
+
+## Управление версиями
+
+Мы используем [SemVer](http://semver.org/) для управления версиями. Доступные версии см. в разделе [теги в этом репозитории](https://github.com/lentryd/NetSchoolApi/tags).
+
+## Авторы
+
+- [lentryd](https://github.com/lentryd)
+
+Смотрите также список [участников](https://github.com/lentryd/NetSchoolApi/contributors), которые участвовали в этом проекте.
+
+## Лицензия
+
+Этот проект лицензирован по лицензии MIT - см. [LICENSE.md](LICENSE.md) файл для получения подробной информации
