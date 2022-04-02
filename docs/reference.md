@@ -1,26 +1,88 @@
 # Классы | NetSchoolApi
 
-- [Session](#session)
-- [Info](#info)
-- [Diary](#diary)
-- [Day](#day)
-- [Lesson](#lesson)
-- [Assignment](#assignment)
-- [AssignmentInfo](#assignmentinfo)
-- [AssignmentType](#assignmenttype)
-- [AssignmentTypes](#assignmenttypes)
-- [ScheduleDay](#scheduleday)
-- [ScheduleDayLine](#scheduledayline)
-- [ScheduleWeek](#scheduleweek)
-- [ScheduleWeekLine](#scheduleweekline)
-- [InitRequest](#initrequest)
-- [Grades](#grades)
+- [Дополнительные данные](#дополнительные-данные)
+  - [InitRequest](#initrequest)
+  - [Context](#context)
+  - [Session](#session)
+  - [Info](#info)
+- [Дневник](#дневник)
+  - [Diary](#diary)
+  - [Day](#day)
+  - [Lesson](#lesson)
+  - [Assignment](#assignment)
+- [Задания](#задания)
+  - [AssignmentInfo](#assignmentinfo)
+  - [AssignmentType](#assignmenttype)
+  - [AssignmentTypes](#assignmenttypes)
+- [Расписание](#задания)
+  - [ScheduleDay](#scheduleday)
+  - [ScheduleDayLine](#scheduledayline)
+  - [ScheduleWeek](#scheduleweek)
+  - [ScheduleWeekLine](#scheduleweekline)
+- [Отчеты](#отчеты)
+  - [Grades](#grades)
 
-## Session
+## Дополнительные данные
+
+---
+
+### InitRequest
+
+Интерфейс опциональных значений запроса
+
+#### Объект класса содержит:
+
+- `.params: object` - объект параметров запроса (?a=12&b=24)
+- Другие значения [см. тут](https://www.npmjs.com/package/node-fetch#options)
+
+---
+
+### Context
+
+Данные, которые могут быть полезны при работе с "Сетевым Городом"
+
+#### Объект класса содержит:
+
+- `.user: object` - данные пользователя
+  - `.id: number` - id пользователя
+  - `.name: string` - имя пользователя в системе
+  - `.classes: array` - массив доступных классов
+    - `.id: number` - id класса
+    - `.name: string` - название класса
+  - `.students: array` - массив доступных учащихся
+    - `.id: number` - id учащегося
+    - `.name: string` - имя учащегося в системе
+- `.year: object` - данные выбранного года
+  - `.id: number` - id года
+  - `.gId: number` - последнии две цифры года
+  - `.name: string` - название года ('2021/2022')
+  - `.start: Date` - дата начала года
+  - `.end: Date` - дата окончания года
+- `.server: object` - данные сервера
+  - `.id: string` - id сервера
+  - `.timeFormat: string` - формат времени
+  - `.dateFormat: string` - формат даты
+- `.school: object` - данные школы
+  - `.id: number` - id школы
+  - `.name: string` - название школы
+  - `.fullName: string` - полное название школы
+- `.subjects: array` - массив доступных предметов
+  - `.id: number` - id предмета
+  - `.name: string` - название предмета
+- `.checkDate(date: Date): boolean` - является ли дата частью года
+- `.classExists(id: number): boolean` - существует ли id класса
+- `.defaultClass(): number` - id первого класса
+- `.studentExists(id: number): boolean` - существует ли id учащегося
+- `.defaultStudent(): number` - id первого учащегося
+- `.subjectExists(id: number): boolean` - существует ли id предмета
+
+---
+
+### Session
 
 Класс необходим для удобного хранения данных сеанса/пользователя.
 
-### Объект класса содержит:
+#### Объект класса содержит:
 
 - `.userId: number` - ID пользователя (не путать с id учащегося)
 - `.yearId: number` - ID учебного года
@@ -32,11 +94,13 @@
 - `.isValid(): boolean` - возвращает `true`, если сессия все еще активна
 - `.isExpired(): boolean` - возвращает "true", если сессия больше не активна
 
-## Info
+---
+
+### Info
 
 Класс необходим для удобной работы с данными пользователя.
 
-### Объект класса содержит:
+#### Объект класса содержит:
 
 - `.email: string` - почта пользователя
 - `.phone: string` - телефон пользователя
@@ -47,11 +111,15 @@
 - `.existsPhoto: boolean` - возвращает `true` если фото установлено
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
 
-## Diary
+## Дневник
+
+---
+
+### Diary
 
 Класс необходим для удобной работы с дневником.
 
-### Объект класса содержит:
+#### Объект класса содержит:
 
 - `.days: Day[]` - массив объектов [Day](#day)
 - `.termName: string` - название учебного периода (например: _2 полугодие_)
@@ -64,21 +132,25 @@
 - `.currentLesson(): Lesson` - возвращает объект [Lesson](#lesson). **Принимает дату с учетом времени**
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
 
-## Day
+---
+
+### Day
 
 Класс необходим для удобной работы с днями в дневнике.
 
-### Объект класса содержит:
+#### Объект класса содержит:
 
 - `.date: Date` - дата этого дня
 - `.lessons: Lesson[]` - массив объектов [Lesson](#lesson)
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
 
-## Lesson
+---
+
+### Lesson
 
 Класс необходим для удобной работы с уроками в дневнике.
 
-### Объект класса содержит:
+#### Объект класса содержит:
 
 - `.id: number` - ID занятия
 - `.start: Date` - дата начала урока
@@ -87,11 +159,13 @@
 - `.assignments: Assignment[]` - массив объектов [Assignment](#assignment)
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
 
-## Assignment
+---
+
+### Assignment
 
 Класс необходим для удобной работы с заданиями для уроков в дневнике.
 
-### Объект класса содержит:
+#### Объект класса содержит:
 
 - `.id: number` - ID задания
 - `.dot: boolean` - возвращает `true`, если урок просрочен (точка в дневнике)
@@ -103,11 +177,15 @@
 - `.lessonId: number` - ID занятия
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
 
-## AssignmentInfo
+## Задания
+
+---
+
+### AssignmentInfo
 
 Класс необходим для удобной работы с доп. информацией о задании.
 
-### Объект класса содержит:
+#### Объект класса содержит:
 
 - `.id: number` - ID задания
 - `.date: Date` - дата сдачи задания
@@ -119,11 +197,13 @@
 - `.description: string` - описание задания
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
 
-## AssignmentType
+---
+
+### AssignmentType
 
 Класс необходим для удобного хранения типов заданий.
 
-### Объект класса содержит:
+#### Объект класса содержит:
 
 - `.id: number` - ID типа задания
 - `.name: string` - название типа задания
@@ -131,33 +211,42 @@
 - `.order: number` - какая-то странная вещь (если вы знаете, что это такое, то пишите)
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
 
-## AssignmentTypes
+---
+
+### AssignmentTypes
 
 Класс необходим для удобной работы с типами задания ([AssignmentType](#assignmenttype)).
 
-### Объект класса содержит:
+#### Объект класса содержит:
 
 - `.types: AssignmentType[]` - массив объектов [AssignmentType](#assignmenttype)
 - `.findById(): AssignmentType` - возвращает объект класса [AssignmentType](#assignmenttype). **Принимает id типа задания в качестве аргумента**
-- `.findByAbbr(): AssignmentType` - возвращает объект класса [AssignmentType](#assignmenttype). **Принимает abbr типа задания в качестве аргумента**
+- `.findByName(): AssignmentType` - возвращает объект класса [AssignmentType](#assignmenttype). **Принимает название типа задания в качестве аргумента**
+- `.findByAbbr(): AssignmentType` - возвращает объект класса [AssignmentType](#assignmenttype). **Принимает аббревиатуру типа задания в качестве аргумента**
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
 
-## ScheduleDay
+## Расписание
+
+---
+
+### ScheduleDay
 
 Класс необходим для удобной работы с расписанием на день.
 
-### Объект класса содержит:
+#### Объект класса содержит:
 
 - `.raw: string` - HTML код таблицы с расписанием
 - `.date: Date` - дата возвращаемого дня
 - `.lines: ScheduleDayLine[]` - массив объектов [ScheduleDayLine](#scheduledayline).
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
 
-## ScheduleDayLine
+---
+
+### ScheduleDayLine
 
 Класс необходим для удобной работы с "линиями" расписания.
 
-### Объект класса содержит:
+#### Объект класса содержит:
 
 - `.name: string` - название предмета/мероприятия
 - `.className?: string` - название кабинета
@@ -165,22 +254,26 @@
 - `.end: Date` - время окончания предмета/мероприятия.
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
 
-## ScheduleWeek
+---
+
+### ScheduleWeek
 
 Класс необходим для удобной работы с расписанием на неделю.
 
-### Объект класса содержит:
+#### Объект класса содержит:
 
 - `.raw: string` - HTML код таблицы с расписанием
 - `.date: Date` - дата требуемого дня
 - `.parsed: ScheduleWeekLine[]` - массив объектов [ScheduleWeekLine](#scheduleweekline).
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
 
-## ScheduleWeekLine
+---
+
+### ScheduleWeekLine
 
 Класс необходим для удобной работы с "линиями" расписания.
 
-### Объект класса содержит:
+#### Объект класса содержит:
 
 - `.date: Date` - дата дня.
 - `.lessons: object[]` - массив предметов
@@ -189,24 +282,26 @@
 - `.lessons.classesName: string[]` - названия кабинетов
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
 
-## InitRequest
+## Отчеты
 
-Интерфейс опциональных значений запроса
+---
 
-### Объект класса содержит:
+### Grades
 
-- `.params: object` - объект параметров запроса (?a=12&b=24)
-- Другие значения [см. тут](https://www.npmjs.com/package/node-fetch#options)
+Класс необходим для удобной работы с отчетом успеваемости (по предмету)
 
-## Grades
+#### Объект класса содержит:
 
-Класс необходим для удобной работы с отчётом успеваемости (по предмету)
-
-### Объект класса содержит:
-
-- `.raw: string` - HTML код отчёта
-- `.range: { start: Date, end: Date }` - период отчёта
-- ​`.teacher​: ​string​` - имя учителя, ведущего урок
--​ `.averageMark​: ​number​` - средняя оценка
-- `.assignments` - массив оценок
+- `.raw: string` - HTML код отчета
+- `.range: object` - период отчета
+  - `.start: Date` - начало отчета
+  - `.end: Date` - окончание отчета
+- ​`.teacher​: ​string​` - имя учителя, ведущего урок
+- `.averageMark​: ​number​` - средняя оценка
+- `.assignments: array` - массив оценок
+  - `.type: AssignmentType` - объект класса [AssignmentType](#assignmenttype)
+  - `.theme: string` - тема урока (например: 'Чтение произведений 20-го века')
+  - `.date: Date` - дата урока
+  - `.issueDate: Date` - дата выставления оценки
+  - `.mark: number` - полученная оценка
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
