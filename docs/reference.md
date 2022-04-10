@@ -21,6 +21,7 @@
   - [ScheduleWeekLine](#scheduleweekline)
 - [Отчеты](#отчеты)
   - [Grades](#grades)
+  - [Journal](#journal)
 
 ## Дополнительные данные
 
