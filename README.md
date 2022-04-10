@@ -43,7 +43,7 @@ const user = new NS({
 3. Запустите это код введя в консоли команду
 
 ```bash
-node test.ts
+node test.js
 ```
 
 4. Если в консоли не выводится информация о пользователе, то проверьте версию NodeJS или создайте [issue](https://github.com/lentryd/NetSchoolApi/issues/new)
