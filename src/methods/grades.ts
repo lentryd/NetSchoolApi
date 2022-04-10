@@ -24,8 +24,8 @@ export default async function grades(this: NS, credentials: Credentials) {
     throw new Error(`Предмета ${subjectId} не существует`);
   classId = classIdValid.call(this, classId);
   studentId = studentIdValid.call(this, studentId);
-  if (!start) start = context.reportRange.start;
-  if (!end) end = context.reportRange.end;
+  if (!start) start = context.year.start;
+  if (!end) end = context.year.end;
   dateValid.call(this, start, end);
 
   const [types, htmlText] = await Promise.all([
