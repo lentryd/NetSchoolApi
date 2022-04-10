@@ -93,14 +93,11 @@ export default async function (client: Client) {
         name: s.title,
       })) ?? [];
 
-  const range = data.find((f) => f.filterId == "period")?.range;
-
   return {
     user: {
       classes,
       students,
     },
     subjects,
-    range,
   };
 }

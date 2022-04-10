@@ -36,7 +36,6 @@ interface Credentials {
   server: Server;
   school: School;
   subjects: Subject[];
-  reportRange: { start: Date; end: Date };
 }
 
 export default class Context {
@@ -45,7 +44,6 @@ export default class Context {
   readonly server: Server;
   readonly school: School;
   readonly subjects: Subject[];
-  readonly reportRange: Credentials["reportRange"];
 
   constructor(credentials: Credentials) {
     this.user = credentials.user;
@@ -53,7 +51,6 @@ export default class Context {
     this.server = credentials.server;
     this.school = credentials.school;
     this.subjects = credentials.subjects;
-    this.reportRange = credentials.reportRange;
   }
 
   /** Проверяет является ли число частью года */

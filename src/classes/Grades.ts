@@ -1,5 +1,5 @@
 import { str2date, date2JSON } from "@/utils/dateNum";
-import { outerHTML, query, table } from "@/utils/parseHtml";
+import { query, table } from "@/utils/parseHtml";
 import AssignmentTypes from "./AssignmentTypes";
 
 interface Credentials {

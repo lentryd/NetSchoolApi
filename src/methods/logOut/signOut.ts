@@ -4,9 +4,5 @@ import Client from "@classes/Client";
 export default function (client: Client, session: Session) {
   const { accessToken: at, ver } = session;
 
-  return client
-    .post("../asp/logout.asp", Client.formData({ at, ver }))
-    .then(({ status }) => {
-      if (status != 200) throw new Error("Не удалось выйти, код: " + status);
-    });
+  return client.post("../asp/logout.asp", Client.formData({ at, ver }));
 }

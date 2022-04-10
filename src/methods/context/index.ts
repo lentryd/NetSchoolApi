@@ -12,7 +12,7 @@ export default async function (this: NS) {
   const [
     { server },
     { year, user, server: server1, schoolId },
-    { user: user1, subjects, range },
+    { user: user1, subjects },
   ] = await Promise.all([
     sysInfo(client),
     context(client),
@@ -25,9 +25,5 @@ export default async function (this: NS) {
     server: { ...server, ...server1 },
     school: { ...(await schoolInfo(client, schoolId)), id: schoolId },
     subjects,
-    reportRange: {
-      start: range?.start ? new Date(range.start) : year.start,
-      end: range?.end ? new Date(range.end) : year.end,
-    },
   });
 }
