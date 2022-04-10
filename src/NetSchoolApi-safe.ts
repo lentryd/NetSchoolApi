@@ -19,6 +19,7 @@ import scheduleWeek from "@methods/scheduleWeek";
 
 import reportFile from "@methods/reportFile";
 import grades from "@methods/grades";
+import journal from "@methods/journal";
 
 import { Credentials as PhotoCredentials } from "@methods/photo";
 import { Credentials as DiaryCredentials } from "@methods/diary";
@@ -27,6 +28,7 @@ import { Credentials as ScheduleDayCredentials } from "@methods/scheduleDay";
 import { Credentials as ScheduleWeekCredentials } from "@methods/scheduleWeek";
 import { Credentials as ReportFileCredentials } from "@methods/reportFile";
 import { Credentials as GradesCredentials } from "@methods/grades";
+import { Credentials as JournalCredentials } from "@methods/journal";
 
 export interface Credentials {
   login: string;
@@ -134,7 +136,13 @@ export default class NetSchoolApiSafe {
     return reportFile.call(this, credentials);
   }
 
+  /** Отчет об успеваемости (по предмету) */
   grades(credentials: GradesCredentials) {
     return grades.call(this, credentials);
+  }
+
+  /** Отчет об успеваемости (полный) */
+  journal(credentials: JournalCredentials) {
+    return journal.call(this, credentials);
   }
 }

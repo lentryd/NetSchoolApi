@@ -101,12 +101,11 @@ export default class Client {
   }
 
   private async isSecurityWarning(res: Response) {
-    const { headers } = res;
-    return !!(
-      headers.get("content-type")?.includes?.("text/html") &&
+    return (
+      res.headers.get("content-type")?.includes?.("text/html") &&
       +(res.headers.get("content-length") ?? "") < 1000 &&
       !res.headers.has("filename") &&
-      (await res.text()).includes("/asp/SecurityWarning.asp")
+      (await res.clone().text()).includes("/asp/SecurityWarning.asp")
     );
   }
 
@@ -145,7 +144,7 @@ export default class Client {
       );
       return this.request(url, init);
     }
-    
+
     this.cookie.set(res.headers.raw()?.["set-cookie"]);
 
     return res;

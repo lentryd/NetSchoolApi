@@ -17,6 +17,7 @@
 - [Отчеты](#отчеты)
   - [.reportFile()](#reportfile)
   - [.grades()](#grades)
+  - [.journal()](#journal)
 - [Дополнительно](#дополнительно)
   - [.fetch()](#fetch)
 
@@ -170,15 +171,30 @@
 
 #### Принимает объект данных:
 
-- `​subjectId​: ​number​` - ID прпредмет
-- `start​?: ​Date​` - начала периода (опционный)
-- `end​?: ​Date​` - окончание периода (оопционный
-- `​classId​?: ​number​` - ID класса (опопционный)
-- `studentId​?: ​number​` - ID учащегося (опопционный)
+- `​subjectId​: ​number​` - ID предмета
+- `start​?: ​Date​` - начало периода
+- `end​?: ​Date​` - окончание периода
+- `​classId​?: ​number​` - ID класса
+- `studentId​?: ​number​` - ID учащегося
 
 #### Возвращает объект класса [Grades](reference.md#grades)
 
 #### [Пример использования](examples/grades.md)
+
+---
+
+### .journal()
+
+#### Принимает объект данных:
+
+- `start​?: ​Date​` - начало периода
+- `end​?: ​Date​` - окончание периода
+- `​classId​?: ​number​` - ID класса
+- `studentId​?: ​number​` - ID учащегося
+
+#### Возвращает объект класса [Journal](reference.md#journal)
+
+#### [Пример использования](examples/journal.md)
 
 ## Дополнительно
 

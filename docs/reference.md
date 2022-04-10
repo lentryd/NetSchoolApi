@@ -69,9 +69,6 @@
 - `.subjects: array` - массив доступных предметов
   - `.id: number` - id предмета
   - `.name: string` - название предмета
-- `.reportRange: object` - период отчетов
-  - `.start: Date` - начало периода
-  - `.end: Date` - конец периода
 - `.checkDate(date: Date): boolean` - является ли дата частью года
 - `.classExists(id: number): boolean` - существует ли id класса
 - `.defaultClass(): number` - id первого класса
@@ -307,4 +304,28 @@
   - `.date: Date` - дата урока
   - `.issueDate: Date` - дата выставления оценки
   - `.mark: number` - полученная оценка
+- `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
+
+---
+
+### Journal
+
+Класс необходим для удобной работы с отчетом успеваемости и посещаемости
+
+#### Объект класса содержит:
+
+- `.raw: string` - HTML код отчета
+- `.range: object` - период отчета
+  - `.start: Date` - начало отчета
+  - `.end: Date` - окончание отчета
+- `.subjects: array` - массив предметов
+  - `.id: number` - ID предмета в системе
+  - `.name: string` - название предмета в системе
+  - `.marks: array` - массив оценок
+    - `.mark: number` - оценка
+    - `.date: number` - дата оценки
+  - `.missedList: array` - массив пропусков
+    - `.type: string` - аббревиатура пропуска (например: УП, ОТ и т.д.)
+    - `.date: number` - дата пропуска
+  - `.middleMark: number` - средняя оценка
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
