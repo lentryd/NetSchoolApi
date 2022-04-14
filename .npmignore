@@ -1,6 +1,7 @@
 .*
 src
 docs
+*.tgz
 test.js
 node_modules
 tsconfig.json
