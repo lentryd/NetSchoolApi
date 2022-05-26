@@ -1,38 +1,25 @@
 ---
-name: Bug report
-about: Create a report to help us improve
+name: У меня не работает (Bug report)
+about: Создайте отчет, который поможет нам исправить ошибку
 title: ''
 labels: ''
 assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+**Опишите ошибку**
+Четкое и краткое описание того, что представляет собой ошибка.
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+**Ожидаемое поведение**
+Четкое и краткое описание того, что вы ожидали, что произойдет.
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+**Скриншоты/Логи**
+Если возможно, добавьте скриншоты или логи, чтобы помочь нам понять вашу проблему.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**(пожалуйста, заполните следующую информацию):**
+ - Среда: [например: хостинг]
+ - Версия NodeJS [например: 16.14.2]
+ - Версия библиотеки [например: 1.7.0]
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
-
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
-
-**Additional context**
-Add any other context about the problem here.
+**Дополнительная информация**
+Добавьте сюда любой другой контекст, касающийся проблемы.
