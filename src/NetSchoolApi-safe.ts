@@ -71,9 +71,7 @@ export default class NetSchoolApiSafe {
   async logIn() {
     await logIn.call(this);
 
-    if (!this.context) {
-      this.context = await context.call(this);
-    }
+    if (!this.context) this.context = await context.call(this);
 
     return this.session;
   }

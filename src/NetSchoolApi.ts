@@ -1,4 +1,5 @@
 import NS, { Credentials } from "@NS";
+import Session from "@classes/Session";
 
 export default class NetSchoolApi extends NS {
   /** Уведомления */
@@ -32,15 +33,14 @@ export default class NetSchoolApi extends NS {
 
     // Если произошла ошибка, мы также закрываем сессию
     process.addListener("uncaughtException", this.closeProcess.bind(this));
-    process.addListener("unhandledRejection", this.closeProcess.bind(this));
   }
 
   /** Открытие сессии (только если она закрыта) */
-  async logIn() {
+  async logIn(): Promise<Session> {
     const valid = await super.sessionValid();
 
-    if (valid) return this.session;
-    else return super.logIn();
+    if (valid) return this.session as any;
+    else return super.logIn() as any;
   }
 
   /** Закрытие сессии (только если она открыта) */
@@ -52,17 +52,17 @@ export default class NetSchoolApi extends NS {
   }
 
   /** Повторное открытие сессии (всегда возвращает `true`) */
-  async sessionValid() {
+  async sessionValid(): Promise<true> {
     await super.logIn();
 
     return true;
   }
 
   /** Экстренное закрытие сессии */
-  async closeProcess(err: any) {
+  private async closeProcess(err: any) {
     // Если поймали ошибку, то показываем ее
     if (err)
-      this.console.error("Ошибка в коде привела к закрытию сессии.", err);
+      this.console.error("Ошибка в коде привела к закрытию сессии.\n", err);
 
     // Закрываем сессию
     await this.logOut();
