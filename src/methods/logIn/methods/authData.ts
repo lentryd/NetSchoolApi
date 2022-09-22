@@ -9,7 +9,8 @@ export interface AuthData {
 export default async function (client: Client) {
   const data: AuthData = await client
     .post("/auth/getData")
-    .then((res) => res.json() as any);
+    .then((res) => res.json() as any)
+    .catch(() => ({}));
 
   if (!data.lt || !data.ver || !data.salt) {
     throw new Error("Сетевой не вернул данные для авторизации.");
