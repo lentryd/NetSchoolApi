@@ -22,6 +22,9 @@ export default async function (
 ): Promise<SignIn> {
   const { login: un, password, school: schoolCr } = credentials;
 
+  // Сохранение куки
+  await client.get("logindata");
+
   const [{ lt, ver, salt }, school] = await Promise.all([
     authData(client),
     schoolInfo(client, schoolCr),
@@ -39,7 +42,10 @@ export default async function (
         ...passwordHash(salt, password),
       })
     )
-    .then((res) => res.json() as any);
+    .then((res) => res.json() as any)
+    .catch(() => {
+      throw new Error("Не удалось войти. Проверьте введение данные.");
+    });
 
   return { at, ver, timeOut };
 }
