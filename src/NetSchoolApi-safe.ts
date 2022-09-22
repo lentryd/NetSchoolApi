@@ -52,7 +52,7 @@ export default class NetSchoolApiSafe {
     this.credentials = credentials;
     this.client = new Client(credentials.origin);
 
-    this.client.path.set("webApi");
+    this.client.path.set("webapi");
     this.client.headers.set("at", () =>
       this.session?.isValid() ? this.session.accessToken : undefined
     );
