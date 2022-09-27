@@ -29,8 +29,8 @@ export default async function (this: NS, credentials: Credentials = {}) {
       params: {
         yearId: context.year.id,
         studentId,
-        weekEnd: end.toJSON(),
-        weekStart: start.toJSON(),
+        weekEnd: end.toJSON().replace(/T.+/, ""),
+        weekStart: start.toJSON().replace(/T.+/, ""),
       },
     })
     .then((res) => res.json() as any)
