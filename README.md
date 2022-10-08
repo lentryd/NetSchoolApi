@@ -26,7 +26,7 @@ npm i netschoolapi
 2. В этот файл вставьте код ниже (введя ваши данные)
 
 ```javascript
-const NS = require("./dist").default;
+const NS = require("netschoolapi").default;
 const user = new NS({
   origin: "https://example.com/", // Origin вашего сайта
   login: "Иванов", // Ваш логин
