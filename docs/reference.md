@@ -61,6 +61,7 @@
   - `.end: Date` - дата окончания года
 - `.server: object` - данные сервера
   - `.id: string` - id сервера
+  - `.version: string` - версия сервера
   - `.timeFormat: string` - формат времени
   - `.dateFormat: string` - формат даты
 - `.school: object` - данные школы
