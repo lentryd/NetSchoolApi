@@ -34,3 +34,37 @@ const user = new NS({
   await user.logOut();
 })();
 ```
+
+### Пример серверного использование
+
+> Этот пример работает не только с классом `Safe`
+
+Для безопасного хранения пользовательских данных рекомендуется сохранить хэш пароля (md5) в вашей базе данных. Библиотека может работать как с "чистым" паролем, так и с его хэшем.
+
+```typescript
+import { Safe as NS } from "netschoolapi";
+
+// Получаем хеш пароля из базы данных
+
+const user = new NS({
+  origin: "https://example.com",
+  login: "Иванов",
+  school: "МБОУ ...", // Название школы (полностью) или её id
+  password: {
+    hash: "e10adc3949ba59abbe56e057f20f883e", // MD5 хеш пароля
+    length: 6, // Длина оригинального пароля
+  },
+});
+
+(async function () {
+  // Открываем сессию
+  await user.logIn();
+
+  // Получаем дневник
+  const diary = await user.diary();
+  console.log(diary);
+
+  // Закрываем сессию
+  await user.logOut();
+})();
+```

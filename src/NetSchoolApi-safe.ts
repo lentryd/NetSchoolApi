@@ -30,11 +30,18 @@ import { Credentials as ReportFileCredentials } from "@methods/reportFile";
 import { Credentials as GradesCredentials } from "@methods/grades";
 import { Credentials as JournalCredentials } from "@methods/journal";
 
+export type PasswordType =
+  | string
+  | {
+      hash: string;
+      length: number;
+    };
+
 export interface Credentials {
   login: string;
   origin: string;
   school: number | string;
-  password: string;
+  password: PasswordType;
 }
 
 export default class NetSchoolApiSafe {
