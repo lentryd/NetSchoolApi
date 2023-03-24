@@ -32,7 +32,12 @@ export default class NetSchoolApi extends NS {
     process.addListener("beforeExit", this.closeProcess.bind(this));
 
     // Если произошла ошибка, мы также закрываем сессию
-    process.addListener("uncaughtException", this.closeProcess.bind(this));
+    process.addListener("uncaughtException", (err) =>
+      this.console.error(
+        `В классе пользователя ${this.credentials.login} произошла ошибка\n`,
+        err
+      )
+    );
   }
 
   /** Открытие сессии (только если она закрыта) */
@@ -59,11 +64,7 @@ export default class NetSchoolApi extends NS {
   }
 
   /** Экстренное закрытие сессии */
-  private async closeProcess(err: any) {
-    // Если поймали ошибку, то показываем ее
-    if (err)
-      this.console.error("Ошибка в коде привела к закрытию сессии.\n", err);
-
+  private async closeProcess() {
     // Закрываем сессию
     await this.logOut();
 
