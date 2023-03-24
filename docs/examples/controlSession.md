@@ -44,8 +44,6 @@ const user = new NS({
 ```typescript
 import { Safe as NS } from "netschoolapi";
 
-// Получаем хэш пароля из базы данных
-
 const user = new NS({
   origin: "https://example.com",
   login: "Иванов",
