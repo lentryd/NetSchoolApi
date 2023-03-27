@@ -58,7 +58,7 @@ export default class NetSchoolApi extends NS {
 
   /** Повторное открытие сессии (всегда возвращает `true`) */
   async sessionValid(): Promise<true> {
-    await super.logIn();
+    if (!(await super.sessionValid())) await super.logIn();
 
     return true;
   }
