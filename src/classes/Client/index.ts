@@ -96,7 +96,7 @@ export default class Client {
     },
   };
 
-  private join(...paths: string[]) {
+  public join(...paths: string[]) {
     return joinURL(this.origin, this.path.get(), ...paths);
   }
 
@@ -129,11 +129,15 @@ export default class Client {
     const res = await fetch(url, {
       ...init,
       headers: {
-        ...init?.headers,
         ...this.headers.get(),
+        ...init?.headers,
       },
     });
-    if (!res.ok) throw new Error("Fetch failed");
+    if (!res.ok) {
+      throw new Error(
+        "Fetch failed.\n\t- url: " + url + "\n\t- status: " + res.status
+      );
+    }
     if (await this.isSecurityWarning(res)) {
       await this.post(
         "../asp/SecurityWarning.asp",

@@ -10,6 +10,7 @@
 - [Дневник](#дневник)
   - [.diary()](#diary)
   - [.assignment()](#assignment)
+  - [.downloadFile()](#downloadfile)
   - [.assignmentTypes()](#assignmenttypes)
 - [Расписание](#расписание)
   - [.scheduleDay()](#scheduleday)
@@ -110,6 +111,20 @@
 #### Возвращает объект класса [AssignmentInfo](reference.md#assignmentinfo)
 
 #### [Пример использования](examples/assignment.md)
+
+---
+
+### .downloadFile()
+
+#### Принимает объект данных:
+
+- `studentId?: number` - ID учащегося, можно не указывать.
+- `assignId: number` - ID задания, с которым связан файл
+- `id: number` - ID файла
+
+#### Возвращает файл в виде [Buffer](https://nodejs.org/api/buffer.html)
+
+#### [Пример использования](examples/downloadFile.md)
 
 ---
 

@@ -174,9 +174,28 @@
 - `.date: Date` - дата сдачи задания
 - `.text: string` - текст задания
 - `.mark: number | null` - оценка за задание, если таковая имеется
+- `.answer?: object` - объект ответа на задание
+  - `.date: Date` - дата ответа
+  - `.text: string` - текст ответа
+  - `.attachments: Attachment[]` - массив объектов [Attachment](#attachment)
 - `.typeId: number` - ID типа задания
 - `.comment: string | null` - комментарий учителя, если таковой имеется
 - `.lessonId: number` - ID занятия
+- `.attachments: Attachment[]` - массив объектов [Attachment](#attachment)
+- `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
+
+---
+
+### Attachment
+
+Класс необходим для удобной работы c файлами, которые прикреплены к заданиям.
+
+#### Объект класса содержит:
+
+- `.id: number` - ID файла
+- `.name: string` - название файла
+- `.date?: Date` - дата загрузки файла (видно только у файлов ответа)
+- `.description?: string` - описание файла
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)
 
 ## Задания

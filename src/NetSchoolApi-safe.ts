@@ -12,6 +12,7 @@ import photo from "@methods/photo";
 
 import diary from "@methods/diary";
 import assignment from "@methods/assignment";
+import downloadFile from "@methods/downloadFile";
 import assignmentTypes from "@methods/assignmentTypes";
 
 import scheduleDay from "@methods/scheduleDay";
@@ -24,6 +25,7 @@ import journal from "@methods/journal";
 import { Credentials as PhotoCredentials } from "@methods/photo";
 import { Credentials as DiaryCredentials } from "@methods/diary";
 import { Credentials as AssignmentCredentials } from "@methods/assignment";
+import { Credentials as DownloadFileCredentials } from "@methods/downloadFile";
 import { Credentials as ScheduleDayCredentials } from "@methods/scheduleDay";
 import { Credentials as ScheduleWeekCredentials } from "@methods/scheduleWeek";
 import { Credentials as ReportFileCredentials } from "@methods/reportFile";
@@ -117,6 +119,11 @@ export default class NetSchoolApiSafe {
   /** Информация о задание */
   assignment(credentials: AssignmentCredentials) {
     return assignment.call(this, credentials);
+  }
+
+  /** Скачивание файла */
+  downloadFile(credentials: DownloadFileCredentials) {
+    return downloadFile.call(this, credentials);
   }
 
   /** Типы заданий */
