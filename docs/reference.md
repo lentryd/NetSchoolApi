@@ -10,6 +10,7 @@
   - [Day](#day)
   - [Lesson](#lesson)
   - [Assignment](#assignment)
+  - [Attachment](#attachment)
 - [Задания](#задания)
   - [AssignmentInfo](#assignmentinfo)
   - [AssignmentType](#assignmenttype)
