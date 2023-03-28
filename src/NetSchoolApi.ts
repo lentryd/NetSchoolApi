@@ -1,6 +1,8 @@
 import NS, { Credentials } from "@NS";
 import Session from "@classes/Session";
 
+let activeClasses = 0;
+
 export default class NetSchoolApi extends NS {
   /** Уведомления */
   private console = {
@@ -20,9 +22,13 @@ export default class NetSchoolApi extends NS {
     },
   };
 
+  /** Начался ли процесс закрытия */
+  private startClosing = false;
+
   constructor(credentials: Credentials) {
     super(credentials);
 
+    activeClasses++;
     this.console.info(`Класс пользователя ${this.credentials.login} создан`);
 
     // Если нажали Ctrl + C, то закрываем сессию
@@ -30,14 +36,6 @@ export default class NetSchoolApi extends NS {
 
     // Прежде чем завершить процесс, мы закрываем сессию
     process.addListener("beforeExit", this.closeProcess.bind(this));
-
-    // Если произошла ошибка, мы также закрываем сессию
-    process.addListener("uncaughtException", (err) =>
-      this.console.error(
-        `В классе пользователя ${this.credentials.login} произошла ошибка\n`,
-        err
-      )
-    );
   }
 
   /** Открытие сессии (только если она закрыта) */
@@ -65,12 +63,27 @@ export default class NetSchoolApi extends NS {
 
   /** Экстренное закрытие сессии */
   private async closeProcess() {
+    if (this.startClosing) return;
+    this.startClosing = true;
+
     // Закрываем сессию
-    await this.logOut();
+    await this.logOut()
+      .then(() =>
+        this.console.done(`Сеанс ${this.credentials.login} успешно закрыт`)
+      )
+      .catch((err) =>
+        this.console.error(
+          `Ошибка закрытия сессии ${this.credentials.login}`,
+          err
+        )
+      );
 
-    // Уведомляем о закрытии
-    this.console.done(`Сеанс ${this.credentials.login} успешно закрыт`);
+    // Уменьшаем счетчик
+    activeClasses--;
 
-    process.exit();
+    this.console.info("Осталось: " + activeClasses);
+
+    // Если счетчик пуст, то закрываем процесс
+    if (activeClasses === 0) process.exit(0);
   }
 }
