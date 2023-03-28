@@ -60,7 +60,7 @@ export default class Journal {
     this.raw = credentials.htmlText;
     this._subjects = credentials.subjects;
 
-    const [start, end] =
+    const [start = "", end = ""] =
       query(
         this.raw,
         "table td:nth-child(2) > span:nth-child(5)"

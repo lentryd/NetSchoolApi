@@ -19,7 +19,7 @@ export default class Grades {
     this.raw = credentials.htmlText;
     this._types = credentials.types;
 
-    const [start, end] =
+    const [start = "", end = ""] =
       query(
         this.raw,
         "table td:nth-child(2) > span:nth-child(3)"
