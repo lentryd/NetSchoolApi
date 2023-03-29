@@ -32,6 +32,7 @@ interface NegotiateObject {
 export interface Credentials {
   url: string;
   filters: Filter[];
+  yearId?: number;
   timeout?: number;
 }
 
@@ -39,7 +40,7 @@ export default async function reportFile(
   this: NS,
   credentials: Credentials
 ): Promise<string> {
-  const { url, filters, timeout = 6e4 } = credentials;
+  const { url, filters, yearId, timeout = 6e4 } = credentials;
   const { client, session, context } = await sessionValid.call(this);
   const query: Query = {
     _: session.ver,
@@ -50,7 +51,7 @@ export default async function reportFile(
   };
   const params = [
     { name: "DATEFORMAT", value: context.server.dateFormat },
-    { name: "SCHOOLYEARID", value: context.year.id },
+    { name: "SCHOOLYEARID", value: yearId ? yearId : context.year.id },
     { name: "SERVERTIMEZONE", value: 3 },
     { name: "FULLSCHOOLNAME", value: context.school.fullName },
   ];
