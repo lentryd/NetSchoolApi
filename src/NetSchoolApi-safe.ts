@@ -22,6 +22,8 @@ import reportFile from "@methods/reportFile";
 import grades from "@methods/grades";
 import journal from "@methods/journal";
 
+import fetch from "@methods/fetch";
+
 import { Credentials as PhotoCredentials } from "@methods/photo";
 import { Credentials as DiaryCredentials } from "@methods/diary";
 import { Credentials as AssignmentCredentials } from "@methods/assignment";
@@ -71,7 +73,7 @@ export default class NetSchoolApiSafe {
 
   /** Произвольные запросы к сетевому */
   fetch(url: string, init?: InitRequest) {
-    return this.client.request("../" + url, init);
+    return fetch.call(this, url, init);
   }
 
   // ⭐️ Сессия
