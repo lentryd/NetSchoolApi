@@ -81,8 +81,6 @@ export default class NetSchoolApi extends NS {
     // Уменьшаем счетчик
     activeClasses--;
 
-    this.console.info("Осталось: " + activeClasses);
-
     // Если счетчик пуст, то закрываем процесс
     if (activeClasses === 0) process.exit(0);
   }
