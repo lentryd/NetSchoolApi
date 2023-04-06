@@ -2,6 +2,7 @@ import NS, { Credentials } from "@NS";
 import Session from "@classes/Session";
 
 let activeClasses = 0;
+const errors: string[] = [];
 
 export default class NetSchoolApi extends NS {
   /** Уведомления */
@@ -36,6 +37,15 @@ export default class NetSchoolApi extends NS {
 
     // Прежде чем завершить процесс, мы закрываем сессию
     process.addListener("beforeExit", this.closeProcess.bind(this));
+
+    // Если произошла ошибка, мы закрываем сессию
+    process.addListener("uncaughtException", (err) => {
+      if (!errors.includes(err.name)) {
+        this.console.error("Ошибка в коде привела к закрытию программы", err);
+        errors.push(err.name);
+      }
+      this.closeProcess.bind(this);
+    });
   }
 
   /** Открытие сессии (только если она закрыта) */
