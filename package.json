@@ -8,6 +8,13 @@
     "build": "tsc && tsc-alias",
     "test": "npm run build && node test"
   },
+  "keywords": [
+    "sgo",
+    "nodejs",
+    "netschool",
+    "api-client",
+    "typescript"
+  ],
   "homepage": "https://lentryd.su/NetSchoolApi/",
   "repository": {
     "type": "git",
@@ -16,15 +23,15 @@
   "author": "lentryd",
   "license": "MIT",
   "dependencies": {
-    "node-fetch": "^2.6.9",
-    "node-html-parser": "^6.1.5",
+    "node-fetch": "^2.6.13",
+    "node-html-parser": "^6.1.6",
     "ws": "^8.13.0"
   },
   "devDependencies": {
-    "@types/node": "^18.15.10",
-    "@types/node-fetch": "^2.6.2",
-    "@types/ws": "^8.5.4",
-    "tsc-alias": "^1.8.4",
-    "typescript": "^5.0.2"
+    "@types/node": "^18.17.8",
+    "@types/node-fetch": "^2.6.4",
+    "@types/ws": "^8.5.5",
+    "tsc-alias": "^1.8.7",
+    "typescript": "^5.1.6"
   }
 }
