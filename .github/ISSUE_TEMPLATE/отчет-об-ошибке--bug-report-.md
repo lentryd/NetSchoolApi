@@ -1,7 +1,7 @@
 ---
 name: Отчет об ошибке (Bug report)
 about: Создайте отчет, чтобы помочь нам исправить ошибку
-title: Bug
+title: ''
 labels: bug
 assignees: lentryd
 
