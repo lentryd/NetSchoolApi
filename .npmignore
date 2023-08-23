@@ -2,7 +2,6 @@
 src
 docs
 *.tgz
-test.js
 node_modules
 tsconfig.json
 CODE_OF_CONDUCT.md

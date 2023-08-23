@@ -1,5 +1,4 @@
 .*
 dist
-test.js
 !.npmignore
 node_modules
