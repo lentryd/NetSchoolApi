@@ -1,6 +1,4 @@
 import NS from "@NS";
-import WS from "ws";
-import Client from "@classes/Client";
 import { sessionValid } from "@utils/checks";
 
 type Filter = {
