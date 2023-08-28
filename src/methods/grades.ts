@@ -1,12 +1,12 @@
 import NS from "@NS";
-import Grades from "@classes/Grades";
-import { date2JSON } from "@utils/dateNum";
+import Grades from "@/classes/Grades";
+import { date2JSON } from "@/utils/dateNum";
 import {
   sessionValid,
   dateValid,
   classIdValid,
   studentIdValid,
-} from "@utils/checks";
+} from "@/utils/checks";
 
 export interface Credentials {
   subjectId: number;

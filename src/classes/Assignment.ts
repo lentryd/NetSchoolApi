@@ -1,7 +1,7 @@
 import Attachment, {
   AttachmentObject,
   AnswerFilesObject,
-} from "@classes/Attachment";
+} from "@/classes/Attachment";
 
 type Mark = {
   assignmentId: number;

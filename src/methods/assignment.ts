@@ -1,6 +1,6 @@
 import NS from "@NS";
-import { sessionValid, studentIdValid } from "@utils/checks";
-import AssignmentInfo from "@classes/AssignmentInfo";
+import { sessionValid, studentIdValid } from "@/utils/checks";
+import AssignmentInfo from "@/classes/AssignmentInfo";
 
 export interface Credentials {
   studentId?: number;

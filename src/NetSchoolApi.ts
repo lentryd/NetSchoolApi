@@ -1,5 +1,5 @@
 import NS, { Credentials } from "@NS";
-import Session from "@classes/Session";
+import Session from "@/classes/Session";
 
 let activeClasses = 0;
 const errors: string[] = [];

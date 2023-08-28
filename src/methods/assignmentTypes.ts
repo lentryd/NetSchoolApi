@@ -1,6 +1,6 @@
 import NS from "@NS";
-import { sessionValid } from "@utils/checks";
-import AssignmentTypes from "@classes/AssignmentTypes";
+import { sessionValid } from "@/utils/checks";
+import AssignmentTypes from "@/classes/AssignmentTypes";
 
 export default async function (this: NS) {
   await sessionValid.call(this);

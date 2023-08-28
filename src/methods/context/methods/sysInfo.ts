@@ -1,4 +1,4 @@
-import Client from "@classes/Client";
+import Client from "@/classes/Client";
 
 export default async function (client: Client) {
   const text = await client.get("sysInfo").then((res) => res.text());

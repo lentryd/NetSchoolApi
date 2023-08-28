@@ -1,6 +1,6 @@
 import NS from "@NS";
-import Diary, { DiaryObject } from "@classes/Diary";
-import { sessionValid, dateValid, studentIdValid } from "@utils/checks";
+import Diary, { DiaryObject } from "@/classes/Diary";
+import { sessionValid, dateValid, studentIdValid } from "@/utils/checks";
 import { AttachmentObject, AnswerFilesObject } from "@/classes/Attachment";
 
 type AttachmentRaw = {

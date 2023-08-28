@@ -1,6 +1,6 @@
 /**
  * Преобразование объекта в строку
- * @param cookie Объект с куки файлами
+ * @/param cookie Объект с куки файлами
  */
 export default function (cookie: { [key: string]: string }) {
   const cookies = [];

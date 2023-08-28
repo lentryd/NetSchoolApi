@@ -1,12 +1,12 @@
 import NS from "@NS";
-import Journal from "@classes/Journal";
-import { date2JSON } from "@utils/dateNum";
+import Journal from "@/classes/Journal";
+import { date2JSON } from "@/utils/dateNum";
 import {
   classIdValid,
   dateValid,
   sessionValid,
   studentIdValid,
-} from "@utils/checks";
+} from "@/utils/checks";
 
 export interface Credentials {
   start?: Date;

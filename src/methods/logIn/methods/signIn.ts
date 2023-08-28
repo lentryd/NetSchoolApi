@@ -1,5 +1,5 @@
 import { Credentials } from "@NS";
-import Client from "@classes/Client";
+import Client from "@/classes/Client";
 
 import authData from "./authData";
 import schoolInfo from "./schoolInfo";

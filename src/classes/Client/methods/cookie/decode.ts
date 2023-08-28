@@ -1,6 +1,6 @@
 /**
  * Преобразование строки в объект
- * @param cookie Значение заголовка `set-cookie`
+ * @/param cookie Значение заголовка `set-cookie`
  */
 export default function (cookie?: string[]) {
   return cookie

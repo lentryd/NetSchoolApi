@@ -1,38 +1,38 @@
-import Client, { InitRequest } from "@classes/Client";
-import Session from "@classes/Session";
-import Context from "@classes/Context";
+import Client, { InitRequest } from "@/classes/Client";
+import Session from "@/classes/Session";
+import Context from "@/classes/Context";
 
-import logIn from "@methods/logIn";
-import logOut from "@methods/logOut";
-import context from "@methods/context";
-import sessionValid from "@methods/sessionValid";
+import logIn from "@/methods/logIn";
+import logOut from "@/methods/logOut";
+import context from "@/methods/context";
+import sessionValid from "@/methods/sessionValid";
 
-import info from "@methods/info";
-import photo from "@methods/photo";
+import info from "@/methods/info";
+import photo from "@/methods/photo";
 
-import diary from "@methods/diary";
-import assignment from "@methods/assignment";
-import downloadFile from "@methods/downloadFile";
-import assignmentTypes from "@methods/assignmentTypes";
+import diary from "@/methods/diary";
+import assignment from "@/methods/assignment";
+import downloadFile from "@/methods/downloadFile";
+import assignmentTypes from "@/methods/assignmentTypes";
 
-import scheduleDay from "@methods/scheduleDay";
-import scheduleWeek from "@methods/scheduleWeek";
+import scheduleDay from "@/methods/scheduleDay";
+import scheduleWeek from "@/methods/scheduleWeek";
 
-import reportFile from "@methods/reportFile";
-import grades from "@methods/grades";
-import journal from "@methods/journal";
+import reportFile from "@/methods/reportFile";
+import grades from "@/methods/grades";
+import journal from "@/methods/journal";
 
-import fetch from "@methods/fetch";
+import fetch from "@/methods/fetch";
 
-import { Credentials as PhotoCredentials } from "@methods/photo";
-import { Credentials as DiaryCredentials } from "@methods/diary";
-import { Credentials as AssignmentCredentials } from "@methods/assignment";
-import { Credentials as DownloadFileCredentials } from "@methods/downloadFile";
-import { Credentials as ScheduleDayCredentials } from "@methods/scheduleDay";
-import { Credentials as ScheduleWeekCredentials } from "@methods/scheduleWeek";
-import { Credentials as ReportFileCredentials } from "@methods/reportFile";
-import { Credentials as GradesCredentials } from "@methods/grades";
-import { Credentials as JournalCredentials } from "@methods/journal";
+import { Credentials as PhotoCredentials } from "@/methods/photo";
+import { Credentials as DiaryCredentials } from "@/methods/diary";
+import { Credentials as AssignmentCredentials } from "@/methods/assignment";
+import { Credentials as DownloadFileCredentials } from "@/methods/downloadFile";
+import { Credentials as ScheduleDayCredentials } from "@/methods/scheduleDay";
+import { Credentials as ScheduleWeekCredentials } from "@/methods/scheduleWeek";
+import { Credentials as ReportFileCredentials } from "@/methods/reportFile";
+import { Credentials as GradesCredentials } from "@/methods/grades";
+import { Credentials as JournalCredentials } from "@/methods/journal";
 
 export type PasswordType = string | { hash: string; length: number };
 
@@ -52,7 +52,7 @@ export default class NetSchoolApiSafe {
 
   /**
    * Создание пользователя
-   * @param credentials Данные пользователя
+   * @/param credentials Данные пользователя
    */
   constructor(credentials: Credentials) {
     this.credentials = credentials;

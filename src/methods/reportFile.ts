@@ -1,5 +1,5 @@
 import NS from "@NS";
-import { sessionValid } from "@utils/checks";
+import { sessionValid } from "@/utils/checks";
 
 type Filter = {
   filterId: string;

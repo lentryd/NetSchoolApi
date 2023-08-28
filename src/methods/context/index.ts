@@ -1,5 +1,5 @@
 import NS from "@NS";
-import Context from "@classes/Context";
+import Context from "@/classes/Context";
 
 import sysInfo from "./methods/sysInfo";
 import context from "./methods/context";

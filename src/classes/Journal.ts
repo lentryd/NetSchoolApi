@@ -1,7 +1,7 @@
-import { str2date, date2JSON } from "@utils/dateNum";
-import { query, table } from "@utils/parseHtml";
+import { str2date, date2JSON } from "@/utils/dateNum";
+import { query, table } from "@/utils/parseHtml";
 import { HTMLElement } from "node-html-parser";
-import Context from "@classes/Context";
+import Context from "@/classes/Context";
 
 interface Credentials {
   htmlText: string;

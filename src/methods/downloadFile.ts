@@ -1,5 +1,5 @@
 import NS from "@NS";
-import { sessionValid, studentIdValid } from "@utils/checks";
+import { sessionValid, studentIdValid } from "@/utils/checks";
 
 export interface Credentials {
   studentId?: number;

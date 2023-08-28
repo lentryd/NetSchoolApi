@@ -1,8 +1,8 @@
 import NS from "@NS";
-import Client from "@classes/Client";
-import ScheduleDay from "@classes/ScheduleDay";
-import { date2str } from "@utils/dateNum";
-import { sessionValid, dateValid, classIdValid } from "@utils/checks";
+import Client from "@/classes/Client";
+import ScheduleDay from "@/classes/ScheduleDay";
+import { date2str } from "@/utils/dateNum";
+import { sessionValid, dateValid, classIdValid } from "@/utils/checks";
 
 export interface Credentials {
   date?: Date;

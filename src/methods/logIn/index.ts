@@ -1,5 +1,5 @@
 import NS from "@NS";
-import Session from "@classes/Session";
+import Session from "@/classes/Session";
 
 import signIn from "./methods/signIn";
 
