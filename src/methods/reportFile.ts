@@ -62,11 +62,14 @@ export default async function reportFile(
   const ws = client.ws("signalr/connect", { params: query });
 
   return new Promise((resolve, reject) => {
+    let fileCode: string | undefined;
     let timeoutId = 0 as unknown as NodeJS.Timeout;
 
-    ws.once("open", () => {
-      client.get("signalr/start", { params: query });
-      client
+    ws.once("open", async () => {
+      await client
+        .get("signalr/start", { params: query })
+        .catch(() => ws.close(4001));
+      await client
         .post(url, {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ params, selectedData: filters }),
@@ -87,7 +90,7 @@ export default async function reportFile(
         .catch(() => ws.close(4001));
     });
 
-    ws.on("message", async (msg: string) => {
+    ws.on("message", (msg: string) => {
       let data: any;
       try {
         data = JSON.parse(msg);
@@ -97,9 +100,8 @@ export default async function reportFile(
 
       switch (data?.M?.[0]?.M) {
         case "complete":
+          fileCode = data.M[0].A[0].Data;
           ws.close(4000);
-          const res = await client.get("files/" + data.M[0].A[0].Data);
-          resolve(await res.text());
           break;
         case "error":
           ws.close(4003, data.M[0].A[0].Details);
@@ -116,6 +118,9 @@ export default async function reportFile(
       switch (code) {
         case 1000:
         case 4000:
+          if (!fileCode) return reject(new Error("Server didn't respond"));
+          const res = await client.get("files/" + fileCode);
+          resolve(await res.text());
           break;
         case 4001:
           reject(new Error("Error during initialization"));
