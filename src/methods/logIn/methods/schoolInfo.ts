@@ -75,6 +75,7 @@ export default async function (client: Client, school: string | number) {
   const data = await Promise.all([
     client
       .get("schools/search")
+      .catch(() => client.get("schools/search?name=У"))
       .then((res) => res.json() as Promise<SchoolSearchData[]>),
     client
       .get("prepareloginform")
