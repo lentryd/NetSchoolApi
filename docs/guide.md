@@ -190,6 +190,7 @@
 - `​subjectId​: ​number​` - ID предмета
 - `start​?: ​Date​` - начало периода
 - `end​?: ​Date​` - окончание периода
+- `termId​?: ​number​` - ID четверти
 - `​classId​?: ​number​` - ID класса
 - `studentId​?: ​number​` - ID учащегося
 
@@ -205,6 +206,7 @@
 
 - `start​?: ​Date​` - начало периода
 - `end​?: ​Date​` - окончание периода
+- `termId​?: ​number​` - ID четверти
 - `​classId​?: ​number​` - ID класса
 - `studentId​?: ​number​` - ID учащегося
 

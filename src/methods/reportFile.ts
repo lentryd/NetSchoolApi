@@ -9,6 +9,7 @@ type Filter = {
 type Query = {
   _: string;
   at: string;
+  tid?: string;
   transport: "webSockets";
   clientProtocol: number;
   connectionData: string;
@@ -49,14 +50,18 @@ export default async function reportFile(
   };
   const params = [
     { name: "DATEFORMAT", value: context.server.dateFormat },
-    { name: "SCHOOLYEARID", value: yearId ? yearId : context.year.id },
+    {
+      name: "SCHOOLYEARID",
+      value: (yearId ? yearId : context.year.id).toString(),
+    },
     { name: "SERVERTIMEZONE", value: 3 },
     { name: "FULLSCHOOLNAME", value: context.school.fullName },
   ];
 
-  const { ConnectionToken } = (await client
+  const { ConnectionId, ConnectionToken } = (await client
     .get("signalr/negotiate", { params: query })
     .then((res) => res.json())) as NegotiateObject;
+  query.tid = ConnectionId[0];
   query.connectionToken = ConnectionToken;
 
   const ws = client.ws("signalr/connect", { params: query });
@@ -83,7 +88,7 @@ export default async function reportFile(
               I: 0,
               H: "queuehub",
               M: "StartTask",
-              A: [taskId],
+              A: [taskId, "report-v2"],
             })
           );
         })
@@ -104,6 +109,8 @@ export default async function reportFile(
           ws.close(4000);
           break;
         case "error":
+          console.log("Ошибка: ", data.M[0].A[0]);
+          console.error(data.M[0].A[0].Details);
           ws.close(4003, data.M[0].A[0].Details);
           break;
       }

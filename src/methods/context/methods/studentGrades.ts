@@ -54,7 +54,7 @@ interface DefaultRange {
   end: Date;
 }
 
-interface FilterSource {
+export interface FilterSource {
   items: Item[];
   defaultValue: string;
   filterId: string;
@@ -93,10 +93,24 @@ export default async function (client: Client) {
         name: s.title,
       })) ?? [];
 
+  const terms =
+    data
+      .find((f) => f.filterId == "TERMID")
+      ?.items.map((t) => ({
+        id: parseInt(t.value),
+        name: t.title,
+      })) ?? [];
+
+  const currentTerm = parseInt(
+    data.find((f) => f.filterId == "TERMID")?.defaultValue ?? "-1"
+  );
+
   return {
     user: {
+      terms,
       classes,
       students,
+      currentTerm,
     },
     subjects,
   };

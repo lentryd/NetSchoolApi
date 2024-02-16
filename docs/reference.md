@@ -48,12 +48,16 @@
 - `.user: object` - данные пользователя
   - `.id: number` - id пользователя
   - `.name: string` - имя пользователя в системе
+  - `.terms: array` - массив доступных четвертей
+    - `.id: number` - id четверти
+    - `.name: string` - название четверти
   - `.classes: array` - массив доступных классов
     - `.id: number` - id класса
     - `.name: string` - название класса
   - `.students: array` - массив доступных учащихся
     - `.id: number` - id учащегося
     - `.name: string` - имя учащегося в системе
+  - `.currentTerm: number` - id текущей четверти
 - `.year: object` - данные выбранного года
   - `.id: number` - id года
   - `.gId: number` - последнии две цифры года
@@ -73,6 +77,8 @@
   - `.id: number` - id предмета
   - `.name: string` - название предмета
 - `.checkDate(date: Date): boolean` - является ли дата частью года
+- `.termExists(id: number): boolean` - существует ли id четверти
+- `.defaultTerm(): number` - id текущей четверти
 - `.classExists(id: number): boolean` - существует ли id класса
 - `.defaultClass(): number` - id первого класса
 - `.studentExists(id: number): boolean` - существует ли id учащегося

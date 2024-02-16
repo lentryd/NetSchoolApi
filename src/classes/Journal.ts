@@ -6,6 +6,7 @@ import Context from "@/classes/Context";
 interface Credentials {
   htmlText: string;
   subjects: Context["subjects"];
+  hasTerms: boolean;
 }
 
 const MONTHS = {
@@ -23,15 +24,35 @@ const MONTHS = {
   Август: "19",
 };
 
+const MONTH_NEW = {
+  Сентябрь: "08",
+  Октябрь: "09",
+  Ноябрь: "10",
+  Декабрь: "11",
+  Январь: "00",
+  Февраль: "01",
+  Март: "02",
+  Апрель: "03",
+  Май: "04",
+  Июнь: "05",
+  Июль: "06",
+  Август: "07",
+};
+
 function parseDates(
-  yearStart: Date,
+  startDate: Date,
+  endDate: Date,
   monthsTr: HTMLElement,
   daysTr: HTMLElement
 ) {
+  const isSameYear = startDate.getFullYear() === endDate.getFullYear();
+
   const days = daysTr.querySelectorAll("th").map((th) => +th.structuredText);
   const months = monthsTr.querySelectorAll("[colspan]").map((th) => ({
     length: +(th.getAttribute("colspan") ?? ""),
-    number: +MONTHS[th.structuredText as keyof typeof MONTHS],
+    number: !isSameYear
+      ? +MONTHS[th.structuredText as keyof typeof MONTHS]
+      : +MONTH_NEW[th.structuredText as keyof typeof MONTH_NEW],
   }));
 
   const result: Date[] = [];
@@ -39,7 +60,7 @@ function parseDates(
     const resultLength = result.length;
 
     for (let i = resultLength; i < resultLength + length; i++) {
-      const date = new Date(yearStart);
+      const date = new Date(startDate);
       date.setDate(days[i]);
       date.setMonth(number);
 
@@ -54,16 +75,18 @@ export default class Journal {
   raw: string;
   range: { start: Date; end: Date };
 
+  private hasTerms: boolean;
   private _subjects: Credentials["subjects"];
 
   constructor(credentials: Credentials) {
     this.raw = credentials.htmlText;
+    this.hasTerms = credentials.hasTerms;
     this._subjects = credentials.subjects;
 
     const [start = "", end = ""] =
       query(
         this.raw,
-        "table td:nth-child(2) > span:nth-child(5)"
+        `table td:nth-child(2) > span:nth-child(${this.hasTerms ? 7 : 5})`
       )?.structuredText.match(/((\d{1,2}\.){2}\d{2})/g) ?? [];
     this.range = { start: str2date(start), end: str2date(end) };
   }
@@ -74,7 +97,7 @@ export default class Journal {
       query: ".table-print",
       removeHeaders: false,
     });
-    const dates = parseDates(this.range.start, trs[0], trs[1]);
+    const dates = parseDates(this.range.start, this.range.end, trs[0], trs[1]);
     trs.splice(0, 2);
 
     return trs.map((tr) => {

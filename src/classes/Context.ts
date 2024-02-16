@@ -1,8 +1,10 @@
 interface User {
   id: number;
   name: string;
+  terms: { id: number; name: string }[];
   classes: { id: number; name: string }[];
   students: { id: number; name: string }[];
+  currentTerm: number;
 }
 
 interface Year {
@@ -57,6 +59,16 @@ export default class Context {
   checkDate(date: Date) {
     const { start, end } = this.year;
     return +start <= +date && +date <= +end;
+  }
+
+  /** Существует ли четверть */
+  termExists(id: number) {
+    return !!this.user.terms.find((t) => t.id == id);
+  }
+
+  /** ID текущей четверти */
+  defaultTerm() {
+    return this.user.currentTerm;
   }
 
   /** Существует ли класс */

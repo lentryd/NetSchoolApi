@@ -4,14 +4,17 @@ import { date2JSON } from "@/utils/dateNum";
 import {
   sessionValid,
   dateValid,
+  termIdValid,
   classIdValid,
   studentIdValid,
+  termDateValid,
 } from "@/utils/checks";
 
 export interface Credentials {
   subjectId: number;
   start?: Date;
   end?: Date;
+  termId?: number;
   classId?: number;
   studentId?: number;
 }
@@ -19,14 +22,15 @@ export interface Credentials {
 export default async function grades(this: NS, credentials: Credentials) {
   const { context } = await sessionValid.call(this);
 
-  let { subjectId, start, end, classId, studentId } = credentials;
+  let { subjectId, start, end, termId, classId, studentId } = credentials;
   if (!context.subjectExists(subjectId))
     throw new Error(`Предмета ${subjectId} не существует`);
+  termId = termIdValid.call(this, termId);
   classId = classIdValid.call(this, classId);
   studentId = studentIdValid.call(this, studentId);
-  if (!start) start = context.year.start;
-  if (!end) end = context.year.end;
-  dateValid.call(this, start, end);
+  const termDates = await termDateValid.call(this, termId, start, end);
+  start = termDates.start;
+  end = termDates.end;
 
   const [types, htmlText] = await Promise.all([
     this.assignmentTypes(),
@@ -46,6 +50,10 @@ export default async function grades(this: NS, credentials: Credentials) {
           filterValue: subjectId,
         },
         {
+          filterId: "TERMID",
+          filterValue: termId,
+        },
+        {
           filterId: "period",
           filterValue: date2JSON(start) + " - " + date2JSON(end),
         },
@@ -53,5 +61,9 @@ export default async function grades(this: NS, credentials: Credentials) {
     }),
   ]);
 
-  return new Grades({ types, htmlText });
+  return new Grades({
+    types,
+    htmlText,
+    hasTerms: context.user.terms.length > 0,
+  });
 }

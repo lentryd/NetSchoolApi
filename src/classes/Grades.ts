@@ -5,6 +5,7 @@ import AssignmentTypes from "./AssignmentTypes";
 interface Credentials {
   types: AssignmentTypes;
   htmlText: string;
+  hasTerms: boolean;
 }
 
 export default class Grades {
@@ -22,14 +23,18 @@ export default class Grades {
     const [start = "", end = ""] =
       query(
         this.raw,
-        "table td:nth-child(2) > span:nth-child(3)"
+        `table td:nth-child(2) > span:nth-child(${
+          credentials.hasTerms ? 5 : 3
+        })`
       )?.structuredText.match(/((\d{1,2}\.){2}\d{2})/g) ?? [];
     this.range = { start: str2date(start), end: str2date(end) };
 
     this.teacher =
       query(
         this.raw,
-        "table td:nth-child(2) > span:nth-child(9)"
+        `table td:nth-child(2) > span:nth-child(${
+          credentials.hasTerms ? 11 : 9
+        })`
       )?.childNodes[1].text.trim() ?? "";
 
     this.averageMark = +(

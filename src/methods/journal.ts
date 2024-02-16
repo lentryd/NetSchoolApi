@@ -6,11 +6,14 @@ import {
   dateValid,
   sessionValid,
   studentIdValid,
+  termDateValid,
+  termIdValid,
 } from "@/utils/checks";
 
 export interface Credentials {
   start?: Date;
   end?: Date;
+  termId?: number;
   classId?: number;
   studentId?: number;
 }
@@ -18,12 +21,13 @@ export interface Credentials {
 export default async function journal(this: NS, credentials: Credentials = {}) {
   const { context } = await sessionValid.call(this);
 
-  let { start, end, classId, studentId } = credentials;
+  let { start, end, termId, classId, studentId } = credentials;
+  termId = termIdValid.call(this, termId);
   classId = classIdValid.call(this, classId);
   studentId = studentIdValid.call(this, studentId);
-  if (!start) start = context.year.start;
-  if (!end) end = context.year.end;
-  dateValid.call(this, start, end);
+  const termDates = await termDateValid.call(this, termId, start, end);
+  start = termDates.start;
+  end = termDates.end;
 
   const htmlText = await this.reportFile({
     url: "reports/studenttotal/queue",
@@ -37,11 +41,19 @@ export default async function journal(this: NS, credentials: Credentials = {}) {
         filterValue: classId,
       },
       {
+        filterId: "TERMID",
+        filterValue: termId,
+      },
+      {
         filterId: "period",
         filterValue: date2JSON(start) + " - " + date2JSON(end),
       },
     ],
   });
 
-  return new Journal({ htmlText, subjects: context.subjects });
+  return new Journal({
+    htmlText,
+    subjects: context.subjects,
+    hasTerms: context.user.terms.length > 0,
+  });
 }
