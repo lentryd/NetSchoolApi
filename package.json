@@ -23,6 +23,7 @@
   "author": "lentryd",
   "license": "MIT",
   "dependencies": {
+    "compare-versions": "^6.1.0",
     "node-fetch": "^2.6.13",
     "node-html-parser": "^6.1.6",
     "ws": "^8.13.0"

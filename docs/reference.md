@@ -51,13 +51,15 @@
   - `.terms: array` - массив доступных четвертей
     - `.id: number` - id четверти
     - `.name: string` - название четверти
+    - `.isCurrent: boolean` - является ли эта четверть текущей
+    - `.start: Date` - начало четверти
+    - `.end: Date` - конец четверти
   - `.classes: array` - массив доступных классов
     - `.id: number` - id класса
     - `.name: string` - название класса
   - `.students: array` - массив доступных учащихся
     - `.id: number` - id учащегося
     - `.name: string` - имя учащегося в системе
-  - `.currentTerm: number` - id текущей четверти
 - `.year: object` - данные выбранного года
   - `.id: number` - id года
   - `.gId: number` - последнии две цифры года
@@ -84,6 +86,7 @@
 - `.studentExists(id: number): boolean` - существует ли id учащегося
 - `.defaultStudent(): number` - id первого учащегося
 - `.subjectExists(id: number): boolean` - существует ли id предмета
+- `.compareServerVersion(version: string): 0 | 1 | -1` - сравнивает версию сервера с указанной (1 если указанная версия больше, -1 если меньше, 0 если равны)
 
 ---
 
@@ -351,9 +354,14 @@
   - `.name: string` - название предмета в системе
   - `.marks: array` - массив оценок
     - `.mark: number` - оценка
-    - `.date: number` - дата оценки
+    - `.date: Date` - дата оценки
+    - `.termId: number` - ID четверти
+  - `.dotList: array` - массив точек (долгов)
+    - `.date: Date` - дата точки
+    - `.termId: number` - ID четверти
   - `.missedList: array` - массив пропусков
     - `.type: string` - аббревиатура пропуска (например: УП, ОТ и т.д.)
     - `.date: number` - дата пропуска
-  - `.middleMark: number` - средняя оценка
+    - `.termId: number` - ID четверти
+  - `.periodMiddleMark: number` - средняя оценка по предмету за выбранный промежуток
 - `.toJSON(): object` - возвращает объект класса (нужно для нормальной работы `JSON.stringify()`)

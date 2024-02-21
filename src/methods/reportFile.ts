@@ -41,6 +41,8 @@ export default async function reportFile(
 ): Promise<string> {
   const { url, filters, yearId, timeout = 6e4 } = credentials;
   const { client, session, context } = await sessionValid.call(this);
+
+  // Параметры запроса
   const query: Query = {
     _: session.ver,
     at: session.accessToken,
@@ -58,14 +60,15 @@ export default async function reportFile(
     { name: "FULLSCHOOLNAME", value: context.school.fullName },
   ];
 
+  // Получаем токен подключения
   const { ConnectionId, ConnectionToken } = (await client
     .get("signalr/negotiate", { params: query })
     .then((res) => res.json())) as NegotiateObject;
   query.tid = ConnectionId[0];
   query.connectionToken = ConnectionToken;
 
+  // Создаем WebSocket и ждем ответа
   const ws = client.ws("signalr/connect", { params: query });
-
   return new Promise((resolve, reject) => {
     let fileCode: string | undefined;
     let timeoutId = 0 as unknown as NodeJS.Timeout;
@@ -83,12 +86,17 @@ export default async function reportFile(
         .then(({ taskId }) => {
           if (timeout > 0)
             timeoutId = setTimeout(() => ws.close(4010), timeout);
+
+          const msg = [taskId];
+          if (context.compareServerVersion("5.24.0.0") != -1)
+            msg.push("report-v2");
+
           ws.send(
             JSON.stringify({
               I: 0,
               H: "queuehub",
               M: "StartTask",
-              A: [taskId, "report-v2"],
+              A: msg,
             })
           );
         })

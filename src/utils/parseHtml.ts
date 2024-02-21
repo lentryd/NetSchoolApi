@@ -14,6 +14,10 @@ export function query(html: string, query: string) {
   return parse(html).querySelector(query);
 }
 
+export function queryAll(html: string, query: string) {
+  return parse(html).querySelectorAll(query);
+}
+
 export function table(args: {
   html: string;
   query?: string;

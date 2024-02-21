@@ -41,33 +41,16 @@ export async function termDateValid(
   startDate?: Date,
   endDate?: Date
 ) {
-  if (!this.context?.termExists(termId))
-    throw new Error("Четверть не существует");
+  // Получаем четверть по id
+  const term = this.context?.user.terms.find((t) => t.id == termId);
+  if (!term) throw new Error("Четверть не существует");
 
-  // Получаем даты четверти
-  const filters = await this.client
-    .post("v2/reports/studentgrades/initfilters", {
-      body: JSON.stringify({
-        params: null,
-        selectedData: [{ filterId: "TERMID", filterValue: termId }],
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    .then((res) => res.json() as Promise<FilterSource[]>);
-  const termDates = filters.find((f) => f.filterId == "period")?.range;
-  if (!termDates) throw new Error("Не удалось получить даты четверти");
-
-  // Форматируем даты четверти
-  termDates.start = new Date(termDates.start);
-  termDates.end = new Date(termDates.end);
-
-  // Проверяем валидность дат
-  if (!startDate) startDate = termDates.start;
-  if (!endDate) endDate = termDates.end;
+  // Проверяем даты
+  const { start, end } = term;
+  if (!startDate) startDate = start;
+  if (!endDate) endDate = end;
   for (let date of [startDate, endDate])
-    if (+date < +termDates.start && +termDates.end < +date)
+    if (+date < +start && +end < +date)
       throw new Error(`Дата выходит за рамки четверти ${termId}`);
 
   // Возвращаем даты

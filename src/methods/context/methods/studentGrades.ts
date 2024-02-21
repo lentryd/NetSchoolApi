@@ -93,24 +93,40 @@ export default async function (client: Client) {
         name: s.title,
       })) ?? [];
 
-  const terms =
-    data
-      .find((f) => f.filterId == "TERMID")
-      ?.items.map((t) => ({
-        id: parseInt(t.value),
-        name: t.title,
-      })) ?? [];
+  const termFilters = data.find((f) => f.filterId == "TERMID");
+  const terms = !termFilters
+    ? []
+    : await Promise.all(
+        termFilters.items.map(async (t) => {
+          const filters = await client
+            .post("v2/reports/studentgrades/initfilters", {
+              body: JSON.stringify({
+                params: null,
+                selectedData: [{ filterId: "TERMID", filterValue: t.value }],
+              }),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+            .then((res) => res.json() as Promise<FilterSource[]>);
+          const termDates = filters.find((f) => f.filterId == "period")?.range;
+          if (!termDates) throw new Error("Не удалось получить даты четверти");
 
-  const currentTerm = parseInt(
-    data.find((f) => f.filterId == "TERMID")?.defaultValue ?? "-1"
-  );
+          return {
+            id: parseInt(t.value),
+            name: t.title,
+            isCurrent: termFilters.defaultValue == t.value,
+            start: new Date(termDates?.start),
+            end: new Date(termDates?.end),
+          };
+        })
+      );
 
   return {
     user: {
       terms,
       classes,
       students,
-      currentTerm,
     },
     subjects,
   };
