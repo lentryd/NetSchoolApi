@@ -149,9 +149,6 @@ function totalMarksFormat(
   // TODO: удалить в следующих версиях
   middleMark: Subject["middleMark"];
 } {
-  // Получаем среднюю оценку за выбранный период
-  const periodMiddleMark = marksTds.pop() as number;
-
   // Сопоставляем оценки с четвертями
   const totalMarks: Subject["totalMarks"] = [];
   const middleMarks: Subject["middleMarks"] = [];
@@ -161,11 +158,14 @@ function totalMarksFormat(
     const termId = terms.find((t) => tdName.includes(t.name))?.id ?? -1;
 
     // Если это итоговая оценка за выбранный период
-    if (tdName.includes("Итог")) totalMarks.push({ mark, termId });
+    if (tdName.includes("Итог") && mark) totalMarks.push({ mark, termId });
 
     // Если это средняя оценка за выбранный период
-    if (tdName.includes("Средн")) middleMarks.push({ mark, termId });
+    if (tdName.includes("Средн") && mark) middleMarks.push({ mark, termId });
   });
+
+  // Получаем среднюю оценку за выбранный период
+  const periodMiddleMark = middleMarks[middleMarks.length - 1]?.mark ?? 0;
 
   return {
     totalMarks,
@@ -217,8 +217,15 @@ function parseDates(html: string, start: Date, end: Date) {
 }
 
 export default class Journal {
+  /** HTML код отчета */
   raw: string;
-  range: { start: Date; end: Date };
+  /** Промежуток отчета */
+  range: {
+    /** Начало отчета */
+    start: Date;
+    /** Конец отчета */
+    end: Date;
+  };
 
   private _terms: Credentials["terms"];
   private _subjects: Credentials["subjects"];
@@ -259,7 +266,6 @@ export default class Journal {
     // Удаляем лишнее
     trs.splice(0, 2);
     termTds.shift();
-    termTds.pop();
 
     return trs.map((tr) => {
       // Получаем название предмета
