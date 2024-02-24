@@ -21,6 +21,7 @@
   - [.journal()](#journal)
 - [Дополнительно](#дополнительно)
   - [.fetch()](#fetch)
+  - [.contextAsync](#contextasync)
 
 ## Управление сессией
 
@@ -228,3 +229,13 @@
 #### Возвращает объект класса [Response](https://www.npmjs.com/package/node-fetch#class-response)
 
 #### [Пример использования](examples/fetch.md)
+
+---
+
+### .contextAsync
+
+> Это значение, а не метод, и оно не доступно в классе `Safe`.
+
+#### Возвращает объект класса [Context](reference.md#context), представляющий асинхронный контекст
+
+#### [Пример использования](examples/contextAsync.md)

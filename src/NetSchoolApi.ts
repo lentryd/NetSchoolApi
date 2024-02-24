@@ -48,6 +48,22 @@ export default class NetSchoolApi extends NS {
     });
   }
 
+  /** Контекст который доступен без авторизации */
+  get contextAsync(): Promise<NonNullable<NS["context"]>> {
+    // Если нет контекста, то создаём (через авторизацию)
+    return new Promise((resolve, reject) => {
+      if (this.context) {
+        resolve(this.context);
+      } else {
+        this.logIn()
+          .then(() => {
+            resolve(this.context as NonNullable<NS["context"]>);
+          })
+          .catch(reject);
+      }
+    });
+  }
+
   /** Открытие сессии (только если она закрыта) */
   async logIn(): Promise<Session> {
     const valid = await super.sessionValid();
