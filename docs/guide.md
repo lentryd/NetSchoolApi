@@ -177,6 +177,7 @@
 - `filters: { filterId: string, filterValue: string }[]` - Массив с фильтрами (форма, которая находится на странице запроса)
 - `yearId?: number` - ID года, за который требуется отчет
 - `timeout?: number` - Время в миллисекундах, через которое запрос будет закрыт (по умолчания `60000`, при значении `-1` запрос не будет закрываться)
+- `transport?: 0 | 1` - 0 - Web Sockets, 1 - Long Polling (если отсутствует, то используется Web Sockets или Long Polling, в зависимости от версии сервера)
 
 #### Возвращает html с результатом запроса
 
@@ -194,6 +195,7 @@
 - `termId​?: ​number​` - ID четверти
 - `​classId​?: ​number​` - ID класса
 - `studentId​?: ​number​` - ID учащегося
+- `transport?: 0 | 1` - 0 - Web Sockets, 1 - Long Polling (если отсутствует, то используется Web Sockets или Long Polling, в зависимости от версии сервера)
 
 #### Возвращает объект класса [Grades](reference.md#grades)
 
@@ -210,6 +212,7 @@
 - `termId​?: ​number​` - ID четверти
 - `​classId​?: ​number​` - ID класса
 - `studentId​?: ​number​` - ID учащегося
+- `transport?: 0 | 1` - 0 - Web Sockets, 1 - Long Polling (если отсутствует, то используется Web Sockets или Long Polling, в зависимости от версии сервера)
 
 #### Возвращает объект класса [Journal](reference.md#journal)
 
