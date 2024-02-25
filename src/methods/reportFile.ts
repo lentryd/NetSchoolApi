@@ -126,7 +126,7 @@ async function getTaskId(
  */
 function messageHandler(msg: Message) {
   const { C: messageId, M } = msg;
-  let error = M.find((m) => m.M === "complete")?.A[0].Details;
+  let error = M.find((m) => m.M === "error")?.A[0].Details;
   let fileCode = M.find((m) => m.M === "complete")?.A[0].Data;
 
   return { error, fileCode, messageId };
@@ -329,7 +329,7 @@ async function longPollingConnection(
       throw new Error("Error in task.\nError: " + data.error);
     }
 
-    // Обрабатываем
+    // Обрабатываем идентификатор отчета
     if (data.fileCode) fileCode = data.fileCode;
   }
 
