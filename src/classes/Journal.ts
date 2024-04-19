@@ -261,7 +261,7 @@ export default class Journal {
     });
     // Получаем название четвертей
     const termTds = Array.from(trs[0].querySelectorAll("th[rowspan]"), (th) =>
-      th.rawText.trim()
+      th.text.trim()
     );
     // Удаляем лишнее
     trs.splice(0, 2);
@@ -270,16 +270,16 @@ export default class Journal {
     return trs.map((tr) => {
       // Получаем название предмета
       const nameTd = tr.querySelector("td:nth-child(1)");
-      const name = nameTd?.rawText.trim() ?? "";
+      const name = nameTd?.text.trim() ?? "";
 
       // Получаем средние оценки и итоговые
       const marksTds = Array.from(
         tr.querySelectorAll("td.cell-num-2"),
-        (td) => +td.rawText.trim().replace(",", ".")
+        (td) => +td.text.trim().replace(",", ".")
       );
       // Получаем данные ячеек за период
       const periodTds = Array.from(tr.querySelectorAll(":not([class])"), (td) =>
-        td.rawText.trim()
+        td.text.trim()
       );
 
       // Парсим данные ячеек за период
