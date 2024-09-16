@@ -1,4 +1,4 @@
-import Client, { InitRequest } from "@/classes/Client";
+import Client, { InitRequest, requestHook } from "@/classes/Client";
 import Session from "@/classes/Session";
 import Context from "@/classes/Context";
 
@@ -57,6 +57,7 @@ export default class NetSchoolApiSafe {
   constructor(credentials: Credentials) {
     this.credentials = credentials;
     this.client = new Client(credentials.origin);
+    this.client.onResponse(requestHook.bind(this.client));
 
     this.client.path.set("webapi");
     this.client.headers.set("at", () =>
