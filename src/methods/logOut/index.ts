@@ -3,9 +3,8 @@ import NS from "@NS";
 import signOut from "./signOut";
 
 export default async function (this: NS) {
-  const { client, session } = this;
+  const { session } = this;
 
-  if (session) await signOut(client, session);
-
+  if (session) await signOut.call(this, session);
   this.session = null;
 }
