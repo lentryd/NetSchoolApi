@@ -46,7 +46,7 @@ const user = new NS({
 node test.js
 ```
 
-4. Если в консоли не выводится информация о пользователе, убедитесь, что у вас установлена подходящая версия NodeJS, либо создайте [issue]([https://github.com/lentryd/NetSchoolApi/issues/new](https://github.com/lentryd/NetSchoolApi/issues/new?labels=bug&projects=&template=%D0%BE%D1%82%D1%87%D0%B5%D1%82-%D0%BE%D0%B1-%D0%BE%D1%88%D0%B8%D0%B1%D0%BA%D0%B5--bug-report-.md)) на GitHub.
+4. Если в консоли не выводится информация о пользователе, убедитесь, что у вас установлена подходящая версия NodeJS, либо создайте [issue](https://github.com/lentryd/NetSchoolApi/issues/new?assignees=lentryd&labels=bug&projects=&template=%D0%BE%D1%82%D1%87%D0%B5%D1%82-%D0%BE%D0%B1-%D0%BE%D1%88%D0%B8%D0%B1%D0%BA%D0%B5--bug-report-.md) на GitHub.
 
 ## Дополнительная информация о библиотеке
 
