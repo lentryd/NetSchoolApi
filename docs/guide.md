@@ -235,6 +235,24 @@
 
 ---
 
+### .getProxy()
+
+#### Не принимает аргументы
+
+#### Возвращает объект класса [HttpsProxyAgent](https://www.npmjs.com/package/https-proxy-agent)
+
+---
+
+### .setProxy()
+
+#### Принимает аргументы:
+
+- `url: string` - Ссылка на прокси сервер
+
+#### Возвращает объект класса [HttpsProxyAgent](https://www.npmjs.com/package/https-proxy-agent)
+
+---
+
 ### .contextAsync
 
 > Это значение, а не метод, и оно не доступно в классе `Safe`.

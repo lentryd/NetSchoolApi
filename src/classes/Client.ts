@@ -1,4 +1,5 @@
-import Client, { Response, InitRequest } from "@lentryd/web-client";
+import { HttpsProxyAgent } from "https-proxy-agent";
+import WebClient, { Response, InitRequest } from "@lentryd/web-client";
 
 export async function isSecurityWarning(res: Response) {
   return (
@@ -29,4 +30,21 @@ export async function requestHook(
 }
 
 export * from "@lentryd/web-client";
-export default Client;
+export default class Client extends WebClient {
+  /**
+   * Получает прокси для запросов
+   * @returns Прокси
+   */
+  getProxy() {
+    return this.agent.get();
+  }
+
+  /**
+   * Задает прокси для запросов
+   * @param url Ссылка на прокси
+   * @returns
+   */
+  setProxy(url: string) {
+    return this.agent.set(new HttpsProxyAgent(url));
+  }
+}

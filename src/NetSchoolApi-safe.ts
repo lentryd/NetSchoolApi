@@ -72,6 +72,22 @@ export default class NetSchoolApiSafe {
     return fetch.call(this, url, init);
   }
 
+  /**
+   * Получение прокси
+   * @returns Прокси
+   */
+  getProxy() {
+    return this.client.getProxy();
+  }
+
+  /**
+   * Установка прокси
+   * @param url Ссылка на прокси
+   */
+  setProxy(url: string) {
+    return this.client.setProxy(url);
+  }
+
   // ⭐️ Сессия
 
   /** Открытие сессии в "Сетевой город. Образование" */
