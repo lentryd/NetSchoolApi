@@ -78,12 +78,20 @@ export default async function (client: Client) {
   const classes =
     data
       .find((f) => f.filterId == "PCLID_IUP")
-      ?.items.map((c) => ({ id: parseInt(c.value), name: c.title })) ?? [];
+      ?.items.map((c) => ({
+        id: parseInt(c.value),
+        name: c.title,
+        value: c.value,
+      })) ?? [];
 
   const subjects =
     data
       .find((f) => f.filterId == "SGID")
-      ?.items.map((s) => ({ id: parseInt(s.value), name: s.title })) ?? [];
+      ?.items.map((s) => ({
+        id: parseInt(s.value),
+        name: s.title,
+        value: s.value,
+      })) ?? [];
 
   const students =
     data
@@ -91,6 +99,7 @@ export default async function (client: Client) {
       ?.items.map((s) => ({
         id: parseInt(s.value),
         name: s.title,
+        value: s.value,
       })) ?? [];
 
   const termFilters = data.find((f) => f.filterId == "TERMID");
@@ -115,6 +124,7 @@ export default async function (client: Client) {
           return {
             id: parseInt(t.value),
             name: t.title,
+            value: t.value,
             isCurrent: termFilters.defaultValue == t.value,
             start: new Date(termDates?.start),
             end: new Date(termDates?.end),

@@ -1,10 +1,12 @@
 import { compareVersions } from "compare-versions";
 
-interface Term {
+export interface Term {
   // ID четверти
   id: number;
   // Название четверти
   name: string;
+  // Значение фильтра
+  value: string;
   // Является ли эта четверть текущей
   isCurrent: boolean;
 
@@ -14,15 +16,33 @@ interface Term {
   end: Date;
 }
 
-interface User {
+export interface Class {
+  // ID класса
+  id: number;
+  // Название класса
+  name: string;
+  // Значение фильтра
+  value: string;
+}
+
+export interface Student {
+  // ID ученика
+  id: number;
+  // Имя ученика
+  name: string;
+  // Значение фильтра
+  value: string;
+}
+
+export interface User {
   id: number;
   name: string;
   terms: Term[];
-  classes: { id: number; name: string }[];
-  students: { id: number; name: string }[];
+  classes: Class[];
+  students: Student[];
 }
 
-interface Year {
+export interface Year {
   id: number;
   gId: number;
   name: string;
@@ -30,25 +50,25 @@ interface Year {
   end: Date;
 }
 
-interface Server {
+export interface Server {
   id: string;
   version: string;
   timeFormat: string;
   dateFormat: string;
 }
 
-interface Subject {
+export interface Subject {
   id: number;
   name: string;
 }
 
-interface School {
+export interface School {
   id: number;
   name: string;
   fullName: string;
 }
 
-interface Credentials {
+export interface Credentials {
   user: User;
   year: Year;
   server: Server;
@@ -83,28 +103,43 @@ export default class Context {
   }
 
   /** ID текущей четверти */
-  defaultTerm() {
-    return this.user.terms.find((t) => t.isCurrent)?.id ?? -1;
+  defaultTerm(): Term | undefined {
+    return this.user.terms.find((t) => t.isCurrent);
+  }
+
+  /** Получить четверть по ID */
+  getTermById(id: number) {
+    return this.user.terms.find((t) => t.id == id);
   }
 
   /** Существует ли класс */
   classExists(id: number) {
-    return !!this.user.classes.find((c) => c.id == id);
+    return !!this.getClassById(id);
   }
 
   /** ID первого класса */
-  defaultClass() {
-    return this.user.classes[0]?.id ?? -1;
+  defaultClass(): Class | undefined {
+    return this.user.classes[0];
+  }
+
+  /** Получить класс по ID */
+  getClassById(id: number) {
+    return this.user.classes.find((c) => c.id == id);
   }
 
   /** Существует ли ученик */
   studentExists(id: number) {
-    return !!this.user.students.find((s) => s.id == id);
+    return !!this.getStudentById(id);
   }
 
   /** ID первого ученика */
-  defaultStudent() {
-    return this.user.students[0]?.id ?? -1;
+  defaultStudent(): Student | undefined {
+    return this.user.students[0];
+  }
+
+  /** Получить ученика по ID */
+  getStudentById(id: number) {
+    return this.user.students.find((s) => s.id == id);
   }
 
   /** Существует ли предмет */

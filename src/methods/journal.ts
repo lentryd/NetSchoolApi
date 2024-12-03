@@ -32,13 +32,15 @@ export interface Credentials {
 
 export default async function journal(this: NS, credentials: Credentials = {}) {
   const { context } = await sessionValid.call(this);
-
-  // Проверяем параметры
   let { start, end, termId, classId, studentId, transport } = credentials;
-  termId = termIdValid.call(this, termId);
-  classId = classIdValid.call(this, classId);
-  studentId = studentIdValid.call(this, studentId);
-  const termDates = await termDateValid.call(this, termId, start, end);
+
+  // Проверяем валидность данных
+  const termData = termIdValid.call(this, termId);
+  const classData = classIdValid.call(this, classId);
+  const studentData = studentIdValid.call(this, studentId);
+
+  // Если не указаны даты, то берем текущий учебный год
+  const termDates = await termDateValid.call(this, termData.id, start, end);
   start = termDates.start;
   end = termDates.end;
 
@@ -51,15 +53,15 @@ export default async function journal(this: NS, credentials: Credentials = {}) {
     filters: [
       {
         filterId: "SID",
-        filterValue: studentId.toString(),
+        filterValue: studentData.value,
       },
       {
         filterId: "PCLID",
-        filterValue: classId.toString(),
+        filterValue: classData.id.toString(),
       },
       {
         filterId: "TERMID",
-        filterValue: termId.toString(),
+        filterValue: termData.value,
       },
       {
         filterId: "period",

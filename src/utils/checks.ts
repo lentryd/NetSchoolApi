@@ -62,9 +62,11 @@ export async function termDateValid(
  */
 export function studentIdValid(this: NS, id?: number) {
   const context = this.context as NonNullable<NS["context"]>;
-  if (!id) id = context.defaultStudent();
 
-  if (context.studentExists(id)) return id;
+  if (!id) id = context.defaultStudent()?.id;
+  const data = id && context.getStudentById(id);
+
+  if (data) return data;
   else throw new Error(`Нет пользователя c id: ${id}`);
 }
 
@@ -73,9 +75,11 @@ export function studentIdValid(this: NS, id?: number) {
  */
 export function classIdValid(this: NS, id?: number) {
   const context = this.context as NonNullable<NS["context"]>;
-  if (!id) id = context.defaultClass();
 
-  if (context.classExists(id)) return id;
+  if (!id) id = context.defaultClass()?.id;
+  const data = id && context.getClassById(id);
+
+  if (data) return data;
   else throw new Error(`Нет класса c id: ${id}`);
 }
 
@@ -84,8 +88,10 @@ export function classIdValid(this: NS, id?: number) {
  */
 export function termIdValid(this: NS, id?: number) {
   const context = this.context as NonNullable<NS["context"]>;
-  if (!id) id = context.defaultTerm();
 
-  if (context.termExists(id)) return id;
+  if (!id) id = context.defaultTerm()?.id;
+  const data = id && context.getTermById(id);
+
+  if (data) return data;
   else throw new Error(`Нет четверти c id: ${id}`);
 }

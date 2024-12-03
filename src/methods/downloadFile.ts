@@ -11,7 +11,7 @@ export default async function (this: NS, credentials: Credentials) {
   const { client } = await sessionValid.call(this);
 
   let { id, assignId, studentId } = credentials;
-  studentId = studentIdValid.call(this, studentId);
+  studentId = studentIdValid.call(this, studentId).id;
 
   const response = await client
     .post("student/diary/get-attachments", {

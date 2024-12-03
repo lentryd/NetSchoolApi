@@ -19,7 +19,7 @@ export default async function (this: NS, credentials: Credentials = {}) {
   const { client, context } = await sessionValid.call(this);
 
   let { studentId, start, end } = credentials;
-  studentId = studentIdValid.call(this, studentId);
+  studentId = studentIdValid.call(this, studentId).id;
   if (start && end) dateValid.call(this, start, end);
   else {
     const { weekStart } = await client
