@@ -43,7 +43,8 @@ export default async function (
       })
     )
     .then((res) => res.json() as any)
-    .catch(() => {
+    .catch((e) => {
+      console.error(e);
       throw new Error("Не удалось войти. Проверьте введение данные.");
     });
 
