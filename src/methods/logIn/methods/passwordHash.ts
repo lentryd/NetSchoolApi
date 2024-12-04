@@ -1,8 +1,10 @@
+import { encode } from "iconv-lite";
 import { createHash } from "crypto";
 import { PasswordType } from "@NS";
 
 function md5(str: string): string {
-  return createHash("md5").update(str, "utf8").digest("hex");
+  const buf = encode(str, "windows-1251");
+  return createHash("md5").update(buf).digest("hex");
 }
 
 export default function (salt: string, password: PasswordType) {

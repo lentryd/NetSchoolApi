@@ -26,6 +26,7 @@
     "@lentryd/web-client": "^0.1.0",
     "compare-versions": "^6.1.1",
     "https-proxy-agent": "^7.0.5",
+    "iconv-lite": "^0.6.3",
     "node-html-parser": "^6.1.13"
   },
   "devDependencies": {
