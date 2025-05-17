@@ -2,7 +2,7 @@
   "name": "netschoolapi",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "version": "1.12.1",
+  "version": "1.12.2",
   "description": "Полностью асинхронный API враппер для \"Сетевой Город. Образование\" написанный на Node.js",
   "scripts": {
     "build": "tsc && tsc-alias",
