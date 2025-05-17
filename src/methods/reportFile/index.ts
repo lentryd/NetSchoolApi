@@ -134,12 +134,13 @@ function messageHandler(msg: Message) {
  */
 async function webSocketsConnection(
   client: Client,
+  endpoint: string,
   at: string,
   taskId: number,
   timeout: number
 ) {
   // Создаем WebSocket
-  const ws = client.ws("queueHub", { params: { at } });
+  const ws = client.ws(endpoint, { params: { at } });
 
   // Обрабатывает сообщения
   return new Promise<string>((resolve, reject) => {
@@ -261,9 +262,13 @@ export default async function reportFile(
   else {
     // Получаем идентификатор задачи
     const taskId = await getTaskId(client, url, params, filters);
+    // Формируем endpoint для ws
+    const endpoint = context.compareServerVersion("5.32.0.0") == -1 ? 'queueHub' : 'signalr/queueHub';
+
     // Получаем идентификатор отчета
     fileCode = await webSocketsConnection(
       client,
+      endpoint,
       session.accessToken,
       taskId,
       timeout
